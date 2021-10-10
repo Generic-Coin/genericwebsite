@@ -5,7 +5,7 @@ describe(`main navigation`, () => {
   });
 
   it("has a clickable logo", () => {
-    cy.get("header").findAllByText("Advanced Blog").click();
+    cy.get("header").findAllByText("Generic Coin").click();
 
     cy.location("pathname").should("eq", "/");
   });
