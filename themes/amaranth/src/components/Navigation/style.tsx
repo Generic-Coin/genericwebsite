@@ -33,7 +33,7 @@ export const SiteTitle = styled.p`
   ${styles.ButtonLabel}
 
   @media (max-width: 500px) {
-    display: none;
+    
   }
 `;
 
