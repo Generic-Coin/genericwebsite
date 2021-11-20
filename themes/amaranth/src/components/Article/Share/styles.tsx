@@ -32,7 +32,7 @@ export const LinkWrapper = styled.div`
 
 export const Label = styled(H3)`
   color: var(--color-grey-600);
-  text-transform: uppercase;
+  text-transform: capitalize;
 `;
 
 export const LinkGrid = styled.div`

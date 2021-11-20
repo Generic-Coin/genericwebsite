@@ -24,29 +24,33 @@ const ArticleCard = ({ post, hero }: ArticleHeroCardProps): JSX.Element => {
     throw Error("Failed to render ArticleCard without Gatsby coverImg.");
 
   return (
-    <S.Wrapper hero={hero}>
-      <TransparentLink to={post.slug} ariaLabel={post.title}>
-        <S.Cover
-          image={getImage(post.coverImg) as IGatsbyImageData}
-          alt={post.coverImageAlt}
-        />
-      </TransparentLink>
-      <S.Details hero={hero}>
-        <S.Meta>
-          <S.Header>
-            <ArticleInfo post={post} />
-            <TransparentLink to={post.slug}>
-              {/* Display as an H2 for accessibility and title semantics */}
-              <H3 as="h2">{post.title}</H3>
-            </TransparentLink>
-          </S.Header>
-          <TransparentLink to={post.slug} ariaLabel={post.title}>
-            <S.Excerpt hero={hero}>{post.excerpt}</S.Excerpt>
-          </TransparentLink>
-        </S.Meta>
-        {hero && <ReadButton to={post.slug} />}
-      </S.Details>
-    </S.Wrapper>
+    <TransparentLink to={post.slug}>
+      {/* Display as an H2 for accessibility and title semantics */}
+      <H3 as="h2">{post.title}</H3>
+    </TransparentLink>
+    // <S.Wrapper hero={hero}>
+    //   <TransparentLink to={post.slug} ariaLabel={post.title}>
+    //     <S.Cover
+    //       image={getImage(post.coverImg) as IGatsbyImageData}
+    //       alt={post.coverImageAlt}
+    //     />
+    //   </TransparentLink>
+    //   <S.Details hero={hero}>
+    //     <S.Meta>
+    //       <S.Header>
+    //         <ArticleInfo post={post} />
+    //         <TransparentLink to={post.slug}>
+    //           {/* Display as an H2 for accessibility and title semantics */}
+    //           <H3 as="h2">{post.title}</H3>
+    //         </TransparentLink>
+    //       </S.Header>
+    //       <TransparentLink to={post.slug} ariaLabel={post.title}>
+    //         <S.Excerpt hero={hero}>{post.excerpt}</S.Excerpt>
+    //       </TransparentLink>
+    //     </S.Meta>
+    //     {hero && <ReadButton to={post.slug} />}
+    //   </S.Details>
+    // </S.Wrapper>
   );
 };
 

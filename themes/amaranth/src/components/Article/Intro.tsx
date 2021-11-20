@@ -51,12 +51,12 @@ const ArticleIntro = ({ post }: ArticleIntroProps): JSX.Element => {
       <WidthWrapper>
         <Details>
           <H1>{post.title}</H1>
-          <Body>{post.excerpt}</Body>
+          {/* <Body>{post.excerpt}</Body> */}
         </Details>
       </WidthWrapper>
       <Cover>
         <WidthWrapper>
-          <ArticleInfo post={post} />
+          {/* <ArticleInfo post={post} /> */}
         </WidthWrapper>
         <CoverImage image={imgData} alt={post.coverImageAlt} />
       </Cover>

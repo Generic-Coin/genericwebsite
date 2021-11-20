@@ -29,7 +29,7 @@ type ArticleButtonProps = { to: string };
 
 const ArticleButton = ({ to }: ArticleButtonProps): JSX.Element => (
   <ReadButton to={to}>
-    Read the article <Exit size={28} />
+    Read <Exit size={28} />
   </ReadButton>
 );
 

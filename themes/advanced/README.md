@@ -140,7 +140,7 @@ const config: SiteConfig = {
     googleAnalyticsId: "UA-VALIDID", // GA tracking ID
     copyright: "© Copyright 2021 | Advanced User", // Copyright string for the footer of the website and RSS feed.
 
-    themeColor: "#D83850", // Used for setting manifest and progress theme colors.
+    themeColor: "#000", // Used for setting manifest and progress theme colors.
     backgroundColor: "#F7F7F7", // Used for setting manifest background color.
   },
 

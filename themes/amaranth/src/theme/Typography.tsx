@@ -75,11 +75,11 @@ const MobileCaption = css`
 const MobileOverline = css`
   font-family: Times, sans-serif;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 10px;
   line-height: 16px;
   letter-spacing: 1.5px;
-  text-transform: uppercase;
+  text-transform: capitalize;
 `;
 
 const MobileCode = css`
@@ -157,11 +157,11 @@ const DesktopCaption = css`
 const DesktopOverline = css`
   font-family: Times, sans-serif;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 12px;
   line-height: 16px;
   letter-spacing: 1.5px;
-  text-transform: uppercase;
+  text-transform: capitalize;
 `;
 
 const DesktopCode = css`
@@ -243,11 +243,11 @@ const CodeStyle = css`
 const ButtonLabelStyle = css`
   font-family: Times, sans-serif;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 18px;
   line-height: 16px;
-  letter-spacing: 1.25px;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: capitalize;
 `;
 
 const TypographyStyles = createGlobalStyle`

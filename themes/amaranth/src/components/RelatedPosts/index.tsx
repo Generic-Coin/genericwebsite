@@ -14,7 +14,7 @@ const Wrapper = styled.aside`
 `;
 
 const Label = styled(H2)`
-  text-transform: uppercase;
+  text-transform: capitalize;
   color: var(--color-grey-700);
 `;
 
@@ -24,8 +24,8 @@ type RelatedPostsProps = {
 
 const RelatedPosts = ({ list }: RelatedPostsProps): JSX.Element => (
   <Wrapper>
-    <Label>RELATED POSTS</Label>
-    <FeedListing noHero listing={list} />
+    {/* <Label>RELATED POSTS</Label>
+    <FeedListing noHero listing={list} /> */}
   </Wrapper>
 );
 

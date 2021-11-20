@@ -46,51 +46,52 @@ const ArticleShare = ({ post }: ArticleShareProps): JSX.Element => {
   const relatedTwitterNames = generateRelatedTwitterNames(config);
 
   return (
-    <S.Wrapper aria-label="Share on social media">
-      <S.LinkWrapper>
-        <S.Label>SHARE</S.Label>
-        <S.LinkGrid>
-          <FacebookShareButton url={url} quote={excerpt}>
-            <FacebookIcon size={40} />
-          </FacebookShareButton>
-          <TwitterShareButton
-            url={url}
-            title={title}
-            via={config.website.name}
-            related={relatedTwitterNames}
-          >
-            <TwitterIcon size={40} />
-          </TwitterShareButton>
-          <RedditShareButton url={url} title={title}>
-            <RedditIcon size={40} />
-          </RedditShareButton>
-          <LinkedinShareButton
-            url={url}
-            title={title}
-            summary={excerpt}
-            source={config.website.name}
-          >
-            <LinkedInIcon size={40} />
-          </LinkedinShareButton>
-          <S.LinkButton
-            size={40}
-            onClick={() => {
-              // eslint-disable-next-line no-void
-              void navigator.clipboard.writeText(url);
-              setShowlinkNotification(true);
-            }}
-          />
-          {showLinkNotification && (
-            <LinkCopyNotification
-              onAnimationEnd={() => {
-                setShowlinkNotification(false);
-              }}
-            />
-          )}
-        </S.LinkGrid>
-      </S.LinkWrapper>
-      <Separator />
-    </S.Wrapper>
+    <span></span>
+    // <S.Wrapper aria-label="Share on social media">
+    //   <S.LinkWrapper>
+    //     <S.Label>SHARE</S.Label>
+    //     <S.LinkGrid>
+    //       <FacebookShareButton url={url} quote={excerpt}>
+    //         <FacebookIcon size={40} />
+    //       </FacebookShareButton>
+    //       <TwitterShareButton
+    //         url={url}
+    //         title={title}
+    //         via={config.website.name}
+    //         related={relatedTwitterNames}
+    //       >
+    //         <TwitterIcon size={40} />
+    //       </TwitterShareButton>
+    //       <RedditShareButton url={url} title={title}>
+    //         <RedditIcon size={40} />
+    //       </RedditShareButton>
+    //       <LinkedinShareButton
+    //         url={url}
+    //         title={title}
+    //         summary={excerpt}
+    //         source={config.website.name}
+    //       >
+    //         <LinkedInIcon size={40} />
+    //       </LinkedinShareButton>
+    //       <S.LinkButton
+    //         size={40}
+    //         onClick={() => {
+    //           // eslint-disable-next-line no-void
+    //           void navigator.clipboard.writeText(url);
+    //           setShowlinkNotification(true);
+    //         }}
+    //       />
+    //       {showLinkNotification && (
+    //         <LinkCopyNotification
+    //           onAnimationEnd={() => {
+    //             setShowlinkNotification(false);
+    //           }}
+    //         />
+    //       )}
+    //     </S.LinkGrid>
+    //   </S.LinkWrapper>
+    //   <Separator />
+    // </S.Wrapper>
   );
 };
 

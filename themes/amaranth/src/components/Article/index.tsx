@@ -23,7 +23,7 @@ const Article = ({ post }: ArticleProps): JSX.Element => (
   <Wrapper>
     <Intro post={post} />
     <Render post={post} />
-    <Share post={post} />
+    {/* <Share post={post} /> */}
   </Wrapper>
 );
 

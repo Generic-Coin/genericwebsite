@@ -6,7 +6,7 @@ import { styles, Caption as BaseCaption } from "../../theme";
 export const TagLink = styled(PrimaryLink)`
   ${styles.Overline}
 
-  text-transform: uppercase;
+  text-transform: capitalize;
 
   &::before {
     content: "#";
@@ -17,6 +17,8 @@ export const CategoryLink = styled(PrimaryLink)`
   ${styles.Caption}
 
   text-transform: capitalize;
+  font-weight: bold !important;
+  letter-spacing: 0rem;
 `;
 
 export const Caption = styled(BaseCaption)`

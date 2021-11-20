@@ -6,7 +6,7 @@ const Colors = css`
     --color-primary-200: #e47485;
     --color-primary-300: #e06073;
     --color-primary-400: #dc4c62;
-    --color-primary: #d83850;
+    --color-primary: #000;
     --color-primary-600: #c23248;
     --color-primary-700: #ad2d40;
     --color-primary-800: #972738;
