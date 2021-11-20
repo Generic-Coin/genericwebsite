@@ -13,6 +13,7 @@ const Navigation = (): JSX.Element => {
         <S.SiteTitle>{config.website.titleShort}</S.SiteTitle>
       </S.HomeButton>
     </S.Wrapper>
+    
   );
 };
 

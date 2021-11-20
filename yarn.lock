@@ -3713,7 +3713,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:^4.14.173, @types/lodash@npm:^4.14.92":
+"@types/lodash@npm:^4.14.92":
   version: 4.14.175
   resolution: "@types/lodash@npm:4.14.175"
   checksum: 50721f33faa542f1b9f62f2ba769ed353c6036711e92bd89ce569f2ed247e38fb2a2899f6fd46466b1690fea7ae0239471e6a6093c54e8f2b0613e43e8eac19c
@@ -4040,15 +4040,6 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: ef820469115617fc537f5b050b4f319fb7783f9572722d43c8445eaecb5c8e126555d40e20777ba3161a4a54d61f8df65fb3a85e14089d5d1ef140639818283b
-  languageName: node
-  linkType: hard
-
-"@types/xml2js@npm:^0.4.9":
-  version: 0.4.9
-  resolution: "@types/xml2js@npm:0.4.9"
-  dependencies:
-    "@types/node": "*"
-  checksum: 7e352c4aad0cc31edfcc5102353b64a59e3d75b8d232985c939668d26adba00e33ee38d2b6893a862186015de779672b582dd70c1a1cfccee62f987e13a7cb0a
   languageName: node
   linkType: hard
 
@@ -5215,7 +5206,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axe-core@npm:^4.0.2, axe-core@npm:^4.3.3":
+"axe-core@npm:^4.0.2":
   version: 4.3.3
   resolution: "axe-core@npm:4.3.3"
   checksum: ac349d0b5341ad0859052d843717a1f596adf2efaa85ed9796581aa2f8fea74fda0f68b300363da8a0fb50f4b41b381c4f0b53dd14052205b9a082be0ca388b7
@@ -9076,17 +9067,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-cypress@npm:^2.12.1":
-  version: 2.12.1
-  resolution: "eslint-plugin-cypress@npm:2.12.1"
-  dependencies:
-    globals: ^11.12.0
-  peerDependencies:
-    eslint: ">= 3.2.1"
-  checksum: 1f1c36e149304e9a6f58e2292a761abad58274da33b3a48b24ad55ad20cbce3ac7467321f2b6fcb052f9563c89f67004de4766eba2e2bdbcb010a6a0666989cf
-  languageName: node
-  linkType: hard
-
 "eslint-plugin-flowtype@npm:^5.9.2":
   version: 5.10.0
   resolution: "eslint-plugin-flowtype@npm:5.10.0"
@@ -11252,67 +11232,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"gatsby-theme-advanced-demo@workspace:examples/advanced-demo":
-  version: 0.0.0-use.local
-  resolution: "gatsby-theme-advanced-demo@workspace:examples/advanced-demo"
-  dependencies:
-    "@testing-library/cypress": ^8.0.1
-    "@testing-library/jest-dom": ^5.14.1
-    "@testing-library/react": ^12.1.0
-    "@types/jest": ^26.0.24
-    "@types/lodash": ^4.14.173
-    "@types/node": ^16.9.2
-    "@types/react": ^17.0.21
-    "@types/react-dom": ^17.0.9
-    "@types/react-helmet": ^6.1.2
-    "@types/xml2js": ^0.4.9
-    "@typescript-eslint/eslint-plugin": ^4.31.1
-    axe-core: ^4.3.3
-    babel-jest: ^27.2.0
-    babel-preset-gatsby: ^1.14.0
-    cypress: ^8.4.1
-    cypress-axe: ^0.13.0
-    eslint: ^7.32.0
-    eslint-config-airbnb: ^18.2.1
-    eslint-config-airbnb-typescript: ^12.3.1
-    eslint-config-prettier: ^8.3.0
-    eslint-plugin-cypress: ^2.12.1
-    eslint-plugin-import: ^2.24.2
-    eslint-plugin-jest: ^24.4.2
-    eslint-plugin-jest-dom: ^3.9.2
-    eslint-plugin-jsx-a11y: ^6.4.1
-    eslint-plugin-prettier: ^3.4.1
-    eslint-plugin-react: ^7.25.2
-    eslint-plugin-react-hooks: ^4.2.0
-    eslint-plugin-testing-library: ^4.12.2
-    gatsby: ^3.14.0
-    gatsby-cypress: ^1.14.0
-    gatsby-plugin-image: ^1.14.0
-    gatsby-plugin-mdx: ^2.14.0
-    gatsby-theme-advanced: "*"
-    gh-pages: ^3.2.3
-    jest: ^27.2.0
-    lodash: ^4.17.21
-    markdownlint-cli2: ^0.3.1
-    prettier: ^2.4.1
-    react: ^17.0.2
-    react-dom: ^17.0.2
-    react-helmet: ^6.1.0
-    react-share: ^4.4.0
-    start-server-and-test: ^1.14.0
-    stylelint: ^13.13.1
-    stylelint-config-prettier: ^8.0.2
-    stylelint-config-recommended: ^5.0.0
-    stylelint-prettier: ^1.2.0
-    ts-jest: ^27.0.5
-    ts-node: ^10.2.1
-    ts-prune: ^0.9.3
-    typescript: ^4.4.3
-    write-good: ^1.0.8
-    xml2js: ^0.4.23
-  languageName: unknown
-  linkType: soft
-
 "gatsby-theme-advanced@*, gatsby-theme-advanced@workspace:themes/advanced":
   version: 0.0.0-use.local
   resolution: "gatsby-theme-advanced@workspace:themes/advanced"
@@ -11431,62 +11350,6 @@ __metadata:
     gatsby: ^3.8.1
     react: ^17.0.2
     react-dom: ^17.0.2
-  languageName: unknown
-  linkType: soft
-
-"gatsby-theme-amaranth-demo@workspace:examples/amaranth-demo":
-  version: 0.0.0-use.local
-  resolution: "gatsby-theme-amaranth-demo@workspace:examples/amaranth-demo"
-  dependencies:
-    "@testing-library/cypress": ^8.0.1
-    "@testing-library/jest-dom": ^5.14.1
-    "@testing-library/react": ^12.1.0
-    "@types/jest": ^26.0.24
-    "@types/node": ^16.9.2
-    "@types/react": ^17.0.21
-    "@types/react-dom": ^17.0.9
-    "@types/styled-components": ^5.1.14
-    "@types/xml2js": ^0.4.9
-    "@typescript-eslint/eslint-plugin": ^4.31.1
-    axe-core: ^4.3.3
-    babel-jest: ^27.2.0
-    babel-plugin-styled-components: ^1.13.2
-    cypress: ^8.4.1
-    cypress-axe: ^0.13.0
-    eslint: ^7.32.0
-    eslint-config-airbnb: ^18.2.1
-    eslint-config-airbnb-typescript: ^12.3.1
-    eslint-config-prettier: ^8.3.0
-    eslint-plugin-import: ^2.24.2
-    eslint-plugin-jest: ^24.4.2
-    eslint-plugin-jest-dom: ^3.9.2
-    eslint-plugin-jsx-a11y: ^6.4.1
-    eslint-plugin-prettier: ^3.4.1
-    eslint-plugin-react: ^7.25.2
-    eslint-plugin-react-hooks: ^4.2.0
-    eslint-plugin-testing-library: ^4.12.2
-    gatsby: ^3.14.0
-    gatsby-cypress: ^1.14.0
-    gatsby-plugin-styled-components: ^4.14.0
-    gatsby-theme-amaranth: "*"
-    gh-pages: ^3.2.3
-    jest: ^27.2.0
-    markdownlint-cli2: ^0.3.1
-    prettier: ^2.4.1
-    react: ^17.0.2
-    react-dom: ^17.0.2
-    start-server-and-test: ^1.14.0
-    styled-components: ^5.3.1
-    stylelint: ^13.13.1
-    stylelint-config-prettier: ^8.0.2
-    stylelint-config-recommended: ^5.0.0
-    stylelint-prettier: ^1.2.0
-    ts-jest: ^27.0.5
-    ts-node: ^10.2.1
-    ts-prune: ^0.9.3
-    typescript: ^4.4.3
-    write-good: ^1.0.8
-    xml2js: ^0.4.23
   languageName: unknown
   linkType: soft
 
@@ -12217,7 +12080,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"globals@npm:^11.1.0, globals@npm:^11.12.0":
+"globals@npm:^11.1.0":
   version: 11.12.0
   resolution: "globals@npm:11.12.0"
   checksum: 67051a45eca3db904aee189dfc7cd53c20c7d881679c93f6146ddd4c9f4ab2268e68a919df740d39c71f4445d2b38ee360fc234428baea1dbdfe68bbcb46979e
@@ -26554,7 +26417,7 @@ typescript@^4.4.3:
   languageName: node
   linkType: hard
 
-"xml2js@npm:^0.4.23, xml2js@npm:^0.4.5":
+"xml2js@npm:^0.4.5":
   version: 0.4.23
   resolution: "xml2js@npm:0.4.23"
   dependencies:
