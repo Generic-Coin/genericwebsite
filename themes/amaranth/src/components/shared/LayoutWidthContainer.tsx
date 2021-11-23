@@ -2,10 +2,10 @@ import styled from "styled-components";
 
 const LayoutWidthContainer = styled.div`
   width: 100%;
-  padding: 0 16px 0 16px;
+  padding: 0;
   justify-self: center;
 
-  max-width: calc(1144px + 2 * 16px);
+  max-width: 98vw;
 `;
 
 export default LayoutWidthContainer;

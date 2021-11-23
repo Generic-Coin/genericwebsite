@@ -91,6 +91,14 @@ export const AnimatedLink = styled(BaseLink).attrs(
 
 export const TransparentLink = styled(BaseLink)`
   ${TransparentCSS}
+  color: blue;
+  text-transform: lowercase;
+  font-size: 1rem !important;
+  & h2 {
+    font-size: 1rem !important;
+  }
+  font-weight: 100;
+  text-decoration: underline;
 `;
 
 export const PrimaryLink = styled(BaseLink)`

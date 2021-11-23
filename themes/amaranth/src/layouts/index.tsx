@@ -17,8 +17,8 @@ const LayoutGrid = styled.div`
 
   display: grid;
   grid-template-columns: 100%;
-  gap: 80px;
-  align-content: space-between;
+  gap: 1rem;
+  align-content: baseline;
 
   @media (max-width: ${constants.breakpoints.sm}) {
     gap: 40px;

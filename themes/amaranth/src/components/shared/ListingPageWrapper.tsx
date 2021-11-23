@@ -10,7 +10,9 @@ const ListingPageWrapper = styled.main`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
+  align-items: top;
+  border-top: 0.15rem solid #9d9d9d;
+  width: 98vw;
 `;
 
 export default ListingPageWrapper;
