@@ -10,7 +10,7 @@ import LayoutWidthContainer from "../shared/LayoutWidthContainer";
 const Wrapper = styled.div`
   width: 100%;
 
-  display: grid;
+  display: block;
   grid-gap: 80px;
   grid-template-columns: 1fr 1fr;
 
@@ -21,7 +21,7 @@ const Wrapper = styled.div`
 `;
 
 const WidthLimitedGrid = styled(LayoutWidthContainer)`
-  display: grid;
+  display: block;
   grid-template-columns: 100%;
   gap: 80px;
   align-content: space-between;

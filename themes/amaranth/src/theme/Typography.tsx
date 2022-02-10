@@ -9,7 +9,7 @@ const MobileH1 = css`
   font-style: normal;
   font-weight: strong;
   font-size: 32px;
-  line-height: 40px;
+  line-height: 30px;
   letter-spacing: 0.25px;
 `;
 
@@ -18,7 +18,7 @@ const MobileH2 = css`
   font-style: normal;
   font-weight: strong;
   font-size: 29px;
-  line-height: 40px;
+  line-height: 30px;
   letter-spacing: 0px;
 `;
 const MobileH3 = css`
@@ -108,7 +108,7 @@ const DesktopH3 = css`
   font-style: normal;
   font-weight: strong;
   font-size: 33px;
-  line-height: 40px;
+  line-height: 30px;
   letter-spacing: 0.15px;
 `;
 const DesktopH4 = css`
