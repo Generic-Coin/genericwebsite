@@ -12,6 +12,7 @@ const ListingPageWrapper = styled.main`
   justify-content: space-between;
   align-items: top;
   border-top: 0.15rem solid #9d9d9d;
+  padding-top: 1rem;
   width: 98vw;
 `;
 

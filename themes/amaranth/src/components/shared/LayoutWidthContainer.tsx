@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
 const LayoutWidthContainer = styled.div`
-  width: 100%;
+  width: 70%;
   padding: 0;
-  justify-self: center;
+  justify-self: left;
 
   max-width: 98vw;
 `;

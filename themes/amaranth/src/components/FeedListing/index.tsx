@@ -35,6 +35,12 @@ type PostListingProps = {
 
 const FeedListing = ({ listing, noHero }: PostListingProps): JSX.Element => (
   <WidthLimitedGrid>
+    <p>Generic Coin is a Binance Smart Chain project that focuses on features that users find important in today's evolving crypto landscape.<br />
+    You can buy Generic Coin<br />
+    You can sell Generic Coin<br />
+    You can send Generic Coin<br />
+    Have a Generic Day! - The Generic Coin Team.</p>
+    <br />
     <Wrapper>
       {listing.map((feedItem, idx) => {
         // Check if we're rendering a placeholder
