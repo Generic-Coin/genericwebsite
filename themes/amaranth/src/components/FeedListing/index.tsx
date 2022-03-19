@@ -7,6 +7,9 @@ import ArticleCard from "../ArticleCard";
 import { constants } from "../../theme";
 import LayoutWidthContainer from "../shared/LayoutWidthContainer";
 
+import GenericSizzle from "./genericday.mp4"
+import GenericPoster from "./play.jpg"
+
 const Wrapper = styled.div`
   width: 100%;
 
@@ -19,6 +22,46 @@ const Wrapper = styled.div`
     gap: 60px;
   }
 `;
+
+const Tokenomics = styled.div`
+  width: 100%;
+
+  display: block;
+  grid-gap: 80px;
+  grid-template-columns: 1fr 1fr;
+
+  table {
+    min-width: 30rem;
+  }
+  .main-table {
+    margin: 2rem 0;
+    td {
+      padding: .3rem;
+    }
+  }
+
+  @media (max-width: ${constants.breakpoints.lg}) {
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
+`;
+
+const Contract = styled.div`
+  width: 80%;
+  margin: 2rem 0;
+  marquee {
+    width:100%;
+  }
+`
+
+const Videobox = styled.div`
+  margin-top: 2rem;
+  width:100%;
+  max-width:25rem;
+  video {
+    width:100%;
+  }
+`
 
 const WidthLimitedGrid = styled(LayoutWidthContainer)`
   display: block;
@@ -44,7 +87,7 @@ const FeedListing = ({ listing, noHero }: PostListingProps): JSX.Element => (
     <Wrapper>
       {listing.map((feedItem, idx) => {
         // Check if we're rendering a placeholder
-        if ("isPlaceholder" in feedItem)
+        if ("turnedoff_isPlaceholder" in feedItem)
           return <ArticleCard key={feedItem.key} />;
 
         return idx === 0 && !noHero ? (
@@ -54,6 +97,80 @@ const FeedListing = ({ listing, noHero }: PostListingProps): JSX.Element => (
         );
       })}
     </Wrapper>
+
+    <Contract>
+      <h4>Generic Contract</h4>
+      <marquee width="100%" direction="left" height="30px">
+        <a href="https://bscscan.com/token/0x0E121672dCe41034598ba1D71AA958c4Eb6C4DF3" target="_blank">0x0E121672dCe41034598ba1D71AA958c4Eb6C4DF3</a>
+      </marquee>
+    </Contract>
+
+    <Tokenomics>
+    <table className="main-table" border="2" cellpadding="2" cellspacing="2">
+      <thead>
+        <tr>
+          <td><h4>Generic Tokenomics</h4></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <table border="2" cellpadding="2" cellspacing="2">
+              <thead>
+                <tr>
+                  <td>Buy</td>
+                  <td>Sell</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1% team/marketing tax</td>
+                  <td>1% team/marketing tax<br />
+                      4% locked LP tax</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <table border="2" cellpadding="2" cellspacing="2">
+              <thead>
+                <tr>
+                  <td>1,000,000,000 total supply </td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>88.3% of total supply for presale</td>
+                </tr>
+                <tr>
+                  <td>44.5% of the total supply for presale</td>
+                </tr>
+                <tr>
+                  <td>
+                    43.8% of total supply for liquidity<br />
+                    (100% lock for 1 year)
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    </Tokenomics>
+    
+    <Videobox >
+    <video 
+      poster={GenericPoster}
+      controls
+    >
+      <source src={GenericSizzle} 
+              type="video/mp4" />
+    </video>
+    </Videobox>
   </WidthLimitedGrid>
 );
 

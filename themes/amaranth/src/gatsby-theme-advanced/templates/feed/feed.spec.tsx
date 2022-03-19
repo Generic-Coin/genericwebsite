@@ -63,7 +63,7 @@ describe("page template FeedTemplate", () => {
   });
 
   it("renders feed posts", async () => {
-    expect.assertions(5);
+    expect.assertions(20);
 
     renderWithQueryClient(<PostTemplate pageContext={indexFeedContext} />);
 

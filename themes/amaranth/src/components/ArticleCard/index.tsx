@@ -1,32 +1,27 @@
 import React from "react";
-import { getImage, IGatsbyImageData } from "gatsby-plugin-image";
 import { Types } from "gatsby-theme-advanced";
 
-import ReadButton from "./ArticleButton";
-import ArticleInfo from "../ArticleInfo";
 import { H3 } from "../../theme";
 import { TransparentLink } from "../Links";
-
 import ArticleCardSkeleton from "./Skeleton";
-
+import FolderIcon from "./folder.png"
 import * as S from "./styles";
+
+const folderIcon = FolderIcon as string;
 
 type ArticleHeroCardProps = {
   post?: Types.Post;
-  hero?: boolean;
 };
 
-const ArticleCard = ({ post, hero }: ArticleHeroCardProps): JSX.Element => {
+
+const ArticleCard = ({ post }: ArticleHeroCardProps): JSX.Element => {
   // If no post is provided, render a skeleton view with a loading animation
   if (!post) return <ArticleCardSkeleton />;
-
-  if (!post.coverImg)
-    throw Error("Failed to render ArticleCard without Gatsby coverImg.");
 
   return (
     <TransparentLink to={post.slug}>
       {/* Display as an H2 for accessibility and title semantics */}
-      <H3 as="h2">{post.title}</H3>
+        <H3 as="h2"><S.Folder><img className="foldericon" alt="" src={folderIcon} /></S.Folder>{post.title}</H3>
     </TransparentLink>
     // <S.Wrapper hero={hero}>
     //   <TransparentLink to={post.slug} ariaLabel={post.title}>
