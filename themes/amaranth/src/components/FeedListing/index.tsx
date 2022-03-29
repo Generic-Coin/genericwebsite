@@ -230,8 +230,8 @@ const FeedListing = ({ listing, noHero }: PostListingProps): JSX.Element => (
         </a>
       </p>
       <p>
-        <a href="https://t.me/Hatmonke" target="_blank" rel="noreferrer">
-          Hat Monke - Developer
+        <a href="https://t.me/stinkitylinkity" target="_blank" rel="noreferrer">
+          Lord Johnson - Developer
         </a>
       </p>
       <p>
