@@ -18,6 +18,7 @@ const Contract = styled.div`
 `;
 
 const Tokenomics = styled.div`
+  margin: 2rem 0;
   width: 100%;
   display: block;
   grid-gap: 80px;
@@ -39,8 +40,27 @@ const Tokenomics = styled.div`
   }
 `;
 
-const Presale = styled.div`
+const Roadmap = styled.div`
   margin: 2rem 0;
+  width: 100%;
+  display: block;
+  grid-gap: 80px;
+  grid-template-columns: 1fr 1fr;
+
+  table {
+    margin: 1rem 0;
+    width: 100%;
+    max-width: 30rem;
+
+    td {
+      padding: 0.25rem;
+    }
+  }
+
+  @media (max-width: ${constants.breakpoints.lg}) {
+    grid-template-columns: 1fr;
+    gap: 60px;
+  }
 `;
 
 const Team = styled.div`
@@ -123,6 +143,32 @@ const FeedListing = ({ listing, noHero }: PostListingProps): JSX.Element => (
         </marquee>
       </a>
     </Contract>
+
+    <Roadmap>
+      <h4>Generic Roadmap</h4>
+      <table border="2">
+        <tbody>
+          <tr>
+            <td>Generic LP Farming</td>
+          </tr>
+          <tr>
+            <td>Generic PCS LP</td>
+          </tr>
+          <tr>
+            <td>Generic Website Expansion</td>
+          </tr>
+          <tr>
+            <td>Generic Launchpad</td>
+          </tr>
+          <tr>
+            <td>Generic Game</td>
+          </tr>
+          <tr>
+            <td>Generic Ad Campaign</td>
+          </tr>
+        </tbody>
+      </table>
+    </Roadmap>
 
     <Tokenomics>
       <h4>Generic Tokenomics</h4>
