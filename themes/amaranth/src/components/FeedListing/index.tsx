@@ -134,12 +134,12 @@ const FeedListing = ({ listing, noHero }: PostListingProps): JSX.Element => (
 
     <Contract>
       <a
-        href="https://bscscan.com/token/0x0E121672dCe41034598ba1D71AA958c4Eb6C4DF3"
+        href="https://bscscan.com/token/0x98a61ca1504b92ae768ef20b85aa97030b7a1edf"
         target="_blank"
       >
         <h4>Generic Contract</h4>
         <marquee width="100%" direction="left" height="30px">
-          0x0E121672dCe41034598ba1D71AA958c4Eb6C4DF3
+          0x98a61ca1504b92ae768ef20b85aa97030b7a1edf
         </marquee>
       </a>
     </Contract>
@@ -198,16 +198,14 @@ const FeedListing = ({ listing, noHero }: PostListingProps): JSX.Element => (
         </thead>
         <tbody>
           <tr>
-            <td>44.5% of the Total Supply for Presale</td>
+            <td>39.3% of the Total Supply for Presale</td>
+          </tr>
+          <tr>
+            <td>50% of Total Supply for Liquidity (100% Locked for 1 Year)</td>
           </tr>
           <tr>
             <td>
-              43.8% of Total Supply for Liquidity (100% Locked for 1 Year)
-            </td>
-          </tr>
-          <tr>
-            <td>
-              11% of Total Supply for Private Sale to Raise BUSD to be used for
+              15% of Total Supply for Private Sale to Raise BUSD to be used for
               Buyback and Burns to Correct Dumps
             </td>
           </tr>

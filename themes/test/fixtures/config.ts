@@ -5,7 +5,7 @@ const config: SiteConfig = {
   website: {
     title: "Generic Coin", // Homepage title
     titleShort: "Generic Coin", // Short site title for homescreen (PWA). Preferably should be under 12 characters to prevent truncation
-    name: "Gatsby Advanced Starter", // Website name used for homescreen (PWA) and SEO
+    name: "Generic Coin", // Website name used for homescreen (PWA) and SEO
     description: "The most generic coin on BSC.", // Website description used for RSS feeds/meta description tag
     language: "en",
     logoUrl: "/logos/logo-1024.png", // Logo used for SEO
