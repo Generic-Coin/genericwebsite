@@ -1,0 +1,31 @@
+{
+  "name": "generic-coin",
+  "displayName": "Generic Coin",
+  "expo": {
+    "name": "Generic Coin",
+    "slug": "generic-coin",
+    "description": "The website for Generic Coin.",
+    "privacy": "public",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "primaryColor": "#008080",
+    "userInterfaceStyle": "automatic",
+    "icon": "./src/assets/images/icon.png",
+    "splash": {
+      "image": "./src/assets/images/splash.png",
+      "resizeMode": "cover"
+    },
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "io.native.react95",
+      "buildNumber": "0.1.0"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}

@@ -1,45 +1,27 @@
 {
-  "exclude": [
-    "node_modules",
-    "**/node_modules",
-    "**/.cache/*",
-    "**/public",
-    "**/cypress"
-  ],
-  "include": [
-    "./src/",
-    ".eslintrc.js",
-    "**/gatsby/**/*",
-    "**/src/**/*",
-    "**/__mocks__/**/*",
-    "**/test/**/*",
-    "**/index.ts"
-  ],
   "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "react95-native": ["./src/index"]
+    },
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "esModuleInterop": true,
+    "importsNotUsedAsValues": "error",
+    "forceConsistentCasingInFileNames": true,
     "jsx": "react",
-    "lib": ["dom", "es2015", "es2017", "es2019"],
-    "allowJs": true,
-    "incremental": true,
-    "target": "esnext",
-    "module": "commonjs",
-    "checkJs": true,
-    "declaration": true,
-    "outDir": "lib",
-    "strict": true,
-    "noImplicitAny": true,
-    "alwaysStrict": true,
+    "lib": ["esnext"],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noImplicitUseStrict": false,
+    "noStrictGenericChecks": false,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
     "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
     "skipLibCheck": true,
-    "removeComments": false,
-    "preserveConstEnums": true,
-    "noEmit": true
+    "strict": true,
+    "target": "esnext"
   }
 }
