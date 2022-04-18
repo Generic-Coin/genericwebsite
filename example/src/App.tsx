@@ -1,6 +1,5 @@
-/* eslint-disable global-require */
 import React, { useEffect, useState } from 'react';
-import { View, SafeAreaView } from 'react-native';
+import { View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
@@ -34,16 +33,15 @@ const App = () => {
 
   return (
     <>
-      {/* eslint-disable-next-line react/style-prop-object */}
       <StatusBar style='light' />
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#387d80' }}>
+      <View style={{ flex: 1, backgroundColor: '#387d80' }}>
         <Provider theme={theme}>
           <NavigationContainer>
             <MainNavigation setTheme={setTheme} />
           </NavigationContainer>
           <NotificationProvider />
         </Provider>
-      </SafeAreaView>
+      </View>
     </>
   );
 };

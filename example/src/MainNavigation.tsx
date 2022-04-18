@@ -18,7 +18,7 @@ const MainNavigation = (props: Props) => {
         screenOptions={{
           header: ({ navigation, scene, previous }) =>
             scene.descriptor.options.title !== 'Examples' && (
-              <AppBar>
+              <AppBar style={{display: 'none'}}>
                 {previous && (
                   <AppBar.BackAction onPress={() => navigation.goBack()} />
                 )}

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Image, Linking } from 'react-native';
+import { Video } from 'expo-av';
 import { useNavigation } from '@react-navigation/native';
 import {
   Panel,
@@ -16,7 +17,6 @@ import {
 import type { Theme } from 'react95-native';
 import GenericLogo from './assets/images/gcp.png';
 import GenericSizzle from "./genericday.mp4";
-import GenericPoster from "./play.jpg";
 
 type Props = {
   setTheme: (theme: Theme) => void;
@@ -109,18 +109,6 @@ const ExamplesScreen = ({ setTheme: setThemeProp }: Props) => {
                         rel="noreferrer"
                       >
                         genericcoin@outlook.com
-                      </a>
-                      <br />
-                      <a
-                        href="https://twitter.com/thegenericcoin"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        twitter.com/TheGenericCoin
-                      </a>
-                      <br />
-                      <a href="https://t.me/genericcoin" target="_blank" rel="noreferrer">
-                        t.me/genericcoin
                       </a>
                     </p>
                     
@@ -257,9 +245,20 @@ const ExamplesScreen = ({ setTheme: setThemeProp }: Props) => {
                 title='Video Presentation'
                 style={styles.section}
               >
-                <video poster={GenericPoster} controls>
+                <Video
+                  source={GenericSizzle}
+                  rate={1.0}
+                  volume={1.0}
+                  isMuted={false}
+                  resizeMode="cover"
+                  shouldPlay
+                  isLooping
+                  style={styles.videoPresentation}
+                /> 
+              
+                {/* <video poster={GenericPoster} controls>
                   <source src={GenericSizzle} type="video/mp4" />
-                </video>
+                </video> */}
               </List.Accordion>
               <br />
               
@@ -442,6 +441,7 @@ const ExamplesScreen = ({ setTheme: setThemeProp }: Props) => {
                 variant='well'
                 style={[styles.statusBarItem, { flexGrow: 1, marginRight: 4 }]}
               >
+              <Text>0x98a61CA1504b92Ae768eF20b85aa97030b7a1Edf</Text>
               </Panel>
               <Panel variant='well' style={[styles.statusBarItem]}>
                 {/* <Text>        
@@ -470,10 +470,11 @@ const ExamplesScreen = ({ setTheme: setThemeProp }: Props) => {
 
 
 const styles = StyleSheet.create({
-  container: {
-    maxWidth: '70rem',
-    width: '100%',
+  videoPresentation: {
+    width: '70vw',
     margin: 'auto',
+  },
+  container: {
     flex: 1,
   },
   textIndent: {
