@@ -2,7 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { AppBar } from 'react95-native';
 import type { Theme } from 'react95-native';
-import ExamplesScreen from './ExamplesScreen';
+import GenericScreen from './GenericScreen';
 
 const Stack = createStackNavigator();
 
@@ -28,7 +28,7 @@ const MainNavigation = (props: Props) => {
         }}
       >
         <Stack.Screen name='Home' options={{ title: 'Generic Coin' }}>
-          {() => <ExamplesScreen {...props} />}
+          {() => <GenericScreen {...props} />}
         </Stack.Screen>
       </Stack.Navigator>
     </>

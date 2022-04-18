@@ -22,7 +22,7 @@ type Props = {
   setTheme: (theme: Theme) => void;
 };
 
-const ExamplesScreen = ({ setTheme: setThemeProp }: Props) => {
+const GenericScreen = ({ setTheme: setThemeProp }: Props) => {
   const [showAboutModal, setShowAboutModal] = useState(false);
   const navigation = useNavigation();
   // const { theme: currentTheme, setTheme } = useContext(LocalThemeContext);
@@ -441,7 +441,6 @@ const ExamplesScreen = ({ setTheme: setThemeProp }: Props) => {
                 variant='well'
                 style={[styles.statusBarItem, { flexGrow: 1, marginRight: 4 }]}
               >
-              <Text>0x98a61CA1504b92Ae768eF20b85aa97030b7a1Edf</Text>
               </Panel>
               <Panel variant='well' style={[styles.statusBarItem]}>
                 {/* <Text>        
@@ -556,4 +555,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ExamplesScreen;
+export default GenericScreen;
