@@ -430,6 +430,14 @@ const GenericScreen = ({ setTheme: setThemeProp }: Props) => {
                     >
                       youtube.com/channel/UCQXvW-5S9fsfNvWMvri7jdw
                     </a>
+                    <br /><br />
+                    <a
+                      href="https://github.com/Generic-Coin"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      github.com/Generic-Coin
+                    </a>
                   </p>  
                 </Text>
                 </List.Accordion>
