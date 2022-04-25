@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Image, Linking } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Image,
+  Linking,
+  ImageBackground,
+} from 'react-native';
 import { Video } from 'expo-av';
-import { useNavigation } from '@react-navigation/native';
 import {
   Panel,
   AppBar,
@@ -12,62 +17,154 @@ import {
   Divider,
   Window,
   Anchor,
-  useTheme,
+  Select,
+  Fieldset,
 } from 'react95-native';
-import type { Theme } from 'react95-native';
 import GenericLogo from './assets/images/gcp.png';
-import GenericSizzle from "./genericday.mp4";
+import GenericSizzle from './genericday.mp4';
+import James from './james.png';
+import Caribou from './caribou.png';
+import Larry from './larry.png';
+import ComingSoon from './comingsoon.png';
 
-type Props = {
-  setTheme: (theme: Theme) => void;
-};
-
-const GenericScreen = ({ setTheme: setThemeProp }: Props) => {
+const GenericScreen = () => {
   const [showAboutModal, setShowAboutModal] = useState(false);
-  const navigation = useNavigation();
-  // const { theme: currentTheme, setTheme } = useContext(LocalThemeContext);
-
-  const currentTheme = useTheme();
   const openLink = (url: string) => {
     Linking.openURL(url).catch(err => console.warn("Couldn't load page", err));
   };
 
+  let [memberImage, setMemberImage] = useState({ uri: James });
+  let renderMemberImage = () => {
+    console.log('contact');
+    return (
+      <ImageBackground source={memberImage} resizeMode='cover'>
+        <div style={{ width: 190, height: 180 }}></div>
+      </ImageBackground>
+    );
+  };
+
+  let [memberUrl, setMemberUrl] = useState(
+    'https://www.linkedin.com/in/james-smith-770045238/',
+  );
+  let renderMemberLink = () => {
+    if (memberUrl) {
+      return (
+        <a href={memberUrl} target='_blank' rel='noreferrer'>
+          LinkedIn
+        </a>
+      );
+    } else {
+      return null;
+    }
+  };
+
+  const options = [
+    'James Smith - Generic CEO',
+    'Lord Johnson - Developer',
+    'Joel Cuthriell - UI/UX',
+    'Charlie Doodle - Designer',
+    'Larry Smitt - Advisor',
+  ].map(o => ({
+    label: o,
+    value: o,
+  }));
+  let [value, setValue] = useState(options[0].value);
+
+  const changeMember = (newValue: string) => {
+    setValue(newValue);
+
+    if (newValue == 'James Smith - Generic CEO') {
+      console.log(newValue);
+      setMemberImage({ uri: James });
+      setMemberUrl('https://www.linkedin.com/in/james-smith-770045238/');
+    }
+    if (newValue == 'Lord Johnson - Developer') {
+      console.log(newValue);
+      setMemberImage({ uri: ComingSoon });
+      setMemberUrl('');
+    }
+    if (newValue == 'Joel Cuthriell - UI/UX') {
+      console.log(newValue);
+      setMemberImage({ uri: Caribou });
+      setMemberUrl('https://www.linkedin.com/in/joelcuthriell/');
+    }
+    if (newValue == 'Charlie Doodle - Designer') {
+      console.log(newValue);
+      setMemberImage({ uri: ComingSoon });
+      setMemberUrl('');
+    }
+    if (newValue == 'Charlie Doodle - Designer') {
+      console.log(newValue);
+      setMemberImage({ uri: ComingSoon });
+      setMemberUrl('');
+    }
+    if (newValue == 'Larry Smitt - Advisor') {
+      console.log(newValue);
+      setMemberImage({ uri: Larry });
+      setMemberUrl('https://www.linkedin.com/in/larry-smitt-957052238/');
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      {showAboutModal ? (
-        <Window
-          title='Info'
-          style={{ flex: 1 }}
-          onClose={() => setShowAboutModal(false)}
-        >
-          <View
-            style={{
-              padding: 16,
-              justifyContent: 'space-between',
-              flex: 1,
-            }}
+    <View style={styles.background}>
+      <View style={styles.container}>
+        {showAboutModal ? (
+          <Window
+            title='Info'
+            style={{ flex: 1 }}
+            onClose={() => setShowAboutModal(false)}
           >
-            <Panel variant='cutout' background='material' style={styles.cutout}>
-              <ScrollView
-                style={styles.scrollView}
-                scrollViewProps={{
-                  contentContainerStyle: styles.content,
-                }}
+            <View
+              style={{
+                padding: 16,
+                justifyContent: 'space-between',
+                flex: 1,
+              }}
+            >
+              <Panel
+                variant='cutout'
+                background='material'
+                style={styles.cutout}
               >
-                <View>
-
-                  <Text style={{ lineHeight: 24 }}>
-
-                    <Text
-                      bold
-                      style={{
-                        fontSize: 22,
-                        marginBottom: 16,
-                      }}
-                    >
-                      Team
-                    </Text>
-                    <p>
+                <ScrollView
+                  style={styles.scrollView}
+                  scrollViewProps={{
+                    contentContainerStyle: styles.content,
+                  }}
+                >
+                  <View style={styles.infoView}>
+                    <Text style={{ lineHeight: 24 }}>
+                      <div>
+                        <Text
+                          bold
+                          style={{
+                            fontSize: 22,
+                            marginBottom: 16,
+                          }}
+                        >
+                          Team
+                        </Text>
+                      </div>
+                      <div>{renderMemberImage()}</div>
+                      <div>
+                        <Fieldset label='Members:' style={[{ padding: 20 }]}>
+                          <View style={{ zIndex: 999 }}>
+                            <Select
+                              menuMaxHeight={130}
+                              options={options}
+                              value={value}
+                              onChange={newValue => changeMember(newValue)}
+                              style={[{ width: '100%', minWidth: 250 }]}
+                            />
+                          </View>
+                        </Fieldset>
+                      </div>
+                      <div>
+                        {renderMemberLink()}
+                        <br />
+                      </div>
+                      {/* <p>
+                      <div>
                       <a
                         href="mailto:genericcoin@outlook.com"
                         target="_blank"
@@ -75,6 +172,7 @@ const GenericScreen = ({ setTheme: setThemeProp }: Props) => {
                       >
                         James Smith - Generic CEO
                       </a>
+                      </div>
                       <br />
                       <a href="https://t.me/stinkitylinkity" target="_blank" rel="noreferrer">
                         Lord Johnson - Developer
@@ -91,122 +189,71 @@ const GenericScreen = ({ setTheme: setThemeProp }: Props) => {
                       <a href="https://t.me/Mrdoodley" target="_blank" rel="noreferrer">
                         Charlie Doodle - Designer
                       </a>
-                    </p>
-                    <br />
-                    <Text
-                      bold
-                      style={{
-                        fontSize: 22,
-                        marginBottom: 16,
-                      }}
-                    >
-                      Contact
+                    </p> */}
+
+                      <br />
+                      <div style={{ float: 'left', width: '100%' }}>
+                        <Text
+                          bold
+                          style={{
+                            fontSize: 22,
+                            marginBottom: 16,
+                          }}
+                        >
+                          Contact
+                        </Text>
+                        <p>
+                          <a
+                            href='mailto:genericcoin@outlook.com'
+                            target='_blank'
+                            rel='noreferrer'
+                          >
+                            genericcoin@outlook.com
+                          </a>
+                        </p>
+                      </div>
                     </Text>
-                    <p>
-                      <a
-                        href="mailto:genericcoin@outlook.com"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        genericcoin@outlook.com
-                      </a>
-                    </p>
-                    
-                    {/* This <Text style={{ color: 'red' }}>PRERELEASE</Text>{' '}
-                    version of React95 Native is under construction!
-                    {'\n'}
-                    {'\n'}
-                    Please remember that the components, themes and API will
-                    continue to change through the product&apos;s development
-                    cycle.
-                    {'\n'}
-                    {'\n'}
-                    If you find this project interesting consider doing the
-                    following:
-                    {'\n'}
-                    {'\n'}- follow our{' '}
-                    <Anchor
-                      underline
-                      onPress={() => openLink('https://twitter.com/react95_io')}
-                    >
-                      Twitter account
-                    </Anchor>
-                    {'\n'}- visit our{' '}
-                    <Anchor
-                      underline
-                      onPress={() => openLink('https://react95.io/')}
-                    >
-                      Website
-                    </Anchor>
-                    {'\n'}- sponsor us on{' '}
-                    <Anchor
-                      underline
-                      onPress={() =>
-                        openLink('https://www.patreon.com/arturbien')
-                      }
-                    >
-                      Patreon
-                    </Anchor>
-                    {'\n'}- donate through{' '}
-                    <Anchor
-                      underline
-                      onPress={() =>
-                        openLink('https://www.paypal.com/paypalme/react95')
-                      }
-                    >
-                      PayPal
-                    </Anchor>
-                    {'\n'}- tell your friends!
-                    {'\n'}
-                    {'\n'}
-                    Thanks!
-                    {'\n'}
-                    {'\n'}- the React95 team */}
-                  </Text>
-                </View>
-              </ScrollView>
-            </Panel>
-            <View>
-              <Divider style={{ marginTop: 16 }} />
+                  </View>
+                </ScrollView>
+              </Panel>
+              <View>
+                <Divider style={{ marginTop: 16 }} />
+                <Button
+                  primary
+                  style={{ marginTop: 16, alignSelf: 'flex-end', width: 150 }}
+                  onPress={() => setShowAboutModal(false)}
+                >
+                  OK
+                </Button>
+              </View>
+            </View>
+          </Window>
+        ) : (
+          <>
+            <AppBar style={styles.header}>
+              <View style={styles.logo}>
+                <Image style={styles.logoImage} source={GenericLogo} />
+                <Text style={styles.heading} bold disabled>
+                  Generic Coin
+                </Text>
+              </View>
               <Button
-                primary
-                style={{ marginTop: 16, alignSelf: 'flex-end', width: 150 }}
-                onPress={() => setShowAboutModal(false)}
+                square
+                variant='raised'
+                size='lg'
+                style={styles.aboutButton}
+                onPress={() => setShowAboutModal(true)}
               >
-                OK
+                <Image
+                  style={styles.questionMark}
+                  source={{
+                    uri:
+                      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAJ1BMVEUAAACAgID///8AAADAwMAAgIAAgAAA/wCAAID/AP+AgAD//wAA///5GE4vAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAHdElNRQflAQwXHQ1lXxPNAAAAq0lEQVQoz2NgIAcIggADI4gUAPOFlIAAShqA+GCmMIhQEjE0YBAVEnIBAmEVIOEkkpYMEgCrcAKrKC9GUwERQFJhbIymwtQATUVHM5qKmZPRVCAJQFQgGQpRgWQoRMWqxWgqdm+Gq1BCEkCyFmIokrUYhoYGo6k4cxjNUAwBsKHgUBdWBJFgQ41BwERYBEyDBEJBINjYGEyHGjAYQ2RCQyEMA2jsMQNNIxYAAJmCSHaZSKbTAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIxLTAxLTEyVDIzOjI5OjEzKzAwOjAwyc9MIQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMS0wMS0xMlQyMzoyOToxMyswMDowMLiS9J0AAAAASUVORK5CYII=',
+                  }}
+                />
               </Button>
-            </View>
-          </View>
-        </Window>
-      ) : (
-        <>
-          <AppBar style={styles.header}>
-            <View style={styles.logo}>
-              <Image
-                style={styles.logoImage}
-                source={GenericLogo}
-              />
-              <Text style={styles.heading} bold disabled>
-                Generic Coin
-              </Text>
-            </View>
-            <Button
-              square
-              variant='raised'
-              size='lg'
-              style={styles.aboutButton}
-              onPress={() => setShowAboutModal(true)}
-            >
-              <Image
-                style={styles.questionMark}
-                source={{
-                  uri:
-                    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAABeElEQVR4AcXBgW0cMQxFwUfl+qI641dnYmWMZSCAsdmzV+szPGPcIFF8QcK4wNggUbzpfeLuZCbuzpKZuDuZyTJnZ5EwPmFcIFG8iSgyE3cnM3F3MhN3Z8lM3J3M5J85OxLGE8YXJCqiuCozOZqzI2GcMD4hUREFGNcVS2by0ZwdCeOg8YRERRRg7DHAOCNRHDROSFREAcZd7p0jif80fpB7Z5mz80zjQKIiCjBeYc7OZx5sGoN3Eu+q+JbGhjE4MjO+pXGDxGK8kcR3NDZJLMYmicU4aGyQWIxNEotx4sEJM+MJ4wOJighAnBkDJBbjCeMmiYoowDgzBkgsxieMGyQqogDjzBggsRhfaGySqIgCjDNjsKVxi/EqjQ0SFVE8MwbbGr+s8csaP0BiMS5ovJjEYlz0YJOZ8UrGDRLFQe+TOTuLxGJc8GCTpIoQR2N07mhskFQR4kwEtzR+WePFJBbjoj9smHMOM6n3ydEYILEYG4x7inPGpr+fbJEGoinDewAAAABJRU5ErkJggg==',
-                }}
-              />
-            </Button>
-          </AppBar>
-          {/* <ScrollPanel style={styles.scrollPanel}>
+            </AppBar>
+            {/* <ScrollPanel style={styles.scrollPanel}>
             {themes.map(theme => (
               <ThemeButton
                 theme={theme}
@@ -217,88 +264,118 @@ const GenericScreen = ({ setTheme: setThemeProp }: Props) => {
               />
             ))}
           </ScrollPanel> */}
-          <Panel variant='raised' style={styles.panel}>
-            <Panel variant='cutout' background='canvas' style={styles.cutout}>
-              <ScrollView
-                style={styles.scrollView}
-                scrollViewProps={{
-                  contentContainerStyle: styles.content,
-                }}
-                alwaysShowScrollbars
-              >
-              
-              <Text>
-                Generic Coin is a Binance Smart Chain project that focuses on features
-                that users find important in today's evolving crypto landscape.
-                <br />
-                You can buy Generic Coin
-                <br />
-                You can sell Generic Coin
-                <br />
-                You can send Generic Coin
-                <br />
-                Have a Generic Day! - The Generic Coin Team.
-              </Text>
-              <br /><br />
-    
-              <List.Accordion
-                title='Video Presentation'
-                style={styles.section}
-              >
-                <Video
-                  source={GenericSizzle}
-                  rate={1.0}
-                  volume={1.0}
-                  isMuted={false}
-                  resizeMode="cover"
-                  shouldPlay
-                  isLooping
-                  style={styles.videoPresentation}
-                /> 
-              
-                {/* <video poster={GenericPoster} controls>
+            <Panel variant='raised' style={styles.panel}>
+              <Panel variant='cutout' background='canvas' style={styles.cutout}>
+                <ScrollView
+                  style={styles.scrollView}
+                  scrollViewProps={{
+                    contentContainerStyle: styles.content,
+                  }}
+                  alwaysShowScrollbars
+                >
+                  <Text>
+                    You can buy Generic Coin
+                    <br />
+                    You can sell Generic Coin
+                    <br />
+                    You can send Generic Coin
+                  </Text>
+                  <br />
+                  <List.Accordion
+                    title='Video Presentation'
+                    style={styles.section}
+                  >
+                    <Video
+                      source={GenericSizzle}
+                      rate={1.0}
+                      volume={1.0}
+                      isMuted={false}
+                      resizeMode='cover'
+                      shouldPlay
+                      isLooping
+                      style={styles.videoPresentation}
+                    />
+
+                    {/* <video poster={GenericPoster} controls>
                   <source src={GenericSizzle} type="video/mp4" />
                 </video> */}
-              </List.Accordion>
-              <br />
-              
-              <Anchor
-                onPress={() => openLink('https://apeswap.finance/swap/?outputCurrency=0x98a61CA1504b92Ae768eF20b85aa97030b7a1Edf')}
-              >
-                <Button primary variant='default'>
-                  Buy on ApeSwap (Official Partner)
-                </Button>
-              </Anchor>
-              <br />
-              <Anchor
-                onPress={() => openLink('https://pancakeswap.finance/swap?outputCurrency=0x98a61CA1504b92Ae768eF20b85aa97030b7a1Edf')}
-              >
-                <Button primary variant='default'>
-                  Buy on PancakeSwap
-                </Button>
-              </Anchor>
-              <br />
-            
-                <List.Accordion
-                  title='Contract'
-                  style={styles.section}
-                  defaultExpanded
-                >
-                <Text>        
+                  </List.Accordion>
+                  <br />
                   <a
-                    href="https://bscscan.com/token/0x98a61ca1504b92ae768ef20b85aa97030b7a1edf"
-                    target="_blank"
-                    rel="noreferrer"
+                    href='https://apeswap.finance/swap/?outputCurrency=0x98a61CA1504b92Ae768eF20b85aa97030b7a1Edf'
+                    target='_blank'
+                    rel='noreferrer'
+                    style={{ textDecoration: 'none' }}
                   >
-                    <br />
-                    <marquee width="100%" direction="left" height="30px">
-                      0x98a61ca1504b92ae768ef20b85aa97030b7a1edf
-                    </marquee>
+                    <Button
+                      primary
+                      style={{
+                        width: '100%',
+                        maxWidth: '50vw',
+                        minWidth: '16rem',
+                      }}
+                    >
+                      Buy on ApeSwap (Official Partner)
+                    </Button>
                   </a>
-                </Text>
-                </List.Accordion>
-                
-                {/* <List.Accordion
+                  <br />
+                  <a
+                    href='https://pancakeswap.finance/swap?outputCurrency=0x98a61CA1504b92Ae768eF20b85aa97030b7a1Edf'
+                    target='_blank'
+                    rel='noreferrer'
+                    style={{ textDecoration: 'none' }}
+                  >
+                    <Button
+                      primary
+                      style={{
+                        width: '100%',
+                        maxWidth: '50vw',
+                        minWidth: '16rem',
+                      }}
+                    >
+                      Buy on PancakeSwap
+                    </Button>
+                  </a>
+                  <br />
+                  <a
+                    href='https://bscscan.com/token/0x98a61ca1504b92ae768ef20b85aa97030b7a1edf'
+                    target='_blank'
+                    rel='noreferrer'
+                    style={{ textDecoration: 'none' }}
+                  >
+                    <Button
+                      primary
+                      style={{
+                        width: '100%',
+                        maxWidth: '50vw',
+                        minWidth: '16rem',
+                      }}
+                    >
+                      View on BscScan
+                    </Button>
+                  </a>
+                  <br />
+
+                  <List.Accordion
+                    title='Contract'
+                    style={styles.section}
+                    defaultExpanded
+                  >
+                    <Text>
+                      <a
+                        href='https://bscscan.com/token/0x98a61ca1504b92ae768ef20b85aa97030b7a1edf'
+                        target='_blank'
+                        rel='noreferrer'
+                      >
+                        <br />
+                        <marquee width='100%' direction='left' height='30px'>
+                          0x98a61ca1504b92ae768ef20b85aa97030b7a1edf
+                        </marquee>
+                      </a>
+                    </Text>
+                  </List.Accordion>
+
+                  {/* <List.Accordion
                   title='Tokenomics'
                   style={styles.section}
                 >
@@ -349,101 +426,132 @@ const GenericScreen = ({ setTheme: setThemeProp }: Props) => {
                     </tbody>
                   </table>
                 </List.Accordion> */}
-                
-                <List.Accordion
-                  title='Roadmap'
-                  style={styles.section}
-                >
-                <Text style={styles.textIndent}>
-                  <p>Generic LP Farming</p>
-                  <p><s>Generic PCS LP</s> <i>completed</i></p>
-                  <p><s>Generic Website Expansion 1</s> <i>completed</i></p>
-                  <p>Generic Website Expansion 2</p>
-                  <p>Generic Website Expansion 3</p>
-                  <p>Generic Launchpad</p>
-                  <p>Generic Game</p>
-                  <p>Generic Ad Campaign</p>
-                 </Text>
-                </List.Accordion>
-                
-                <List.Accordion
-                  title='Partnerships'
-                  style={styles.section}
-                >
-                  <Text style={styles.textIndent}>
-                    <p>
-                      <a href="https://apeswap.finance/" target="_blank" rel="noreferrer">
-                        ApeSwap
-                      </a>
-                    </p>
-                    <p>
-                      <a href="https://t.me/partyhat" target="_blank" rel="noreferrer">
-                        Partyhat - t.me/partyhat
-                      </a>
-                    </p>
-                  </Text>
-                </List.Accordion>
-                
-                <List.Accordion
-                  title='Connect'
-                  style={styles.section}
-                  defaultExpanded
-                >
-                <Text style={styles.textIndent}>
-                  <p>
-                    <a
-                      href="mailto:genericcoin@outlook.com"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      genericcoin@outlook.com
-                    </a>
-                    <br /><br />
-                    <a href="https://t.me/genericcoin" target="_blank" rel="noreferrer">
-                      t.me/genericcoin
-                    </a>
-                    <br /><br />
-                    <a href="https://discord.gg/j8FgQ2X3Rz" target="_blank" rel="noreferrer">
-                      discord.gg/j8FgQ2X3Rz
-                    </a>
-                    <br /><br />
-                    <a
-                      href="https://twitter.com/thegenericcoin"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      twitter.com/TheGenericCoin
-                    </a>
-                    <br /><br />
-                    <a
-                      href="https://medium.com/@genericcoin"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      medium.com/@genericcoin
-                    </a>
-                    <br /><br />
-                    <a
-                      href="https://www.youtube.com/channel/UCQXvW-5S9fsfNvWMvri7jdw/videos"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      youtube.com/channel/UCQXvW-5S9fsfNvWMvri7jdw
-                    </a>
-                  </p>  
-                </Text>
-                </List.Accordion>
-                
-              </ScrollView>
-            </Panel>
-            <View style={[styles.statusBar]}>
-              <Panel
-                variant='well'
-                style={[styles.statusBarItem, { flexGrow: 1, marginRight: 4 }]}
-              >
+
+                  <List.Accordion title='Roadmap' style={styles.section}>
+                    <Text style={styles.textIndent}>
+                      <p>CoinGecko Listing</p>
+                      <p>CoinMarketCap Listing</p>
+                      <p>Generic LP Farming</p>
+                      <p>
+                        <s>Generic PCS LP</s> <i>completed</i>
+                      </p>
+                      <p>
+                        <s>Generic Website Expansion 1</s> <i>completed</i>
+                      </p>
+                      <p>Generic Website Expansion 2</p>
+                      <p>Generic Website Expansion 3</p>
+                      <p>Generic Launchpad</p>
+                      <p>Generic Game</p>
+                      <p>Generic Ad Campaign</p>
+                    </Text>
+                  </List.Accordion>
+
+                  <List.Accordion title='Partnerships' style={styles.section}>
+                    <Text style={styles.textIndent}>
+                      <p>
+                        <a
+                          href='https://apeswap.finance/'
+                          target='_blank'
+                          rel='noreferrer'
+                        >
+                          ApeSwap
+                        </a>
+                      </p>
+                      <p>
+                        <a
+                          href='https://t.me/partyhat'
+                          target='_blank'
+                          rel='noreferrer'
+                        >
+                          Partyhat - t.me/partyhat
+                        </a>
+                      </p>
+                    </Text>
+                  </List.Accordion>
+
+                  <List.Accordion
+                    title='Connect'
+                    style={styles.section}
+                    defaultExpanded
+                  >
+                    <Text style={styles.textIndent}>
+                      <p>
+                        <a
+                          href='mailto:genericcoin@outlook.com'
+                          target='_blank'
+                          rel='noreferrer'
+                        >
+                          genericcoin@outlook.com
+                        </a>
+                        <br />
+                        <br />
+                        <a
+                          href='https://t.me/genericcoin'
+                          target='_blank'
+                          rel='noreferrer'
+                        >
+                          t.me/genericcoin
+                        </a>
+                        <br />
+                        <br />
+                        <a
+                          href='https://discord.gg/j8FgQ2X3Rz'
+                          target='_blank'
+                          rel='noreferrer'
+                        >
+                          discord.gg/j8FgQ2X3Rz
+                        </a>
+                        <br />
+                        <br />
+                        <a
+                          href='https://twitter.com/thegenericcoin'
+                          target='_blank'
+                          rel='noreferrer'
+                        >
+                          twitter.com/TheGenericCoin
+                        </a>
+                        <br />
+                        <br />
+                        <a
+                          href='https://medium.com/@genericcoin'
+                          target='_blank'
+                          rel='noreferrer'
+                        >
+                          medium.com/@genericcoin
+                        </a>
+                        <br />
+                        <br />
+                        <a
+                          href='https://www.youtube.com/channel/UCQXvW-5S9fsfNvWMvri7jdw/videos'
+                          target='_blank'
+                          rel='noreferrer'
+                        >
+                          youtube.com/channel/UCQXvW-5S9fsfNvWMvri7jdw
+                        </a>
+                        <br />
+                        <br />
+                        <a
+                          href='https://github.com/Generic-Coin'
+                          target='_blank'
+                          rel='noreferrer'
+                        >
+                          github.com/Generic-Coin
+                        </a>
+                      </p>
+                    </Text>
+                  </List.Accordion>
+                </ScrollView>
               </Panel>
-              <Panel variant='well' style={[styles.statusBarItem]}>
-                {/* <Text>        
+              <View style={[styles.statusBar]}>
+                <Panel
+                  variant='well'
+                  style={[
+                    styles.statusBarItem,
+                    { flexGrow: 1, marginRight: 4 },
+                  ]}
+                ></Panel>
+                <Panel variant='well' style={[styles.statusBarItem]}>
+                  {/* <Text>        
                   <a
                     href="mailto:genericcoin@outlook.com"
                     target="_blank"
@@ -452,29 +560,41 @@ const GenericScreen = ({ setTheme: setThemeProp }: Props) => {
                     genericcoin@outlook.com
                   </a>
                 </Text> */}
-                <Anchor
-                  underline
-                  onPress={() => openLink('mailto:genericcoin@outlook.com')}
-                >
-                  genericcoin@outlook.com
-                </Anchor>
-              </Panel>
-            </View>
-          </Panel>
-        </>
-      )}
+                  <Anchor
+                    underline
+                    onPress={() => openLink('mailto:genericcoin@outlook.com')}
+                  >
+                    genericcoin@outlook.com
+                  </Anchor>
+                </Panel>
+              </View>
+            </Panel>
+          </>
+        )}
+      </View>
     </View>
   );
 };
 
-
 const styles = StyleSheet.create({
+  infoView: {
+    maxWidth: '40rem',
+    width: '100%',
+    margin: 'auto',
+  },
   videoPresentation: {
     width: '70vw',
     margin: 'auto',
   },
+  background: {
+    flex: 1,
+    backgroundColor: '#008080',
+  },
   container: {
     flex: 1,
+    maxWidth: '60rem',
+    width: '100%',
+    margin: 'auto',
   },
   textIndent: {
     paddingLeft: 16,
