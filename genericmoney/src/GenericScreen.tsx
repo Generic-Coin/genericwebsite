@@ -28,6 +28,19 @@ import Larry from './larry.png';
 import ComingSoon from './comingsoon.png';
 
 const GenericScreen = () => {
+  let pricesResponse = 'a';
+  const getPrices = () => {
+    return fetch('https://api.apeswap.finance/tokens')
+      .then(response => response.json())
+      .then(response => {
+        console.log(response);
+        let pricesResponse = response;
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
   const [showAboutModal, setShowAboutModal] = useState(false);
   const openLink = (url: string) => {
     Linking.openURL(url).catch(err => console.warn("Couldn't load page", err));
@@ -134,35 +147,8 @@ const GenericScreen = () => {
                 >
                   <View style={styles.infoView}>
                     <Text style={{ lineHeight: 24 }}>
-                      <div>
-                        <Text
-                          bold
-                          style={{
-                            fontSize: 22,
-                            marginBottom: 16,
-                          }}
-                        >
-                          Team
-                        </Text>
-                      </div>
-                      <div>{renderMemberImage()}</div>
-                      <div>
-                        <Fieldset label='Members:' style={[{ padding: 20 }]}>
-                          <View style={{ zIndex: 999 }}>
-                            <Select
-                              menuMaxHeight={130}
-                              options={options}
-                              value={value}
-                              onChange={newValue => changeMember(newValue)}
-                              style={[{ width: '100%', minWidth: 250 }]}
-                            />
-                          </View>
-                        </Fieldset>
-                      </div>
-                      <div>
-                        {renderMemberLink()}
-                        <br />
-                      </div>
+                      <div></div>
+
                       {/* <p>
                       <div>
                       <a
@@ -273,13 +259,21 @@ const GenericScreen = () => {
                   }}
                   alwaysShowScrollbars
                 >
+                  {/* attempting to call price data */}
+                  {/* <Button primary onPress={() => getPrices()}>call</Button>
+                  {pricesResponse && pricesResponse} */}
                   <Text>
-                    You can buy Generic Coin
+                    You can buy it
                     <br />
-                    You can sell Generic Coin
+                    You can sell it
                     <br />
-                    You can send Generic Coin
+                    You can hold it
+                    <br />
+                    Solution to all your problems, have a generic day!
+                    <br />
+                    Fortune favors the brave.
                   </Text>
+
                   <br />
                   <List.Accordion
                     title='Video Presentation'
@@ -446,6 +440,44 @@ const GenericScreen = () => {
                     </Text>
                   </List.Accordion>
 
+                  <Panel variant='raised' style={[styles.zpanel]}>
+                    <Text
+                      bold
+                      style={{
+                        fontSize: 22,
+                        margin: 12,
+                        marginBottom: 24,
+                      }}
+                    >
+                      Team
+                    </Text>
+                    <Text style={styles.textIndent}>
+                      <div>
+                        {renderMemberImage()}
+                        <br />
+                        <br />
+                      </div>
+                      <div>
+                        {renderMemberLink()}
+                        <br />
+                      </div>
+                      <br />
+                      <div>
+                        <Fieldset label='Members:' style={[{ padding: 20 }]}>
+                          <View style={{ zIndex: 999 }}>
+                            <Select
+                              menuMaxHeight={130}
+                              options={options}
+                              value={value}
+                              onChange={newValue => changeMember(newValue)}
+                              style={[{ width: '100%', minWidth: 250 }]}
+                            />
+                          </View>
+                        </Fieldset>
+                      </div>
+                    </Text>
+                  </Panel>
+
                   <List.Accordion title='Partnerships' style={styles.section}>
                     <Text style={styles.textIndent}>
                       <p>
@@ -583,7 +615,10 @@ const styles = StyleSheet.create({
     margin: 'auto',
   },
   videoPresentation: {
+    position: 'relative',
     width: '70vw',
+    maxWidth: 700,
+    height: 'auto',
     margin: 'auto',
   },
   background: {
@@ -593,6 +628,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     maxWidth: '60rem',
+    minWidth: '20rem',
     width: '100%',
     margin: 'auto',
   },
@@ -608,6 +644,14 @@ const styles = StyleSheet.create({
     padding: 8,
     marginTop: -4,
     paddingTop: 12,
+  },
+  zpanel: {
+    flex: 1,
+    padding: 8,
+    marginTop: -4,
+    paddingTop: 12,
+    paddingBottom: 128,
+    marginBottom: 18,
   },
   cutout: {
     flexGrow: 1,
