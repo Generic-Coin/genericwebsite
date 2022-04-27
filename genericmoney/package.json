@@ -15,6 +15,7 @@
     "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/native": "^5.8.1",
     "@react-navigation/stack": "^5.11.0",
+    "ethers": "^5.6.4",
     "expo": "^44.0.0",
     "expo-av": "^10.2.1",
     "expo-font": "^10.0.0",
@@ -37,6 +38,8 @@
     "@babel/runtime": "^7.9.6",
     "babel-plugin-module-resolver": "^4.0.0",
     "babel-preset-expo": "^8.2.3",
-    "expo-cli": "^3.21.12"
+    "expo-cli": "^3.21.12",
+    "prettier": "^2.6.2",
+    "prettier-plugin-solidity": "^1.0.0-beta.19"
   }
 }

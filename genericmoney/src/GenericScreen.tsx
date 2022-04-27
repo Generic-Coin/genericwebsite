@@ -149,34 +149,6 @@ const GenericScreen = () => {
                     <Text style={{ lineHeight: 24 }}>
                       <div></div>
 
-                      {/* <p>
-                      <div>
-                      <a
-                        href="mailto:genericcoin@outlook.com"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        James Smith - Generic CEO
-                      </a>
-                      </div>
-                      <br />
-                      <a href="https://t.me/stinkitylinkity" target="_blank" rel="noreferrer">
-                        Lord Johnson - Developer
-                      </a>
-                      <br />
-                      <a
-                        href="https://t.me/sevenmilesbeneathcariboucoffee"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        caribou - UI / UX
-                      </a>
-                      <br />
-                      <a href="https://t.me/Mrdoodley" target="_blank" rel="noreferrer">
-                        Charlie Doodle - Designer
-                      </a>
-                    </p> */}
-
                       <br />
                       <div style={{ float: 'left', width: '100%' }}>
                         <Text
@@ -223,7 +195,7 @@ const GenericScreen = () => {
                   Generic Coin
                 </Text>
               </View>
-              <Button
+              {/* <Button
                 square
                 variant='raised'
                 size='lg'
@@ -237,7 +209,7 @@ const GenericScreen = () => {
                       'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAJ1BMVEUAAACAgID///8AAADAwMAAgIAAgAAA/wCAAID/AP+AgAD//wAA///5GE4vAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAHdElNRQflAQwXHQ1lXxPNAAAAq0lEQVQoz2NgIAcIggADI4gUAPOFlIAAShqA+GCmMIhQEjE0YBAVEnIBAmEVIOEkkpYMEgCrcAKrKC9GUwERQFJhbIymwtQATUVHM5qKmZPRVCAJQFQgGQpRgWQoRMWqxWgqdm+Gq1BCEkCyFmIokrUYhoYGo6k4cxjNUAwBsKHgUBdWBJFgQ41BwERYBEyDBEJBINjYGEyHGjAYQ2RCQyEMA2jsMQNNIxYAAJmCSHaZSKbTAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIxLTAxLTEyVDIzOjI5OjEzKzAwOjAwyc9MIQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMS0wMS0xMlQyMzoyOToxMyswMDowMLiS9J0AAAAASUVORK5CYII=',
                   }}
                 />
-              </Button>
+              </Button> */}
             </AppBar>
             {/* <ScrollPanel style={styles.scrollPanel}>
             {themes.map(theme => (
@@ -440,43 +412,39 @@ const GenericScreen = () => {
                     </Text>
                   </List.Accordion>
 
-                  <Panel variant='raised' style={[styles.zpanel]}>
-                    <Text
-                      bold
-                      style={{
-                        fontSize: 22,
-                        margin: 12,
-                        marginBottom: 24,
-                      }}
-                    >
-                      Team
-                    </Text>
-                    <Text style={styles.textIndent}>
-                      <div>
-                        {renderMemberImage()}
+                  <List.Accordion
+                    title='Team'
+                    style={styles.section}
+                    defaultExpanded
+                  >
+                    <Panel variant='raised' style={[styles.zpanel]}>
+                      <Text style={styles.textIndent}>
+                        <div>
+                          {renderMemberImage()}
+                          <br />
+                          <br />
+                        </div>
+                        <div>
+                          <Text style={styles.zlink}>{renderMemberLink()}</Text>
+                          <br />
+                        </div>
                         <br />
-                        <br />
-                      </div>
-                      <div>
-                        {renderMemberLink()}
-                        <br />
-                      </div>
-                      <br />
-                      <div>
-                        <Fieldset label='Members:' style={[{ padding: 20 }]}>
-                          <View style={{ zIndex: 999 }}>
-                            <Select
-                              menuMaxHeight={130}
-                              options={options}
-                              value={value}
-                              onChange={newValue => changeMember(newValue)}
-                              style={[{ width: '100%', minWidth: 250 }]}
-                            />
-                          </View>
-                        </Fieldset>
-                      </div>
-                    </Text>
-                  </Panel>
+                        <div>
+                          <Fieldset label='Members:' style={[{ padding: 20 }]}>
+                            <View style={{ zIndex: 999 }}>
+                              <Select
+                                menuMaxHeight={130}
+                                options={options}
+                                value={value}
+                                onChange={newValue => changeMember(newValue)}
+                                style={[{ width: '100%', minWidth: 250 }]}
+                              />
+                            </View>
+                          </Fieldset>
+                        </div>
+                      </Text>
+                    </Panel>
+                  </List.Accordion>
 
                   <List.Accordion title='Partnerships' style={styles.section}>
                     <Text style={styles.textIndent}>
@@ -648,10 +616,15 @@ const styles = StyleSheet.create({
   zpanel: {
     flex: 1,
     padding: 8,
-    marginTop: -4,
-    paddingTop: 12,
+    paddingTop: 32,
     paddingBottom: 128,
-    marginBottom: 18,
+    margin: 18,
+    position: 'relative',
+    zIndex: -1,
+  },
+  zlink: {
+    position: 'relative',
+    zIndex: 9001,
   },
   cutout: {
     flexGrow: 1,
