@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { AppBar } from 'react95-native';
 import type { Theme } from 'react95-native';
 import GenericScreen from './GenericScreen';
+import AppScreen from './AppScreen';
 
 const Stack = createStackNavigator();
 
@@ -14,11 +15,12 @@ const MainNavigation = (props: Props) => {
   return (
     <>
       <Stack.Navigator
+        initialRouteName='GenericScreen'
         headerMode='screen'
         screenOptions={{
           header: ({ navigation, scene, previous }) =>
             scene.descriptor.options.title !== 'Examples' && (
-              <AppBar style={{display: 'none'}}>
+              <AppBar style={{ display: 'none' }}>
                 {previous && (
                   <AppBar.BackAction onPress={() => navigation.goBack()} />
                 )}
@@ -27,8 +29,11 @@ const MainNavigation = (props: Props) => {
             ),
         }}
       >
-        <Stack.Screen name='Home' options={{ title: 'Generic Coin' }}>
+        <Stack.Screen name='home' options={{ title: 'Generic Coin' }}>
           {() => <GenericScreen {...props} />}
+        </Stack.Screen>
+        <Stack.Screen name='app' options={{ title: 'Generic App' }}>
+          {() => <AppScreen {...props} />}
         </Stack.Screen>
       </Stack.Navigator>
     </>

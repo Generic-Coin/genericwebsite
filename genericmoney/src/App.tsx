@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
+import * as Linking from 'expo-linking';
 import { useFonts } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
 import { fontNames, Provider, themes } from 'react95-native';
@@ -10,6 +11,20 @@ import MainNavigation from './MainNavigation';
 import { NotificationProvider } from './util/notifications';
 
 const App = () => {
+  const linking = {
+    prefixes: [
+      Linking.createURL('/'),
+      'https://generic.money',
+      'https://app.generic.money',
+    ],
+    config: {
+      screens: {
+        home: '',
+        app: 'app',
+      },
+    },
+  };
+
   const [theme, setTheme] = useState(themes.original);
 
   const [fontLoaded] = useFonts({
@@ -36,7 +51,7 @@ const App = () => {
       <StatusBar style='light' />
       <View style={{ flex: 1, backgroundColor: '#387d80' }}>
         <Provider theme={theme}>
-          <NavigationContainer>
+          <NavigationContainer linking={linking}>
             <MainNavigation setTheme={setTheme} />
           </NavigationContainer>
           <NotificationProvider />
