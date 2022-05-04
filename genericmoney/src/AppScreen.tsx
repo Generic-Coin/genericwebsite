@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Image, Linking } from 'react-native';
+import { StyleSheet, View, Image, Linking, Platform } from 'react-native';
 import {
   Panel,
   AppBar,
@@ -12,11 +12,42 @@ import {
   Fieldset,
 } from 'react95-native';
 import GenericLogo from './assets/images/gcp.png';
+import 'react-native-get-random-values';
+import '@ethersproject/shims';
 import { ethers } from 'ethers';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  useWalletConnect,
+  withWalletConnect,
+} from '@walletconnect/react-native-dapp';
 
 const AppScreen = () => {
   const openLink = (url: string) => {
     Linking.openURL(url).catch(err => console.warn("Couldn't load page", err));
+  };
+
+  const displayWC = () => {
+    const connector = useWalletConnect();
+    if (!connector.connected) {
+      /**
+       *  Connect! 🎉
+       */
+      return (
+        <Button primary onPress={() => connector.connect()}>
+          Use WalletConnect
+        </Button>
+      );
+    }
+    return (
+      <Button primary onPress={() => connector.killSession()}>
+        Disconnect WalletConnect
+      </Button>
+    );
+  };
+
+  const connectToMM = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    await provider.send('eth_requestAccounts', []);
   };
 
   return (
@@ -26,7 +57,7 @@ const AppScreen = () => {
           <View style={styles.logo}>
             <Image style={styles.logoImage} source={GenericLogo} />
             <Text style={styles.heading} bold disabled>
-              Generic App
+              Generic Coin App
             </Text>
           </View>
         </AppBar>
@@ -59,11 +90,30 @@ const AppScreen = () => {
                     marginBottom: 24,
                   }}
                 >
-                  Something
+                  Calls
                 </Text>
                 <Text style={styles.textIndent}>
                   <div>
-                    {/* {renderMemberImage()} */}
+                    <Button primary onPress={() => connectToMM()}>
+                      Use MetaMask
+                    </Button>
+                    <br />
+                    <br />
+                    {displayWC()}
+
+                    {/* {ViewClaimable()} */}
+                    {/* {ViewLockDuration()}
+                    {ViewClaimTime()}
+                    {ViewUserStaked()}
+                    {ViewTokensToLock}
+                    {ViewHoldersLength}
+                    {ViewTokenBalance}
+                    {ViewUserTimeLeft}
+                    {CheckHolderAddress(uint256 i)}
+                    {SetLockDuration(uint256 secs)}
+                    {WithdrawTokens(uint256 amount)}
+                    {UserStakeTokens}
+                    {UserClaimTokens} */}
                     <br />
                     <br />
                   </div>
@@ -195,4 +245,13 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AppScreen;
+{
+  /* export default AppScreen; */
+}
+export default withWalletConnect(AppScreen, {
+  redirectUrl:
+    Platform.OS === 'web' ? window.location.origin : 'yourappscheme://',
+  storageOptions: {
+    asyncStorage: AsyncStorage,
+  },
+});
