@@ -25,17 +25,21 @@ import GenericSizzle from './genericday.mp4';
 import James from './james.png';
 import Caribou from './caribou.png';
 import Larry from './larry.png';
+import Charlie from './charlie.png';
 import ComingSoon from './comingsoon.png';
 
 const GenericScreen = () => {
-  let pricesResponse = 'a';
   const getPrices = () => {
     return fetch('https://api.apeswap.finance/tokens')
       .then(response => response.json())
-      .then(response => {
-        console.log(response);
-        let pricesResponse = response;
-      })
+      .then(response =>
+        response.find(function (e) {
+          return e.tokenTicker === 'GENv3';
+        }),
+      )
+      .then(response => console.log(response))
+      .then(response => JSON.stringify(response))
+      .then(response => console.log(response))
       .catch(error => {
         console.error(error);
       });
@@ -48,12 +52,25 @@ const GenericScreen = () => {
 
   let [memberImage, setMemberImage] = useState({ uri: James });
   let renderMemberImage = () => {
-    console.log('contact');
     return (
       <ImageBackground source={memberImage} resizeMode='cover'>
         <div style={{ width: 190, height: 180 }}></div>
       </ImageBackground>
     );
+  };
+
+  let [memberTitle, setMemberTitle] = useState('Generic CEO');
+  let renderMemberTitle = () => {
+    if (memberTitle) {
+      return (
+        <Text>
+          {memberTitle}
+          <br />
+        </Text>
+      );
+    } else {
+      return null;
+    }
   };
 
   let [memberUrl, setMemberUrl] = useState(
@@ -72,11 +89,11 @@ const GenericScreen = () => {
   };
 
   const options = [
-    'James Smith - Generic CEO',
-    'Lord Johnson - Developer',
-    'Joel Cuthriell - UI/UX',
-    'Charlie Doodle - Designer',
-    'Larry Smitt - Advisor',
+    'James Smith',
+    'Lord Johnson',
+    'Joel Cuthriell',
+    'Charlie Doodle',
+    'Larry Smitt',
   ].map(o => ({
     label: o,
     value: o,
@@ -86,33 +103,33 @@ const GenericScreen = () => {
   const changeMember = (newValue: string) => {
     setValue(newValue);
 
-    if (newValue == 'James Smith - Generic CEO') {
+    if (newValue == 'James Smith') {
       console.log(newValue);
+      setMemberTitle('Generic CEO');
       setMemberImage({ uri: James });
       setMemberUrl('https://www.linkedin.com/in/james-smith-770045238/');
     }
-    if (newValue == 'Lord Johnson - Developer') {
+    if (newValue == 'Lord Johnson') {
       console.log(newValue);
+      setMemberTitle('Developer');
       setMemberImage({ uri: ComingSoon });
       setMemberUrl('');
     }
-    if (newValue == 'Joel Cuthriell - UI/UX') {
+    if (newValue == 'Joel Cuthriell') {
       console.log(newValue);
+      setMemberTitle('UI/UX');
       setMemberImage({ uri: Caribou });
       setMemberUrl('https://www.linkedin.com/in/joelcuthriell/');
     }
-    if (newValue == 'Charlie Doodle - Designer') {
+    if (newValue == 'Charlie Doodle') {
       console.log(newValue);
-      setMemberImage({ uri: ComingSoon });
-      setMemberUrl('');
+      setMemberTitle('Designer');
+      setMemberImage({ uri: Charlie });
+      setMemberUrl('https://www.linkedin.com/in/charlie-doodle-bab078239/');
     }
-    if (newValue == 'Charlie Doodle - Designer') {
+    if (newValue == 'Larry Smitt') {
       console.log(newValue);
-      setMemberImage({ uri: ComingSoon });
-      setMemberUrl('');
-    }
-    if (newValue == 'Larry Smitt - Advisor') {
-      console.log(newValue);
+      setMemberTitle('Advisor');
       setMemberImage({ uri: Larry });
       setMemberUrl('https://www.linkedin.com/in/larry-smitt-957052238/');
     }
@@ -190,6 +207,7 @@ const GenericScreen = () => {
           <>
             <AppBar style={styles.header}>
               <View style={styles.logo}>
+                {/* {getPrices()} */}
                 <Image style={styles.logoImage} source={GenericLogo} />
                 <Text style={styles.heading} bold disabled>
                   Generic Coin
@@ -234,7 +252,7 @@ const GenericScreen = () => {
                   {/* attempting to call price data */}
                   {/* <Button primary onPress={() => getPrices()}>call</Button>
                   {pricesResponse && pricesResponse} */}
-                  <Text>
+                  <Text style={styles.centered}>
                     You can buy it
                     <br />
                     You can sell it
@@ -261,66 +279,67 @@ const GenericScreen = () => {
                       isLooping
                       style={styles.videoPresentation}
                     />
-
-                    {/* <video poster={GenericPoster} controls>
-                  <source src={GenericSizzle} type="video/mp4" />
-                </video> */}
                   </List.Accordion>
                   <br />
-                  <a
-                    href='https://apeswap.finance/swap/?outputCurrency=0x98a61CA1504b92Ae768eF20b85aa97030b7a1Edf'
-                    target='_blank'
-                    rel='noreferrer'
-                    style={{ textDecoration: 'none' }}
-                  >
-                    <Button
-                      primary
-                      style={{
-                        width: '100%',
-                        maxWidth: '50vw',
-                        minWidth: '16rem',
-                      }}
+                  <Text style={styles.centered}>
+                    <a
+                      href='https://apeswap.finance/swap/?outputCurrency=0x98a61CA1504b92Ae768eF20b85aa97030b7a1Edf'
+                      target='_blank'
+                      rel='noreferrer'
+                      style={{ textDecoration: 'none' }}
                     >
-                      Buy on ApeSwap (Official Partner)
-                    </Button>
-                  </a>
-                  <br />
-                  <a
-                    href='https://pancakeswap.finance/swap?outputCurrency=0x98a61CA1504b92Ae768eF20b85aa97030b7a1Edf'
-                    target='_blank'
-                    rel='noreferrer'
-                    style={{ textDecoration: 'none' }}
-                  >
-                    <Button
-                      primary
-                      style={{
-                        width: '100%',
-                        maxWidth: '50vw',
-                        minWidth: '16rem',
-                      }}
+                      <Button
+                        primary
+                        style={{
+                          width: '100%',
+                          maxWidth: '50vw',
+                          minWidth: '16rem',
+                        }}
+                      >
+                        Buy on ApeSwap (Official Partner)
+                      </Button>
+                    </a>
+                    <br />
+                    <br />
+                    <a
+                      href='https://pancakeswap.finance/swap?outputCurrency=0x98a61CA1504b92Ae768eF20b85aa97030b7a1Edf'
+                      target='_blank'
+                      rel='noreferrer'
+                      style={{ textDecoration: 'none' }}
                     >
-                      Buy on PancakeSwap
-                    </Button>
-                  </a>
-                  <br />
-                  <a
-                    href='https://bscscan.com/token/0x98a61ca1504b92ae768ef20b85aa97030b7a1edf'
-                    target='_blank'
-                    rel='noreferrer'
-                    style={{ textDecoration: 'none' }}
-                  >
-                    <Button
-                      primary
-                      style={{
-                        width: '100%',
-                        maxWidth: '50vw',
-                        minWidth: '16rem',
-                      }}
+                      <Button
+                        primary
+                        style={{
+                          width: '100%',
+                          maxWidth: '50vw',
+                          minWidth: '16rem',
+                        }}
+                      >
+                        Buy on PancakeSwap
+                      </Button>
+                    </a>
+                    <br />
+                    <br />
+                    <a
+                      href='https://bscscan.com/token/0x98a61ca1504b92ae768ef20b85aa97030b7a1edf'
+                      target='_blank'
+                      rel='noreferrer'
+                      style={{ textDecoration: 'none' }}
                     >
-                      View on BscScan
-                    </Button>
-                  </a>
-                  <br />
+                      <Button
+                        primary
+                        style={{
+                          width: '100%',
+                          maxWidth: '50vw',
+                          minWidth: '16rem',
+                        }}
+                      >
+                        View on BscScan
+                      </Button>
+                    </a>
+                    <br />
+                    <br />
+                  </Text>
 
                   <List.Accordion
                     title='Contract'
@@ -341,57 +360,98 @@ const GenericScreen = () => {
                     </Text>
                   </List.Accordion>
 
-                  {/* <List.Accordion
-                  title='Tokenomics'
-                  style={styles.section}
-                >
-                  <table border="2">
-                    <thead>
-                      <tr>
-                        <td><Text>Buy</Text></td>
-                        <td><Text>Sell</Text></td>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td><Text>1% Team/Marketing Tax</Text></td>
-                        <td>
-                          <Text>
-                          1% Team/Marketing Tax
-                          <br />
-                          4% Locked LP Tax
-                          </Text>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <table border="2">
-                    <thead>
-                      <tr>
-                        <td><Text>1,000,000,000,000 Total Supply</Text></td>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td><Text>39.3% of the Total Supply for Presale</Text></td>
-                      </tr>
-                      <tr>
-                        <td><Text>50% of Total Supply for Liquidity (100% Locked for 1 Year)</Text></td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <Text>
-                          15% of Total Supply for Private Sale to Raise BUSD to be used for
-                          Buyback and Burns to Correct Dumps
-                          </Text>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td><Text>0.7% of Total Supply for Apeswap's IAO Listing Fee</Text></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </List.Accordion> */}
+                  <List.Accordion title='Tokenomics' style={styles.section}>
+                    <table border='2'>
+                      <thead>
+                        <tr>
+                          <td>
+                            <Text>Buy</Text>
+                          </td>
+                          <td>
+                            <Text>Sell</Text>
+                          </td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <Text>1% Team/Marketing Tax</Text>
+                          </td>
+                          <td>
+                            <Text>
+                              1% Team/Marketing Tax
+                              <br />
+                              4% Locked LP Tax
+                            </Text>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <table border='2'>
+                      <thead>
+                        <tr>
+                          <td>
+                            <Text>1,000,000,000,000 Total Supply</Text>
+                          </td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <Text>
+                              <a
+                                href='https://dxsale.app/app/v3_3/dxlockview?id=0&add=0x98a61CA1504b92Ae768eF20b85aa97030b7a1Edf&type=tokenlock&chain=BSC'
+                                target='_blank'
+                                rel='noreferrer'
+                              >
+                                50% for Community Events
+                              </a>
+                            </Text>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <Text>
+                              <a
+                                href='https://dxsale.app/app/v3_3/dxlockview?id=1&add=0x98a61CA1504b92Ae768eF20b85aa97030b7a1Edf&type=tokenlock&chain=BSC'
+                                target='_blank'
+                                rel='noreferrer'
+                              >
+                                15% for ApeSwap Partnership Provisions
+                              </a>
+                            </Text>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <Text>
+                              <a
+                                href='https://dxsale.app/app/v3_3/dxlockview?id=2&add=0x98a61CA1504b92Ae768eF20b85aa97030b7a1Edf&type=tokenlock&chain=BSC'
+                                target='_blank'
+                                rel='noreferrer'
+                              >
+                                13% for Team and Development
+                              </a>
+                            </Text>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <Text>
+                              <a
+                                href='https://dxsale.app/app/v3_3/dxlockview?id=2&add=0x98a61CA1504b92Ae768eF20b85aa97030b7a1Edf&type=tokenlock&chain=BSC'
+                                target='_blank'
+                                rel='noreferrer'
+                              >
+                                22% in Circulation (~6% in liquidity, ~3.5%
+                                presale)
+                              </a>
+                            </Text>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </List.Accordion>
 
                   <List.Accordion title='Roadmap' style={styles.section}>
                     <Text style={styles.textIndent}>
@@ -425,6 +485,9 @@ const GenericScreen = () => {
                           <br />
                         </div>
                         <div>
+                          <Text style={styles.zlink}>
+                            {renderMemberTitle()}
+                          </Text>
                           <Text style={styles.zlink}>{renderMemberLink()}</Text>
                           <br />
                         </div>
@@ -437,7 +500,7 @@ const GenericScreen = () => {
                                 options={options}
                                 value={value}
                                 onChange={newValue => changeMember(newValue)}
-                                style={[{ width: '100%', minWidth: 250 }]}
+                                style={[{ width: '100%', minWidth: 150 }]}
                               />
                             </View>
                           </Fieldset>
@@ -577,6 +640,12 @@ const GenericScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  tokenomicText: {
+    margin: 12,
+  },
+  centered: {
+    textAlign: 'center',
+  },
   infoView: {
     maxWidth: '40rem',
     width: '100%',

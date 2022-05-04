@@ -15,6 +15,7 @@ const MainNavigation = (props: Props) => {
   return (
     <>
       <Stack.Navigator
+        initialRouteName='GenericScreen'
         headerMode='screen'
         screenOptions={{
           header: ({ navigation, scene, previous }) =>
@@ -28,10 +29,10 @@ const MainNavigation = (props: Props) => {
             ),
         }}
       >
-        <Stack.Screen name='Home' options={{ title: 'Generic Coin' }}>
+        <Stack.Screen name='home' options={{ title: 'Generic Coin' }}>
           {() => <GenericScreen {...props} />}
         </Stack.Screen>
-        <Stack.Screen name='App' options={{ title: 'Generic App' }}>
+        <Stack.Screen name='app' options={{ title: 'Generic App' }}>
           {() => <AppScreen {...props} />}
         </Stack.Screen>
       </Stack.Navigator>
