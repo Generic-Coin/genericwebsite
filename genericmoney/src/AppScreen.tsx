@@ -21,7 +21,7 @@ import {
   withWalletConnect,
 } from '@walletconnect/react-native-dapp';
 
-const AppScreen = () => {
+const AppScreen = ({ navigation }) => {
   const openLink = (url: string) => {
     Linking.openURL(url).catch(err => console.warn("Couldn't load page", err));
   };
@@ -60,6 +60,21 @@ const AppScreen = () => {
               Generic Coin App
             </Text>
           </View>
+          <Button
+            square
+            variant='raised'
+            size='lg'
+            style={styles.aboutButton}
+            onPress={() => openLink('/')}
+          >
+            <Image
+              style={styles.questionMark}
+              source={{
+                uri:
+                  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAFVBMVEUAAACAgID///8AAADAwMCAAAD/AADqeraFAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAHdElNRQflAQwXHQ1lXxPNAAAAqElEQVQoz5WOMQ6DMAxFLUXda3yCGLrTwAmC2CtV5QJVuf8RmmCCTaQOtX6Wp+cfA5aBfRpuJQdAkhyASPLToGGQ/FuKVWnTVaWB/R3xakoDUxcmU0rsw9T15lJV9m9VKZc2zLyBXNr6wAqyHwkV5NLRp1OMgRSZC5DSUYGMixUAUeaHKhuZ36q4IW0tH7OUtm7r+jTAxWU9GfA6CwC1AJdKSDt9BVx6XzBwJ8Kxeb3/AAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIxLTAxLTEyVDIzOjI5OjEzKzAwOjAwyc9MIQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMS0wMS0xMlQyMzoyOToxMyswMDowMLiS9J0AAAAASUVORK5CYII=',
+              }}
+            />
+          </Button>
         </AppBar>
         {/* <ScrollPanel style={styles.scrollPanel}>
             {themes.map(theme => (
