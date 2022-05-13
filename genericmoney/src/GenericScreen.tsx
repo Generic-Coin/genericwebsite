@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -29,20 +29,23 @@ import Charlie from './charlie.png';
 import ComingSoon from './comingsoon.png';
 
 const GenericScreen = () => {
-  const getPrices = () => {
-    return fetch('https://api.apeswap.finance/tokens')
-      .then(response => response.json())
-      .then(response =>
-        response.find(function (e) {
-          return e.tokenTicker === 'GENv3';
-        }),
-      )
-      .then(response => console.log(response))
-      .then(response => JSON.stringify(response))
-      .then(response => console.log(response))
-      .catch(error => {
-        console.error(error);
-      });
+  useEffect(() => {
+    getPrices();
+  }, []);
+
+  const [showGenericPrice, setShowGenericPrice] = useState(0);
+  const getPrices = async () => {
+    try {
+      const response = await fetch(
+        'https://api.coinpaprika.com/v1/tickers/genv3-generic-coin',
+      );
+      const responseJson = await response.json();
+      const digestedResponse =
+        Math.round(responseJson.quotes.USD.price * 100000000 * 100) / 100;
+      setShowGenericPrice(digestedResponse);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const [showAboutModal, setShowAboutModal] = useState(false);
@@ -206,8 +209,25 @@ const GenericScreen = () => {
         ) : (
           <>
             <AppBar style={styles.header}>
+              <View style={styles.price}>
+                {showGenericPrice ? (
+                  <Text style={styles.priceText}>
+                    <sup>$</sup>
+                    <strong>{showGenericPrice}</strong>
+                    <br />
+                    <sup>
+                      <i>per 1M</i>
+                    </sup>
+                  </Text>
+                ) : (
+                  <Text style={styles.priceText}>
+                    price
+                    <br />
+                    loading...
+                  </Text>
+                )}{' '}
+              </View>
               <View style={styles.logo}>
-                {/* {getPrices()} */}
                 <Image style={styles.logoImage} source={GenericLogo} />
                 <Text style={styles.heading} bold disabled>
                   Generic Coin
@@ -249,9 +269,6 @@ const GenericScreen = () => {
                   }}
                   alwaysShowScrollbars
                 >
-                  {/* attempting to call price data */}
-                  {/* <Button primary onPress={() => getPrices()}>call</Button>
-                  {pricesResponse && pricesResponse} */}
                   <Text style={styles.centered}>
                     You can buy it
                     <br />
@@ -640,6 +657,14 @@ const GenericScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  price: {
+    position: 'absolute',
+    top: '1rem',
+    left: '1rem',
+  },
+  priceText: {
+    fontSize: '.75rem',
+  },
   tokenomicText: {
     margin: 12,
   },
