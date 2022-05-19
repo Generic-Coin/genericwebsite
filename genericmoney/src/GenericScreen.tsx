@@ -27,6 +27,8 @@ import Caribou from './caribou.png';
 import Larry from './larry.png';
 import Charlie from './charlie.png';
 import ComingSoon from './comingsoon.png';
+import BlockSpot from './bs.png';
+import CoinPaprika from './cp.png';
 
 const GenericScreen = () => {
   useEffect(() => {
@@ -41,7 +43,7 @@ const GenericScreen = () => {
       );
       const responseJson = await response.json();
       const digestedResponse =
-        Math.round(responseJson.quotes.USD.price * 100000000 * 100) / 100;
+        Math.round(responseJson.quotes.USD.price * 1000000 * 100) / 100;
       setShowGenericPrice(digestedResponse);
     } catch (error) {
       console.error(error);
@@ -620,6 +622,28 @@ const GenericScreen = () => {
                       </p>
                     </Text>
                   </List.Accordion>
+                
+                <View style={styles.associatedContainer}>
+                  <View style={styles.associatedItem}>
+                    <a
+                      href='https://coinpaprika.com/coin/genv3-generic-coin/'
+                      target='_blank'
+                      rel='noreferrer'
+                    >
+                      <Image style={styles.associatedImage} source={CoinPaprika} />
+                    </a>  
+                  </View>
+                  <View>
+                    <a
+                      href='https://blockspot.io/coin/generic-coin/'
+                      target='_blank'
+                      rel='noreferrer'
+                    >
+                      <Image style={styles.associatedImage} source={BlockSpot} />
+                    </a>  
+                  </View>  
+                </View>  
+                
                 </ScrollView>
               </Panel>
               <View style={[styles.statusBar]}>
@@ -657,6 +681,22 @@ const GenericScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  associatedContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    padding: '1rem 0',
+    margin: '1rem 0',
+  },
+  associatedItem: {
+    position: 'relative',
+    width: '3rem',
+  },
+  associatedImage: {
+    width: '2rem',
+    height: '2rem',
+  },
   price: {
     position: 'absolute',
     top: '1rem',
