@@ -21,14 +21,22 @@ import {
   Fieldset,
 } from 'react95-native';
 import GenericLogo from './assets/images/gcp.png';
-import GenericSizzle from './genericday.mp4';
-import James from './james.png';
-import Caribou from './caribou.png';
-import Larry from './larry.png';
-import Charlie from './charlie.png';
-import ComingSoon from './comingsoon.png';
-import BlockSpot from './bs.png';
-import CoinPaprika from './cp.png';
+import GenericSizzle from './assets/genericday.mp4';
+import GenericWhitepaper from './assets/generic-whitepaper.pdf';
+import James from './assets/images/james.png';
+import Caribou from './assets/images/caribou.png';
+import Larry from './assets/images/larry.png';
+import Charlie from './assets/images/charlie.png';
+import ComingSoon from './assets/images/comingsoon.png';
+import BlockSpot from './assets/images/bs.png';
+import CoinPaprika from './assets/images/cp.png';
+import EmailIcon from './assets/images/em.png';
+import TelegramIcon from './assets/images/te.png';
+import DiscordIcon from './assets/images/di.png';
+import TwitterIcon from './assets/images/tw.png';
+import MediumIcon from './assets/images/me.png';
+import YouTubeIcon from './assets/images/yt.png';
+import GitHubIcon from './assets/images/gh.png';
 
 const GenericScreen = () => {
   useEffect(() => {
@@ -378,6 +386,22 @@ const GenericScreen = () => {
                       </a>
                     </Text>
                   </List.Accordion>
+                  
+                  <List.Accordion
+                    title='Whitepaper'
+                    style={styles.section}
+                    defaultExpanded
+                  >
+                    <Text style={styles.textIndent}>
+                      <a
+                        href={GenericWhitepaper}
+                        target='_blank'
+                        rel='noreferrer'
+                      >
+                        <p>View Whitepaper</p>
+                      </a>
+                    </Text>
+                  </List.Accordion>
 
                   <List.Accordion title='Tokenomics' style={styles.section}>
                     <table border='2'>
@@ -556,94 +580,120 @@ const GenericScreen = () => {
                     style={styles.section}
                     defaultExpanded
                   >
-                    <Text style={styles.textIndent}>
-                      <p>
+                    <View style={styles.associatedContainer}>
+                      <View style={styles.associatedItem}>
                         <a
                           href='mailto:genericcoin@outlook.com'
                           target='_blank'
                           rel='noreferrer'
                         >
-                          genericcoin@outlook.com
+                          <Image
+                            style={styles.associatedImage}
+                            source={EmailIcon}
+                          />
                         </a>
-                        <br />
-                        <br />
+                      </View>
+                      <View style={styles.associatedItem}>
                         <a
                           href='https://t.me/genericcoin'
                           target='_blank'
                           rel='noreferrer'
                         >
-                          t.me/genericcoin
+                          <Image
+                            style={styles.associatedImage}
+                            source={TelegramIcon}
+                          />
                         </a>
-                        <br />
-                        <br />
+                      </View>
+                      <View style={styles.associatedItem}>
                         <a
                           href='https://discord.gg/j8FgQ2X3Rz'
                           target='_blank'
                           rel='noreferrer'
                         >
-                          discord.gg/j8FgQ2X3Rz
+                          <Image
+                            style={styles.associatedImage}
+                            source={DiscordIcon}
+                          />
                         </a>
-                        <br />
-                        <br />
+                      </View>
+                      <View style={styles.associatedItem}>
                         <a
                           href='https://twitter.com/thegenericcoin'
                           target='_blank'
                           rel='noreferrer'
                         >
-                          twitter.com/TheGenericCoin
+                          <Image
+                            style={styles.associatedImage}
+                            source={TwitterIcon}
+                          />
                         </a>
-                        <br />
-                        <br />
+                      </View>
+                      <View style={styles.associatedItem}>
                         <a
                           href='https://medium.com/@genericcoin'
                           target='_blank'
                           rel='noreferrer'
                         >
-                          medium.com/@genericcoin
+                          <Image
+                            style={styles.associatedImage}
+                            source={MediumIcon}
+                          />
                         </a>
-                        <br />
-                        <br />
+                      </View>
+                      <View style={styles.associatedItem}>
                         <a
                           href='https://www.youtube.com/channel/UCQXvW-5S9fsfNvWMvri7jdw/videos'
                           target='_blank'
                           rel='noreferrer'
                         >
-                          youtube.com/channel/UCQXvW-5S9fsfNvWMvri7jdw
+                          <Image
+                            style={styles.associatedImage}
+                            source={YouTubeIcon}
+                          />
                         </a>
-                        <br />
-                        <br />
+                      </View>
+                      <View style={styles.associatedItem}>
                         <a
                           href='https://github.com/Generic-Coin'
                           target='_blank'
                           rel='noreferrer'
                         >
-                          github.com/Generic-Coin
+                          <Image
+                            style={styles.associatedImage}
+                            source={GitHubIcon}
+                          />
                         </a>
-                      </p>
-                    </Text>
+                      </View>
+                    </View>
                   </List.Accordion>
-                
-                <View style={styles.associatedContainer}>
-                  <View style={styles.associatedItem}>
-                    <a
-                      href='https://coinpaprika.com/coin/genv3-generic-coin/'
-                      target='_blank'
-                      rel='noreferrer'
-                    >
-                      <Image style={styles.associatedImage} source={CoinPaprika} />
-                    </a>  
+
+                  <View style={styles.associatedContainer}>
+                    <View style={styles.associatedItem}>
+                      <a
+                        href='https://coinpaprika.com/coin/genv3-generic-coin/'
+                        target='_blank'
+                        rel='noreferrer'
+                      >
+                        <Image
+                          style={styles.associatedImage}
+                          source={CoinPaprika}
+                        />
+                      </a>
+                    </View>
+                    <View style={styles.associatedItem}>
+                      <a
+                        href='https://blockspot.io/coin/generic-coin/'
+                        target='_blank'
+                        rel='noreferrer'
+                      >
+                        <Image
+                          style={styles.associatedImage}
+                          source={BlockSpot}
+                        />
+                      </a>
+                    </View>
                   </View>
-                  <View>
-                    <a
-                      href='https://blockspot.io/coin/generic-coin/'
-                      target='_blank'
-                      rel='noreferrer'
-                    >
-                      <Image style={styles.associatedImage} source={BlockSpot} />
-                    </a>  
-                  </View>  
-                </View>  
-                
                 </ScrollView>
               </Panel>
               <View style={[styles.statusBar]}>
@@ -690,6 +740,8 @@ const styles = StyleSheet.create({
     margin: '1rem 0',
   },
   associatedItem: {
+    marginTop: '1rem',
+    marginBottom: '1rem',
     position: 'relative',
     width: '3rem',
   },
