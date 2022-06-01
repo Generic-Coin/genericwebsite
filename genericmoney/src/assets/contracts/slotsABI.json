@@ -1,5 +1,78 @@
 [
 	{
+		"inputs": [],
+		"name": "claimPrizes",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "ethSpin",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "user",
+				"type": "address"
+			}
+		],
+		"name": "giveFreeSpin",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "requestId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "randomWords",
+				"type": "uint256[]"
+			}
+		],
+		"name": "rawFulfillRandomWords",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_potFee",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_devFee",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_liqFee",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_gasFee",
+				"type": "uint256"
+			}
+		],
+		"name": "setFees",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "uint64",
@@ -9,11 +82,6 @@
 			{
 				"internalType": "address",
 				"name": "_token",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "_router",
 				"type": "address"
 			}
 		],
@@ -35,6 +103,110 @@
 		],
 		"name": "OnlyCoordinatorCanFulfill",
 		"type": "error"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint32",
+				"name": "gas",
+				"type": "uint32"
+			}
+		],
+		"name": "setCallbackGasLimit",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_ethSpinPrice",
+				"type": "uint256"
+			}
+		],
+		"name": "setEthSpinPrice",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_maxPayout",
+				"type": "uint256"
+			}
+		],
+		"name": "setMaxPayout",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "_payouts",
+				"type": "uint256[]"
+			}
+		],
+		"name": "setPayouts",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_prizePool",
+				"type": "uint256"
+			}
+		],
+		"name": "setPrizePool",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "bool",
+				"name": "_tokenSpinning",
+				"type": "bool"
+			}
+		],
+		"name": "setTokenSpinning",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_tokenSpinPrice",
+				"type": "uint256"
+			}
+		],
+		"name": "setTokenSpinPrice",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint8[][]",
+				"name": "_wheels",
+				"type": "uint8[][]"
+			}
+		],
+		"name": "setWheels",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
 		"anonymous": false,
@@ -69,23 +241,34 @@
 	},
 	{
 		"inputs": [],
-		"name": "USDAddress",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
+		"name": "spinFree",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
 		"inputs": [],
-		"name": "claimPrizes",
+		"name": "tokenSpin",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_newOwner",
+				"type": "address"
+			}
+		],
+		"name": "transferOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"stateMutability": "payable",
+		"type": "receive"
 	},
 	{
 		"inputs": [],
@@ -128,14 +311,45 @@
 	},
 	{
 		"inputs": [],
-		"name": "ethSpin",
-		"outputs": [],
-		"stateMutability": "payable",
+		"name": "ethSpinPrice",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "ethSpinPrice",
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "freeSpin",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "freeSpins",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -188,17 +402,25 @@
 	{
 		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "amount",
-				"type": "uint256"
-			},
-			{
-				"internalType": "bool",
-				"name": "fromToken",
-				"type": "bool"
+				"internalType": "address",
+				"name": "player",
+				"type": "address"
 			}
 		],
-		"name": "getEstimatedUSD",
+		"name": "getRoundsPlayed",
+		"outputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "",
+				"type": "uint256[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "idsFulfilled",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -210,8 +432,14 @@
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "idsFulfilled",
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "lastFreeSpinTime",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -355,24 +583,6 @@
 		"inputs": [
 			{
 				"internalType": "uint256",
-				"name": "requestId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256[]",
-				"name": "randomWords",
-				"type": "uint256[]"
-			}
-		],
-		"name": "rawFulfillRandomWords",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
 			}
@@ -462,188 +672,6 @@
 	{
 		"inputs": [
 			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "roundsPlayed",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "router",
-		"outputs": [
-			{
-				"internalType": "contract IUniswapV2Router02",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint32",
-				"name": "gas",
-				"type": "uint32"
-			}
-		],
-		"name": "setCallbackGasLimit",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_ethSpinPrice",
-				"type": "uint256"
-			}
-		],
-		"name": "setEthSpinPrice",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_potFee",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_devFee",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_liqFee",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_gasFee",
-				"type": "uint256"
-			}
-		],
-		"name": "setFees",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_maxPayout",
-				"type": "uint256"
-			}
-		],
-		"name": "setMaxPayout",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256[]",
-				"name": "_payouts",
-				"type": "uint256[]"
-			}
-		],
-		"name": "setPayouts",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_prizePool",
-				"type": "uint256"
-			}
-		],
-		"name": "setPrizePool",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_tokenSpinPrice",
-				"type": "uint256"
-			}
-		],
-		"name": "setTokenSpinPrice",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_token",
-				"type": "address"
-			}
-		],
-		"name": "setUSDAddress",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_price",
-				"type": "uint256"
-			}
-		],
-		"name": "setUSDPrice",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint8[][]",
-				"name": "_wheels",
-				"type": "uint8[][]"
-			}
-		],
-		"name": "setWheels",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
 				"internalType": "uint8",
 				"name": "_symbol",
 				"type": "uint8"
@@ -694,9 +722,15 @@
 	},
 	{
 		"inputs": [],
-		"name": "tokenSpin",
-		"outputs": [],
-		"stateMutability": "nonpayable",
+		"name": "tokenSpinning",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -730,35 +764,5 @@
 		],
 		"stateMutability": "view",
 		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_newOwner",
-				"type": "address"
-			}
-		],
-		"name": "transferOwnership",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "unclaimedPrizes",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"stateMutability": "payable",
-		"type": "receive"
 	}
 ]
