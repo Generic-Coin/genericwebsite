@@ -14,14 +14,45 @@ import {
 import GenericLogo from './assets/images/gcp.png';
 import 'react-native-get-random-values';
 import '@ethersproject/shims';
-import { ethers } from 'ethers';
+//import { ethers } from 'ethers';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   useWalletConnect,
   withWalletConnect,
 } from '@walletconnect/react-native-dapp';
 
+import { useWeb3React } from "@web3-react/core"
+import { injected } from "./supportedNetworks"
+import Web3 from 'web3'
+import slotContractABI from './assets/contracts/slotsABI.json'
+
 const AppScreen = ({ navigation }) => {
+
+  //Web3 implementation
+  const web3 = new Web3(Web3.givenProvider);
+  const { active, account, activate} = useWeb3React()
+  const slotContractAddy = "0xE0f1A84a77dE2679CdCAd49824DE9702d1BfCC03"
+  const slotContract = new web3.eth.Contract(slotContractABI, slotContractAddy);
+
+  async function connect() {
+      await activate(injected)
+  }
+
+  const fetchContractData = async () => {
+    if(!!slotContract)
+    {
+      try{
+      //Obtain price and total minted NFT
+      const lol = await slotContract.methods.ethSpin().send({from:account, value:0});
+      console.log(lol);
+      }
+      catch(ex){
+        console.log(ex);
+      }
+    }
+  }
+  fetchContractData();
+
   const openLink = (url: string) => {
     Linking.openURL(url).catch(err => console.warn("Couldn't load page", err));
   };
@@ -45,10 +76,12 @@ const AppScreen = ({ navigation }) => {
     );
   };
 
-  const connectToMM = async () => {
+  /*const connectToMM = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     await provider.send('eth_requestAccounts', []);
-  };
+  };*/
+  
+
 
   return (
     <View style={styles.background}>
@@ -109,12 +142,15 @@ const AppScreen = ({ navigation }) => {
                 </Text>
                 <Text style={styles.textIndent}>
                   <div>
-                    <Button primary onPress={() => connectToMM()}>
+                    <Button primary onPress={() => connect()}>
                       Use MetaMask
                     </Button>
                     <br />
+                    {active ? 
+                    <>Connected</>:
+                    <>Not Connected</>}
                     <br />
-                    {displayWC()}
+                    {/*displayWC()*/}
 
                     {/* {ViewClaimable()} */}
                     {/* {ViewLockDuration()}

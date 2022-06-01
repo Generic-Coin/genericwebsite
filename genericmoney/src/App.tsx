@@ -6,6 +6,9 @@ import { useFonts } from 'expo-font';
 import { StatusBar } from 'expo-status-bar';
 import { fontNames, Provider, themes } from 'react95-native';
 import * as SplashScreen from 'expo-splash-screen';
+//Web3 Imports
+import { Web3ReactProvider } from '@web3-react/core'
+import Web3 from 'web3'
 
 import MainNavigation from './MainNavigation';
 import { NotificationProvider } from './util/notifications';
@@ -46,10 +49,16 @@ const App = () => {
     return <View />;
   }
 
+  function getLibrary(provider) {
+    return new Web3(provider)
+  }
+
   return (
     <>
+    <Web3ReactProvider getLibrary={getLibrary}>
       <StatusBar style='light' />
       <View style={{ flex: 1, backgroundColor: '#387d80' }}>
+      
         <Provider theme={theme}>
           <NavigationContainer linking={linking}>
             <MainNavigation setTheme={setTheme} />
@@ -57,6 +66,7 @@ const App = () => {
           <NotificationProvider />
         </Provider>
       </View>
+      </Web3ReactProvider>
     </>
   );
 };
