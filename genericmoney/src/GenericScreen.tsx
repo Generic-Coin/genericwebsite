@@ -27,6 +27,7 @@ import James from './assets/images/james.png';
 import Caribou from './assets/images/caribou.png';
 import Larry from './assets/images/larry.png';
 import Charlie from './assets/images/charlie.png';
+import Lord from './assets/images/lord.png';
 import ComingSoon from './assets/images/comingsoon.png';
 import BlockSpot from './assets/images/bs.png';
 import CoinPaprika from './assets/images/cp.png';
@@ -125,8 +126,8 @@ const GenericScreen = () => {
     if (newValue == 'Lord Johnson') {
       console.log(newValue);
       setMemberTitle('Developer');
-      setMemberImage({ uri: ComingSoon });
-      setMemberUrl('');
+      setMemberImage({ uri: Lord });
+      setMemberUrl('https://www.linkedin.com/in/lord-johnson-91561a240/');
     }
     if (newValue == 'Joel Cuthriell') {
       console.log(newValue);
@@ -386,7 +387,7 @@ const GenericScreen = () => {
                       </a>
                     </Text>
                   </List.Accordion>
-                  
+
                   <List.Accordion
                     title='Whitepaper'
                     style={styles.section}
