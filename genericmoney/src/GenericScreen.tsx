@@ -499,9 +499,21 @@ const GenericScreen = () => {
 
                   <List.Accordion title='Roadmap' style={styles.section}>
                     <Text style={styles.textIndent}>
+                      <p>
+                        <s>CEX Listing</s> <i>completed</i>
+                      </p>
                       <p>CoinGecko Listing</p>
+                      <p>
+                        <s>CoinPaprika Listing</s> <i>completed</i>
+                      </p>
                       <p>CoinMarketCap Listing</p>
-                      <p>Generic LP Farming</p>
+                      <p>
+                        <s>ApeSwap Partnership</s> <i>completed</i>
+                      </p>
+                      <p>****** Partnership (Coming Soon)</p>
+                      <p>
+                        <s>Generic LP Farming</s> <i>completed</i>
+                      </p>
                       <p>
                         <s>Generic PCS LP</s> <i>completed</i>
                       </p>
@@ -511,7 +523,9 @@ const GenericScreen = () => {
                       <p>Generic Website Expansion 2</p>
                       <p>Generic Website Expansion 3</p>
                       <p>Generic Launchpad</p>
-                      <p>Generic Game</p>
+                      <p>Generic Slots</p>
+                      <p>Generic App</p>
+                      <p>Generic NFTs</p>
                       <p>Generic Ad Campaign</p>
                     </Text>
                   </List.Accordion>
