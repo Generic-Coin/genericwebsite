@@ -38,6 +38,7 @@ import TwitterIcon from './assets/images/tw.png';
 import MediumIcon from './assets/images/me.png';
 import YouTubeIcon from './assets/images/yt.png';
 import GitHubIcon from './assets/images/gh.png';
+import CoinWatchIcon from './assets/images/cw.png';
 
 const GenericScreen = () => {
   useEffect(() => {
@@ -500,7 +501,10 @@ const GenericScreen = () => {
                   <List.Accordion title='Roadmap' style={styles.section}>
                     <Text style={styles.textIndent}>
                       <p>
-                        <s>CEX Listing</s> <i>completed</i>
+                        CEX Listing <i>(June 7th)</i>
+                      </p>
+                      <p>
+                        LP Farming <i>(June 4th)</i>
                       </p>
                       <p>CoinGecko Listing</p>
                       <p>
@@ -510,7 +514,9 @@ const GenericScreen = () => {
                       <p>
                         <s>ApeSwap Partnership</s> <i>completed</i>
                       </p>
-                      <p>****** Partnership (Coming Soon)</p>
+                      <p>
+                        ****** Partnership <i>(Coming Soon)</i>
+                      </p>
                       <p>
                         <s>Generic LP Farming</s> <i>completed</i>
                       </p>
@@ -705,6 +711,18 @@ const GenericScreen = () => {
                         <Image
                           style={styles.associatedImage}
                           source={BlockSpot}
+                        />
+                      </a>
+                    </View>
+                    <View style={styles.associatedItem}>
+                      <a
+                        href='https://www.livecoinwatch.com/price/GenericCoin-GENV3'
+                        target='_blank'
+                        rel='noreferrer'
+                      >
+                        <Image
+                          style={styles.associatedImage}
+                          source={CoinWatchIcon}
                         />
                       </a>
                     </View>
