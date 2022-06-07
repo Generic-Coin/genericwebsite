@@ -193,11 +193,11 @@ const GenericScreen = () => {
                         </Text>
                         <p>
                           <a
-                            href='mailto:genericcoin@outlook.com'
+                            href='mailto:admin@generic.money'
                             target='_blank'
                             rel='noreferrer'
                           >
-                            genericcoin@outlook.com
+                            admin@generic.money
                           </a>
                         </p>
                       </div>
@@ -598,7 +598,7 @@ const GenericScreen = () => {
                     <View style={styles.associatedContainer}>
                       <View style={styles.associatedItem}>
                         <a
-                          href='mailto:genericcoin@outlook.com'
+                          href='mailto:admin@generic.money'
                           target='_blank'
                           rel='noreferrer'
                         >
@@ -722,18 +722,18 @@ const GenericScreen = () => {
                 <Panel variant='well' style={[styles.statusBarItem]}>
                   {/* <Text>        
                   <a
-                    href="mailto:genericcoin@outlook.com"
+                    href="mailto:admin@generic.money"
                     target="_blank"
                     rel="noreferrer"
                   >
-                    genericcoin@outlook.com
+                    admin@generic.money
                   </a>
                 </Text> */}
                   <Anchor
                     underline
-                    onPress={() => openLink('mailto:genericcoin@outlook.com')}
+                    onPress={() => openLink('mailto:admin@generic.money')}
                   >
-                    genericcoin@outlook.com
+                    admin@generic.money
                   </Anchor>
                 </Panel>
               </View>
