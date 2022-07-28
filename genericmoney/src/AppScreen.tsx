@@ -20,7 +20,6 @@ import {
   Fieldset,
 } from 'react95-native';
 import { AntDesign } from '@expo/vector-icons';
-import GenericLogo from './assets/images/gcp.png';
 import 'react-native-get-random-values';
 import '@ethersproject/shims';
 //import { ethers } from 'ethers';
@@ -31,10 +30,15 @@ import {
 } from '@walletconnect/react-native-dapp';
 
 import { useWeb3React } from '@web3-react/core';
-import { injected } from './supportedNetworks';
 import Web3 from 'web3';
+import { injected } from './supportedNetworks';
 import slotContractABI from './assets/contracts/slotsABI.json';
 import tokenABI from './assets/contracts/tokenABI.json';
+
+import GenericLogo from './assets/images/gcp.png';
+import SlotMachine from './assets/images/slots.png';
+import ReelMetaMask from './assets/images/slots.png';
+import Reel from './assets/images/slots.png';
 
 const AppScreen = () => {
   //Web3 implementation
@@ -269,7 +273,7 @@ const AppScreen = () => {
   const DURATION = 500;
   const TEXT_DURATION = DURATION * 0.8;
 
-  const onPress = () => {
+  const spinReel = () => {
     animatedValue.setValue(0);
     animatedValue2.setValue(0);
     animate((index + 1) % colors.length).start();
@@ -344,73 +348,90 @@ const AppScreen = () => {
     });
 
     return (
-      <Animated.View
-        style={[
-          StyleSheet.absoluteFillObject,
-          styles.container,
-          { backgroundColor },
-        ]}
-      >
+      <Animated.View>
+        <Image style={styles.slotmachine} source={SlotMachine} />
+
         <Animated.View
           style={[
-            styles.circle,
+            styles.reel,
             {
-              backgroundColor: dotBgColor,
               transform: [
-                { perspective: 200 },
                 {
-                  rotateY: animatedValue2.interpolate({
-                    inputRange: [0, 0.5, 1],
-                    outputRange: ['0deg', '-90deg', '-180deg'],
-                  }),
-                },
-
-                {
-                  scale: animatedValue2.interpolate({
-                    inputRange: [0, 0.5, 1],
-                    outputRange: [1, 6, 1],
-                  }),
-                },
-
-                {
-                  translateX: animatedValue2.interpolate({
-                    inputRange: [0, 0.5, 1],
-                    outputRange: ['0%', '50%', '0%'],
+                  translateY: animatedValue2.interpolate({
+                    inputRange: [0, 0.33, 0.33, 0.66, 0.66, 0.99, 1],
+                    outputRange: [
+                      '-50%',
+                      '50%',
+                      '-50%',
+                      '50%',
+                      '-50%',
+                      '50%',
+                      '-50%',
+                    ],
                   }),
                 },
               ],
             },
           ]}
         >
-          <TouchableOpacity onPress={onPress}>
-            <Animated.View
-              style={[
-                styles.button,
-                {
-                  transform: [
-                    {
-                      scale: animatedValue.interpolate({
-                        inputRange: [0, 0.05, 0.5, 1],
-                        outputRange: [1, 0, 0, 1],
-                        // extrapolate: "clamp"
-                      }),
-                    },
-                    {
-                      rotateY: animatedValue.interpolate({
-                        inputRange: [0, 0.5, 0.9, 1],
-                        outputRange: ['0deg', '180deg', '180deg', '180deg'],
-                      }),
-                    },
-                  ],
-                  opacity: animatedValue.interpolate({
-                    inputRange: [0, 0.05, 0.9, 1],
-                    outputRange: [1, 0, 0, 1],
-                  }),
-                },
-              ]}
-            >
-              <AnimatedAntDesign name='arrowright' size={28} color={'white'} />
-            </Animated.View>
+          <TouchableOpacity onPress={spinReel}>
+            <Text style={styles.textIndent} onPress={spinReel}>
+              <View>
+                <View style={styles.machine}>
+                  <View style={styles.reel}>
+                    <View style={styles.reelitem}>
+                      <Image style={styles.reelimage} source={GenericLogo} />
+                    </View>
+                    <View style={styles.reelitem}>
+                      <Image style={styles.reelimage} source={GenericLogo} />
+                    </View>
+                    <View style={styles.reelitem}>
+                      <Image style={styles.reelimage} source={GenericLogo} />
+                    </View>
+                    <View style={styles.reelitem}>
+                      <Image style={styles.reelimage} source={GenericLogo} />
+                    </View>
+                    <View style={styles.reelitem}>
+                      <Image style={styles.reelimage} source={GenericLogo} />
+                    </View>
+                  </View>
+                  <View style={styles.reel}>
+                    <View style={styles.reelitem}>
+                      <Image style={styles.reelimage} source={GenericLogo} />
+                    </View>
+                    <View style={styles.reelitem}>
+                      <Image style={styles.reelimage} source={GenericLogo} />
+                    </View>
+                    <View style={styles.reelitem}>
+                      <Image style={styles.reelimage} source={GenericLogo} />
+                    </View>
+                    <View style={styles.reelitem}>
+                      <Image style={styles.reelimage} source={GenericLogo} />
+                    </View>
+                    <View style={styles.reelitem}>
+                      <Image style={styles.reelimage} source={GenericLogo} />
+                    </View>
+                  </View>
+                  <View style={styles.reel}>
+                    <View style={styles.reelitem}>
+                      <Image style={styles.reelimage} source={GenericLogo} />
+                    </View>
+                    <View style={styles.reelitem}>
+                      <Image style={styles.reelimage} source={GenericLogo} />
+                    </View>
+                    <View style={styles.reelitem}>
+                      <Image style={styles.reelimage} source={GenericLogo} />
+                    </View>
+                    <View style={styles.reelitem}>
+                      <Image style={styles.reelimage} source={GenericLogo} />
+                    </View>
+                    <View style={styles.reelitem}>
+                      <Image style={styles.reelimage} source={GenericLogo} />
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </Text>
           </TouchableOpacity>
         </Animated.View>
       </Animated.View>
@@ -591,54 +612,17 @@ const AppScreen = () => {
                   </div>
                 </Text>
               </Panel>
-              <Panel variant='raised' style={[styles.zpanel]}>
-                <Text
-                  bold
-                  style={{
-                    fontSize: 22,
-                    margin: 12,
-                    marginBottom: 24,
-                  }}
-                >
-                  Animation Testing
-                </Text>
 
+              <Panel variant='raised' style={[styles.slotpanel]}>
                 <Animated.View
                   style={[StyleSheet.absoluteFillObject, styles.container, {}]}
                 >
                   <Circle
                     index={index}
-                    onPress={onPress}
+                    onPress={spinReel}
                     animatedValue={animatedValue}
                     animatedValue2={animatedValue2}
                   />
-                  <Text style={styles.textIndent}>
-                    <View>
-                      <View style={styles.machine}>
-                        <View style={styles.reel}>
-                          <View style={styles.reelitem}>1</View>
-                          <View style={styles.reelitem}>2</View>
-                          <View style={styles.reelitem}>3</View>
-                          <View style={styles.reelitem}>4</View>
-                          <View style={styles.reelitem}>5</View>
-                        </View>
-                        <View style={styles.reel}>
-                          <View style={styles.reelitem}>1</View>
-                          <View style={styles.reelitem}>2</View>
-                          <View style={styles.reelitem}>3</View>
-                          <View style={styles.reelitem}>4</View>
-                          <View style={styles.reelitem}>5</View>
-                        </View>
-                        <View style={styles.reel}>
-                          <View style={styles.reelitem}>1</View>
-                          <View style={styles.reelitem}>2</View>
-                          <View style={styles.reelitem}>3</View>
-                          <View style={styles.reelitem}>4</View>
-                          <View style={styles.reelitem}>5</View>
-                        </View>
-                      </View>
-                    </View>
-                  </Text>
                 </Animated.View>
               </Panel>
             </ScrollView>
@@ -667,9 +651,45 @@ const AppScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  machine: {},
-  reel: {},
-  reelitem: {},
+  slotmachine: {
+    width: '100%',
+    height: '74vw',
+    position: 'relative',
+    padding: 0,
+    maxWidth: '97%',
+    margin: 'auto',
+    left: 0,
+    right: 0,
+    top: '1.2vw',
+    pointerEvents: 'none',
+    overflow: 'hidden',
+  },
+  machine: {
+    flexbox: 'inline-flex',
+    flexDirection: 'row',
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  reel: {
+    zIndex: -1,
+    position: 'relative',
+    top: '-24.5vw',
+    margin: 'auto',
+    bottom: 0,
+    left: '-.6vw',
+    right: 0,
+    padding: '32wv',
+    overflow: 'hidden',
+  },
+  reelitem: {
+    width: '8.5vw',
+    height: '8.5vw',
+    margin: '1.3vw',
+  },
+  reelimage: {
+    width: '8.5vw',
+    height: '8.5vw',
+  },
   infoView: {
     maxWidth: '40rem',
     width: '100%',
@@ -704,8 +724,17 @@ const styles = StyleSheet.create({
     padding: 8,
     marginTop: -4,
     paddingTop: 12,
-    paddingBottom: 384,
+    paddingBottom: 100,
     marginBottom: 18,
+  },
+  slotpanel: {
+    flex: 1,
+    padding: 8,
+    marginTop: -4,
+    paddingTop: 12,
+    paddingBottom: 100,
+    marginBottom: 18,
+    minHeight: '76.6vw',
   },
   cutout: {
     flexGrow: 1,

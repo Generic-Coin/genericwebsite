@@ -39,6 +39,9 @@ import MediumIcon from './assets/images/me.png';
 import YouTubeIcon from './assets/images/yt.png';
 import GitHubIcon from './assets/images/gh.png';
 import CoinWatchIcon from './assets/images/cw.png';
+import TokenPieIcon from './assets/images/tp.png';
+import ApeSwapIcon from './assets/images/as.png';
+import PancakeSwapIcon from './assets/images/ps.png';
 
 const GenericScreen = () => {
   useEffect(() => {
@@ -194,11 +197,11 @@ const GenericScreen = () => {
                         </Text>
                         <p>
                           <a
-                            href='mailto:genericcoin@outlook.com'
+                            href='mailto:admin@generic.money'
                             target='_blank'
                             rel='noreferrer'
                           >
-                            genericcoin@outlook.com
+                            admin@generic.money
                           </a>
                         </p>
                       </div>
@@ -309,73 +312,89 @@ const GenericScreen = () => {
                       style={styles.videoPresentation}
                     />
                   </List.Accordion>
-                  <br />
-                  <Text style={styles.centered}>
-                    <a
-                      href='https://apeswap.finance/swap/?outputCurrency=0x98a61CA1504b92Ae768eF20b85aa97030b7a1Edf'
-                      target='_blank'
-                      rel='noreferrer'
-                      style={{ textDecoration: 'none' }}
-                    >
-                      <Button
-                        primary
-                        style={{
-                          width: '100%',
-                          maxWidth: '50vw',
-                          minWidth: '16rem',
-                        }}
+
+                  <List.Accordion
+                    title='Decentralized Exchanges'
+                    style={styles.section}
+                    defaultExpanded
+                  >
+                    <br />
+                    <Text style={styles.centered}>
+                      <a
+                        href='https://apeswap.finance/swap/?outputCurrency=0x98a61CA1504b92Ae768eF20b85aa97030b7a1Edf'
+                        target='_blank'
+                        rel='noreferrer'
+                        style={{ textDecoration: 'none' }}
                       >
-                        Buy on ApeSwap (Official Partner)
-                      </Button>
-                    </a>
-                    <br />
-                    <br />
-                    <a
-                      href='https://pancakeswap.finance/swap?outputCurrency=0x98a61CA1504b92Ae768eF20b85aa97030b7a1Edf'
-                      target='_blank'
-                      rel='noreferrer'
-                      style={{ textDecoration: 'none' }}
-                    >
-                      <Button
-                        primary
-                        style={{
-                          width: '100%',
-                          maxWidth: '50vw',
-                          minWidth: '16rem',
-                        }}
+                        <Button
+                          primary
+                          style={{
+                            width: '100%',
+                            maxWidth: '50vw',
+                            minWidth: '16rem',
+                          }}
+                        >
+                          Buy on ApeSwap (Official Partner)
+                        </Button>
+                      </a>
+                      <br />
+                      <br />
+                      <a
+                        href='https://pancakeswap.finance/swap?outputCurrency=0x98a61CA1504b92Ae768eF20b85aa97030b7a1Edf'
+                        target='_blank'
+                        rel='noreferrer'
+                        style={{ textDecoration: 'none' }}
                       >
-                        Buy on PancakeSwap
-                      </Button>
-                    </a>
+                        <Button
+                          primary
+                          style={{
+                            width: '100%',
+                            maxWidth: '50vw',
+                            minWidth: '16rem',
+                          }}
+                        >
+                          Buy on PancakeSwap
+                        </Button>
+                      </a>
+                      <br />
+                      <br />
+                    </Text>
+                  </List.Accordion>
+                  <List.Accordion
+                    title='Centralized Exchanges'
+                    style={styles.section}
+                    defaultExpanded
+                  >
                     <br />
-                    <br />
-                    <a
-                      href='https://bscscan.com/token/0x98a61ca1504b92ae768ef20b85aa97030b7a1edf'
-                      target='_blank'
-                      rel='noreferrer'
-                      style={{ textDecoration: 'none' }}
-                    >
-                      <Button
-                        primary
-                        style={{
-                          width: '100%',
-                          maxWidth: '50vw',
-                          minWidth: '16rem',
-                        }}
+                    <Text style={styles.centered}>
+                      <a
+                        href='https://tokpie.com/view_exchange/genv3-bnb/'
+                        target='_blank'
+                        rel='noreferrer'
+                        style={{ textDecoration: 'none' }}
                       >
-                        View on BscScan
-                      </Button>
-                    </a>
-                    <br />
-                    <br />
-                  </Text>
+                        <Button
+                          primary
+                          style={{
+                            width: '100%',
+                            maxWidth: '50vw',
+                            minWidth: '16rem',
+                          }}
+                        >
+                          Buy on Tokpie
+                        </Button>
+                      </a>
+                      <br />
+                      <br />
+                    </Text>
+                  </List.Accordion>
 
                   <List.Accordion
                     title='Contract'
                     style={styles.section}
                     defaultExpanded
                   >
-                    <Text>
+                    <Text style={styles.centered}>
                       <a
                         href='https://bscscan.com/token/0x98a61ca1504b92ae768ef20b85aa97030b7a1edf'
                         target='_blank'
@@ -386,6 +405,26 @@ const GenericScreen = () => {
                           0x98a61ca1504b92ae768ef20b85aa97030b7a1edf
                         </marquee>
                       </a>
+                      <br />
+                      <a
+                        href='https://bscscan.com/token/0x98a61ca1504b92ae768ef20b85aa97030b7a1edf'
+                        target='_blank'
+                        rel='noreferrer'
+                        style={{ textDecoration: 'none' }}
+                      >
+                        <Button
+                          primary
+                          style={{
+                            width: '100%',
+                            maxWidth: '50vw',
+                            minWidth: '16rem',
+                          }}
+                        >
+                          View on BscScan
+                        </Button>
+                      </a>
+                      <br />
+                      <br />
                     </Text>
                   </List.Accordion>
 
@@ -501,10 +540,10 @@ const GenericScreen = () => {
                   <List.Accordion title='Roadmap' style={styles.section}>
                     <Text style={styles.textIndent}>
                       <p>
-                        CEX Listing <i>(June 7th)</i>
+                        <s>CEX Listing</s> <i>completed</i>
                       </p>
                       <p>
-                        LP Farming <i>(June 4th)</i>
+                        <s>LP Farming</s> <i>completed</i>
                       </p>
                       <p>CoinGecko Listing</p>
                       <p>
@@ -604,7 +643,7 @@ const GenericScreen = () => {
                     <View style={styles.associatedContainer}>
                       <View style={styles.associatedItem}>
                         <a
-                          href='mailto:genericcoin@outlook.com'
+                          href='mailto:admin@generic.money'
                           target='_blank'
                           rel='noreferrer'
                         >
@@ -726,6 +765,42 @@ const GenericScreen = () => {
                         />
                       </a>
                     </View>
+                    <View style={styles.associatedItem}>
+                      <a
+                        href='https://tokpie.com/view_exchange/genv3-bnb/'
+                        target='_blank'
+                        rel='noreferrer'
+                      >
+                        <Image
+                          style={styles.associatedImage}
+                          source={TokenPieIcon}
+                        />
+                      </a>
+                    </View>
+                    <View style={styles.associatedItem}>
+                      <a
+                        href='https://apeswap.finance/swap/?outputCurrency=0x98a61CA1504b92Ae768eF20b85aa97030b7a1Edf'
+                        target='_blank'
+                        rel='noreferrer'
+                      >
+                        <Image
+                          style={styles.associatedImage}
+                          source={ApeSwapIcon}
+                        />
+                      </a>
+                    </View>
+                    <View style={styles.associatedItem}>
+                      <a
+                        href='https://pancakeswap.finance/swap?outputCurrency=0x98a61CA1504b92Ae768eF20b85aa97030b7a1Edf'
+                        target='_blank'
+                        rel='noreferrer'
+                      >
+                        <Image
+                          style={styles.associatedImage}
+                          source={PancakeSwapIcon}
+                        />
+                      </a>
+                    </View>
                   </View>
                 </ScrollView>
               </Panel>
@@ -738,20 +813,11 @@ const GenericScreen = () => {
                   ]}
                 ></Panel>
                 <Panel variant='well' style={[styles.statusBarItem]}>
-                  {/* <Text>        
-                  <a
-                    href="mailto:genericcoin@outlook.com"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    genericcoin@outlook.com
-                  </a>
-                </Text> */}
                   <Anchor
                     underline
-                    onPress={() => openLink('mailto:genericcoin@outlook.com')}
+                    onPress={() => openLink('mailto:admin@generic.money')}
                   >
-                    genericcoin@outlook.com
+                    admin@generic.money
                   </Anchor>
                 </Panel>
               </View>
