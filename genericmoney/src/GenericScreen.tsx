@@ -42,6 +42,7 @@ import CoinWatchIcon from './assets/images/cw.png';
 import TokenPieIcon from './assets/images/tp.png';
 import ApeSwapIcon from './assets/images/as.png';
 import PancakeSwapIcon from './assets/images/ps.png';
+import CoinCheckupIcon from './assets/images/cc.png';
 
 const GenericScreen = () => {
   useEffect(() => {
@@ -121,32 +122,27 @@ const GenericScreen = () => {
   const changeMember = (newValue: string) => {
     setValue(newValue);
 
-    if (newValue == 'James Smith') {
-      console.log(newValue);
+    if (newValue === 'James Smith') {
       setMemberTitle('Generic CEO');
       setMemberImage({ uri: James });
       setMemberUrl('https://www.linkedin.com/in/james-smith-770045238/');
     }
-    if (newValue == 'Lord Johnson') {
-      console.log(newValue);
+    if (newValue === 'Lord Johnson') {
       setMemberTitle('Developer');
       setMemberImage({ uri: Lord });
       setMemberUrl('https://www.linkedin.com/in/lord-johnson-91561a240/');
     }
-    if (newValue == 'Joel Cuthriell') {
-      console.log(newValue);
+    if (newValue === 'Joel Cuthriell') {
       setMemberTitle('UI/UX');
       setMemberImage({ uri: Caribou });
       setMemberUrl('https://www.linkedin.com/in/joelcuthriell/');
     }
-    if (newValue == 'Charlie Doodle') {
-      console.log(newValue);
+    if (newValue === 'Charlie Doodle') {
       setMemberTitle('Designer');
       setMemberImage({ uri: Charlie });
       setMemberUrl('https://www.linkedin.com/in/charlie-doodle-bab078239/');
     }
-    if (newValue == 'Larry Smitt') {
-      console.log(newValue);
+    if (newValue === 'Larry Smitt') {
       setMemberTitle('Advisor');
       setMemberImage({ uri: Larry });
       setMemberUrl('https://www.linkedin.com/in/larry-smitt-957052238/');
@@ -623,15 +619,6 @@ const GenericScreen = () => {
                           ApeSwap
                         </a>
                       </p>
-                      <p>
-                        <a
-                          href='https://t.me/partyhat'
-                          target='_blank'
-                          rel='noreferrer'
-                        >
-                          Partyhat - t.me/partyhat
-                        </a>
-                      </p>
                     </Text>
                   </List.Accordion>
 
@@ -798,6 +785,18 @@ const GenericScreen = () => {
                         <Image
                           style={styles.associatedImage}
                           source={PancakeSwapIcon}
+                        />
+                      </a>
+                    </View>
+                    <View style={styles.associatedItem}>
+                      <a
+                        href='https://coincheckup.com/coins/generic-coin'
+                        target='_blank'
+                        rel='noreferrer'
+                      >
+                        <Image
+                          style={styles.associatedImage}
+                          source={CoinCheckupIcon}
                         />
                       </a>
                     </View>
