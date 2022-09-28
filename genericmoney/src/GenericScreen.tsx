@@ -112,7 +112,7 @@ const GenericScreen = () => {
     'Lord Johnson',
     'Joel Cuthriell',
     'Charlie Doodle',
-    'Larry Smitt',
+    'Garry Schmittens',
   ].map(o => ({
     label: o,
     value: o,
@@ -142,7 +142,7 @@ const GenericScreen = () => {
       setMemberImage({ uri: Charlie });
       setMemberUrl('https://www.linkedin.com/in/charlie-doodle-bab078239/');
     }
-    if (newValue === 'Larry Smitt') {
+    if (newValue === 'Garry Schmittens') {
       setMemberTitle('Advisor');
       setMemberImage({ uri: Larry });
       setMemberUrl('https://www.linkedin.com/in/larry-smitt-957052238/');

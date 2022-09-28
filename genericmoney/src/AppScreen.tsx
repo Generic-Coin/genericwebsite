@@ -22,7 +22,6 @@ import {
 import { AntDesign } from '@expo/vector-icons';
 import 'react-native-get-random-values';
 import '@ethersproject/shims';
-//import { ethers } from 'ethers';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   useWalletConnect,
@@ -269,175 +268,12 @@ const AppScreen = () => {
     await provider.send('eth_requestAccounts', []);
   };
 
-  const AnimatedAntDesign = Animated.createAnimatedComponent(AntDesign);
-  const DURATION = 500;
-  const TEXT_DURATION = DURATION * 0.8;
-
-  const spinReel = () => {
-    animatedValue.setValue(0);
-    animatedValue2.setValue(0);
-    animate((index + 1) % colors.length).start();
-    setIndex((index + 1) % colors.length);
-  };
-
-  const animate = i =>
-    Animated.parallel([
-      Animated.timing(sliderAnimatedValue, {
-        toValue: i,
-        duration: TEXT_DURATION,
-        useNativeDriver: true,
-      }),
-      Animated.timing(animatedValue, {
-        toValue: 1,
-        duration: DURATION,
-        useNativeDriver: true,
-      }),
-      Animated.timing(animatedValue2, {
-        toValue: 1,
-        duration: DURATION,
-        useNativeDriver: false,
-      }),
-    ]);
-
-  const colors = [
-    {
-      initialBgColor: '#222',
-      bgColor: '#222',
-      nextBgColor: 'goldenrod',
-    },
-    {
-      initialBgColor: 'goldenrod',
-      bgColor: 'goldenrod',
-      nextBgColor: '#222',
-    },
-  ];
-
   /*const connectToMM = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     await provider.send('eth_requestAccounts', []);
   };*/
 
-  const animatedValue = React.useRef(new Animated.Value(0)).current;
-  const animatedValue2 = React.useRef(new Animated.Value(0)).current;
-  const sliderAnimatedValue = React.useRef(new Animated.Value(0)).current;
-  const [index, setIndex] = React.useState(0);
-
-  const Circle = ({ onPress, index, animatedValue, animatedValue2 }) => {
-    const { initialBgColor, nextBgColor, bgColor } = colors[index];
-    const inputRange = [0, 0.001, 0.5, 0.501, 1];
-    const backgroundColor = animatedValue2.interpolate({
-      inputRange,
-      outputRange: [
-        initialBgColor,
-        initialBgColor,
-        initialBgColor,
-        bgColor,
-        bgColor,
-      ],
-    });
-    const dotBgColor = animatedValue2.interpolate({
-      inputRange: [0, 0.001, 0.5, 0.501, 0.9, 1],
-      outputRange: [
-        bgColor,
-        bgColor,
-        bgColor,
-        initialBgColor,
-        initialBgColor,
-        nextBgColor,
-      ],
-    });
-
-    return (
-      <Animated.View>
-        <Image style={styles.slotmachine} source={SlotMachine} />
-
-        <Animated.View
-          style={[
-            styles.reel,
-            {
-              transform: [
-                {
-                  translateY: animatedValue2.interpolate({
-                    inputRange: [0, 0.33, 0.33, 0.66, 0.66, 0.99, 1],
-                    outputRange: [
-                      '-50%',
-                      '50%',
-                      '-50%',
-                      '50%',
-                      '-50%',
-                      '50%',
-                      '-50%',
-                    ],
-                  }),
-                },
-              ],
-            },
-          ]}
-        >
-          <TouchableOpacity onPress={spinReel}>
-            <Text style={styles.textIndent} onPress={spinReel}>
-              <View>
-                <View style={styles.machine}>
-                  <View style={styles.reel}>
-                    <View style={styles.reelitem}>
-                      <Image style={styles.reelimage} source={GenericLogo} />
-                    </View>
-                    <View style={styles.reelitem}>
-                      <Image style={styles.reelimage} source={GenericLogo} />
-                    </View>
-                    <View style={styles.reelitem}>
-                      <Image style={styles.reelimage} source={GenericLogo} />
-                    </View>
-                    <View style={styles.reelitem}>
-                      <Image style={styles.reelimage} source={GenericLogo} />
-                    </View>
-                    <View style={styles.reelitem}>
-                      <Image style={styles.reelimage} source={GenericLogo} />
-                    </View>
-                  </View>
-                  <View style={styles.reel}>
-                    <View style={styles.reelitem}>
-                      <Image style={styles.reelimage} source={GenericLogo} />
-                    </View>
-                    <View style={styles.reelitem}>
-                      <Image style={styles.reelimage} source={GenericLogo} />
-                    </View>
-                    <View style={styles.reelitem}>
-                      <Image style={styles.reelimage} source={GenericLogo} />
-                    </View>
-                    <View style={styles.reelitem}>
-                      <Image style={styles.reelimage} source={GenericLogo} />
-                    </View>
-                    <View style={styles.reelitem}>
-                      <Image style={styles.reelimage} source={GenericLogo} />
-                    </View>
-                  </View>
-                  <View style={styles.reel}>
-                    <View style={styles.reelitem}>
-                      <Image style={styles.reelimage} source={GenericLogo} />
-                    </View>
-                    <View style={styles.reelitem}>
-                      <Image style={styles.reelimage} source={GenericLogo} />
-                    </View>
-                    <View style={styles.reelitem}>
-                      <Image style={styles.reelimage} source={GenericLogo} />
-                    </View>
-                    <View style={styles.reelitem}>
-                      <Image style={styles.reelimage} source={GenericLogo} />
-                    </View>
-                    <View style={styles.reelitem}>
-                      <Image style={styles.reelimage} source={GenericLogo} />
-                    </View>
-                  </View>
-                </View>
-              </View>
-            </Text>
-          </TouchableOpacity>
-        </Animated.View>
-      </Animated.View>
-    );
-  };
-
+  
   return (
     <View style={styles.background}>
       <View style={styles.container}>
@@ -614,16 +450,7 @@ const AppScreen = () => {
               </Panel>
 
               <Panel variant='raised' style={[styles.slotpanel]}>
-                <Animated.View
-                  style={[StyleSheet.absoluteFillObject, styles.container, {}]}
-                >
-                  <Circle
-                    index={index}
-                    onPress={spinReel}
-                    animatedValue={animatedValue}
-                    animatedValue2={animatedValue2}
-                  />
-                </Animated.View>
+
               </Panel>
             </ScrollView>
           </Panel>
