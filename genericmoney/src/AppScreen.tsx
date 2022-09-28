@@ -462,11 +462,11 @@ const AppScreen = () => {
             <Panel variant='well' style={[styles.statusBarItem]}>
               {/* <Text>        
                   <a
-                    href="mailto:genericcoin@outlook.com"
+                    href="mailto:admin@generic.money"
                     target="_blank"
                     rel="noreferrer"
                   >
-                    genericcoin@outlook.com
+                    admin@generic.money
                   </a>
                 </Text> */}
             </Panel>
