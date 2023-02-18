@@ -5,21 +5,21 @@ import {
   Image,
   Linking,
   Platform,
-  Animated,
-  TouchableOpacity,
+  // Animated,
+  // TouchableOpacity,
 } from 'react-native';
 import {
   Panel,
   AppBar,
   Button,
-  List,
+  // List,
   Text,
   ScrollView,
-  Anchor,
-  Select,
-  Fieldset,
+  // Anchor,
+  // Select,
+  // Fieldset,
 } from 'react95-native';
-import { AntDesign } from '@expo/vector-icons';
+// import { AntDesign } from '@expo/vector-icons';
 import 'react-native-get-random-values';
 import '@ethersproject/shims';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -36,21 +36,21 @@ import tokenABI from './assets/contracts/tokenABI.json';
 
 import GenericLogo from './assets/images/gcp.png';
 import SlotMachine from './assets/images/slots.png';
-import ReelMetaMask from './assets/images/slots.png';
-import Reel from './assets/images/slots.png';
+// import ReelMetaMask from './assets/images/slots.png';
+// import Reel from './assets/images/slots.png';
 
 const AppScreen = () => {
-  //Web3 implementation
+  // Web3 implementation
   const web3 = new Web3(Web3.givenProvider);
   const { active, account, activate } = useWeb3React();
-  //Load Slot Machine Interface
+  // Load Slot Machine Interface
   const slotContractAddy = '0xF05FD4FdEcb26bAD729f05FE9267aEFb397Bb826';
   const slotContract = new web3.eth.Contract(slotContractABI, slotContractAddy);
-  //Load GENv3 Interface
+  // Load GENv3 Interface
   const tokenContractAddy = '0xe541eC6E868E61c384d2d0B16b972443cc1D8996';
   const tokenContract = new web3.eth.Contract(tokenABI, tokenContractAddy);
 
-  //React states for the dApp
+  // React states for the dApp
   const [priceETH, setPriceETH] = useState('Loading...');
   const [priceGEN, setPriceGEN] = useState('Loading...');
   const [pendingPrize, setPendingPrize] = useState('Loading...');
@@ -63,7 +63,7 @@ const AppScreen = () => {
   const [isRoundFetch, setIsRoundFetch] = useState(false);
   const [isSlotRolling, setIsSlotRolling] = useState(false);
 
-  //Define timer for usage with Async requests
+  // Define timer for usage with Async requests
   const timer = ms => new Promise(res => setTimeout(res, ms));
 
   useEffect(() => {
@@ -81,9 +81,9 @@ const AppScreen = () => {
   async function connect() {
     await activate(injected);
     if (web3.givenProvider !== null) {
-      web3.eth.net.getId().then(async function (result) {
-        if (result == 97) {
-          //fetchContractData();
+      web3.eth.net.getId().then(async function(result) {
+        if (result === 97) {
+          // fetchContractData();
         } else {
           setIsWrongNetwork(true);
           addBSCNetwork();
@@ -113,7 +113,7 @@ const AppScreen = () => {
       .then(() => {
         setIsWrongNetwork(false);
       })
-      .catch(ex => {});
+      .catch(ex => { });
   };
 
   const fetchContractData = async () => {
@@ -141,42 +141,42 @@ const AppScreen = () => {
         setPrizePool(web3.utils.fromWei(prizesPool) + ' GENv3');
         setBNBBalance(web3.utils.fromWei(balanceBNB) + ' BNB');
         setTokenBalance(web3.utils.fromWei(balanceToken) + ' GENv3');
-      } catch (ex) {}
+      } catch (ex) { }
     }
   };
 
   const rollEth = async () => {
     if (!!slotContract) {
       try {
-        //Obtain the roll price directly from the contract and update it in the case it gets modified at some point.
+        // Obtain the roll price directly from the contract and update it in the case it gets modified at some point.
         const price = await slotContract.methods.ethSpinPrice().call();
         setPriceETH(web3.utils.fromWei(price) + ' BNB');
-        //Roll the slot machine
+        // Roll the slot machine
         await slotContract.methods
           .ethSpin()
           .send({ from: account, value: price });
-        //Rolling state for the UI
+        // Rolling state for the UI
         setIsSlotRolling(true);
-        //Obtain the array of round IDs played by the connected wallet (so that we may acquire the latest)
+        // Obtain the array of round IDs played by the connected wallet (so that we may acquire the latest)
         const roundsplayed = await slotContract.methods
           .getRoundsPlayed(account)
           .call();
         let resp = await slotContract.methods
           .roundInfo(roundsplayed[roundsplayed.length - 1])
           .call();
-        //While Chainlink is processing the VRF, send a request every three seconds until it's fulfilled.
-        while (resp[4] == false) {
+        // While Chainlink is processing the VRF, send a request every three seconds until it's fulfilled.
+        while (resp[4] === false) {
           await timer(3000);
           resp = await slotContract.methods
             .roundInfo(roundsplayed[roundsplayed.length - 1])
             .call();
         }
 
-        //Finish the rolling state and display the results
+        // Finish the rolling state and display the results
         setRoundInfo(resp);
         setIsRoundFetch(true);
         setIsSlotRolling(false);
-      } catch (ex) {}
+      } catch (ex) { }
     }
   };
 
@@ -211,33 +211,33 @@ const AppScreen = () => {
   const rollToken = async () => {
     if (!!slotContract) {
       try {
-        //Obtain the roll price directly from the contract and update it in the case it gets modified at some point.
+        // Obtain the roll price directly from the contract and update it in the case it gets modified at some point.
         const price = await slotContract.methods.tokenSpinPrice().call();
         setPriceGEN(web3.utils.fromWei(price) + ' GENv3');
-        //Roll the slot machine
+        // Roll the slot machine
         await slotContract.methods.tokenSpin().send({ from: account });
-        //Rolling state for the UI
+        // Rolling state for the UI
         setIsSlotRolling(true);
-        //Obtain the array of round IDs played by the connected wallet (so that we may acquire the latest)
+        // Obtain the array of round IDs played by the connected wallet (so that we may acquire the latest)
         const roundsplayed = await slotContract.methods
           .getRoundsPlayed(account)
           .call();
         let resp = await slotContract.methods
           .roundInfo(roundsplayed[roundsplayed.length - 1])
           .call();
-        //While Chainlink is processing the VRF, send a request every three seconds until it's fulfilled.
-        while (resp[4] == false) {
+        // While Chainlink is processing the VRF, send a request every three seconds until it's fulfilled.
+        while (resp[4] === false) {
           await timer(3000);
           resp = await slotContract.methods
             .roundInfo(roundsplayed[roundsplayed.length - 1])
             .call();
         }
 
-        //Finish the rolling state and display the results
+        // Finish the rolling state and display the results
         setRoundInfo(resp);
         setIsRoundFetch(true);
         setIsSlotRolling(false);
-      } catch (ex) {}
+      } catch (ex) { }
     }
   };
 
@@ -273,7 +273,7 @@ const AppScreen = () => {
     await provider.send('eth_requestAccounts', []);
   };*/
 
-  
+
   return (
     <View style={styles.background}>
       <View style={styles.container}>
@@ -310,6 +310,121 @@ const AppScreen = () => {
               }}
               alwaysShowScrollbars
             >
+
+              <Panel variant='raised' style={[styles.slotpanel]}>
+
+                <Image style={styles.logoImage} source={SlotMachine} />
+                {/* <svg viewbox="0 0 400 400">
+                <defs>
+                  <clipPath id="counter-clippath">
+                    <rect x="50" y="0" width="320" height="72" />
+                  </clipPath>
+                </defs>
+                <circle fill="#ccc" cx="200" cy="200" r="200" />
+                <circle
+                  cx="200"
+                  cy="200"
+                  r="160"
+                  transform="rotate(-90, 200, 200)"
+                  stroke-dasharray="0, 1000"
+                  stroke="#7cb342"
+                  stroke-width="80"
+                  data-fallback="edge"
+                >
+                  <animate
+                    attributeName="stroke-dasharray"
+                    dur="1s"
+                    to="300,1000"
+                    fill="freeze"
+                    begin="1s;op.end+1s"
+                  />
+                </circle>
+                <circle cx="200" cy="200" r="160" fill="#fff" />
+                <g
+                  class="counter-clippath"
+                  clip-path="url(#counter-clippath)"
+                  transform="translate(0, 165)"
+                >
+                  <g class="move-svg-text">
+                    <animateTransform
+                      attributeName="transform"
+                      type="translate"
+                      dur="1s"
+                      calcMode="discrete"
+                      values="0 0; 0 -90; 0 -180; 0 -270; 0 -360; 0 -450; 0 -540"
+                      fill="freeze"
+                      begin="1s;op.end+1s"
+                    />
+                    <text
+                      x="200"
+                      y="70"
+                      text-anchor="middle"
+                      font-size="100"
+                      fill="#3c4946"
+                    >
+                      1%
+                    </text>
+                    <text
+                      x="200"
+                      y="160"
+                      text-anchor="middle"
+                      font-size="100"
+                      fill="#3c4946"
+                    >
+                      3%
+                    </text>
+                    <text
+                      x="200"
+                      y="250"
+                      text-anchor="middle"
+                      font-size="100"
+                      fill="#3c4946"
+                    >
+                      5%
+                    </text>
+                    <text
+                      x="200"
+                      y="340"
+                      text-anchor="middle"
+                      font-size="100"
+                      fill="#3c4946"
+                    >
+                      7%
+                    </text>
+                    <text
+                      x="200"
+                      y="430"
+                      text-anchor="middle"
+                      font-size="100"
+                      fill="#3c4946"
+                    >
+                      9%
+                    </text>
+                    <text
+                      x="200"
+                      y="520"
+                      text-anchor="middle"
+                      font-size="100"
+                      fill="#3c4946"
+                    >
+                      11%
+                    </text>
+                    <text
+                      x="200"
+                      y="610"
+                      text-anchor="middle"
+                      font-size="100"
+                      fill="#3c4946"
+                    >
+                      13%
+                    </text>
+                  </g>
+                </g>
+              </svg> */}
+
+              </Panel>
+
+
               <Panel variant='raised' style={[styles.zpanel]}>
                 <Text
                   bold
@@ -319,139 +434,83 @@ const AppScreen = () => {
                     marginBottom: 24,
                   }}
                 >
-                  Calls
+                  Generic Slots Beta 0.8
                 </Text>
                 <Text style={styles.textIndent}>
                   <div>
-                    {active ? (
-                      <>
-                        <p>
-                          <b>Roll with BNB:</b>
-                        </p>
-                        {isSlotRolling ? (
-                          <>
-                            {/*Remove the ability to roll again from the frontend while waiting for the results of the current roll*/}
-                            <Button primary>
-                              <span style={{ color: '#8c8c8c' }}>Roll</span>
-                            </Button>
-                          </>
-                        ) : (
-                          <Button primary onPress={() => rollEth()}>
-                            Roll
-                          </Button>
-                        )}
+                    <Button primary onPress={() => connect()}>Use MetaMask</Button>
+                    {isWrongNetwork ? (
+                      <p>Wrong Network! Please switch to Binance Smart Chain.</p>
+                    ) : (<></>)}
+                    
+                    <p><b>Roll with BNB:</b></p>
+                    <Button primary disabled={isSlotRolling || !active} onPress={() => rollEth()}>Roll</Button>
+                    {priceETH ? (<p></p>) : (<p>Price: {priceETH}</p>)}
+                    {BNBBalance ? (<p></p>) : (<p>Your BNB Balance: {BNBBalance}</p>)}
 
-                        <p>Price: {priceETH}</p>
-                        <p>Your BNB Balance: {BNBBalance}</p>
+                    <p><b>Roll with GENv3:</b></p>
+                    {hasAllowance ? (
+                      <Button primary disabled={isSlotRolling || !active} onPress={() => rollToken()}>Roll</Button>
+                      ) : (
+                        <Button primary disabled={!hasAllowance} onPress={() => handleApprove()}>Approve</Button>
+                      )
+                    }
 
-                        <p>
-                          <b>Roll with GENv3:</b>
-                        </p>
-                        {hasAllowance ? (
-                          <>
-                            {isSlotRolling ? (
-                              <>
-                                {/*Remove the ability to roll again from the frontend while waiting for the results of the current roll*/}
-                                <Button primary>
-                                  <span style={{ color: '#8c8c8c' }}>Roll</span>
-                                </Button>
-                              </>
-                            ) : (
-                              <Button primary onPress={() => rollToken()}>
-                                Roll
-                              </Button>
-                            )}
-                          </>
-                        ) : (
-                          <>
-                            <Button primary onPress={() => handleApprove()}>
-                              Approve
-                            </Button>
-                          </>
-                        )}
+                    {priceGEN ? (<p></p>) : (<p>Price: {priceGEN}</p>)}
 
-                        <p>Price: {priceGEN}</p>
-                        <p>Your GENv3 Balance: {tokenBalance}</p>
-                        {isRoundFetch ? (
-                          <Panel>
-                            <Text>
-                              <b>Round results:</b>
-                              <p>First Symbol: {roundInfo['symbols'][0]}</p>
-                              <p>Second Symbol: {roundInfo['symbols'][1]}</p>
-                              <p>Third Symbol: {roundInfo['symbols'][2]}</p>
-                              <p>
-                                <b>Payout: {roundInfo['payout']}</b>
-                              </p>
-                            </Text>
-                          </Panel>
-                        ) : (
-                          <>
-                            {isSlotRolling ? (
-                              <>Slot machine rolling...</>
-                            ) : (
+                    {tokenBalance ? (<p></p>) : (<p>Your GENv3 Balance: {tokenBalance}</p>)}
+                    
+                    {isRoundFetch ? (
+                      <Panel>
+                        <Text>
+                          <b>Round results:</b>
+                          <p>First Symbol: {roundInfo.['symbols'][0]}</p>
+                          <p>Second Symbol: {roundInfo['symbols'][1]}</p>
+                          <p>Third Symbol: {roundInfo['symbols'][2]}</p>
+                          <p>
+                            <b>Payout: {roundInfo['payout']}</b>
+                          </p>
+                        </Text>
+                      </Panel>
+                    ) : (
+                        <>
+                          {isSlotRolling ? (
+                            <>Slot machine rolling...</>
+                          ) : (
                               <></>
                             )}
-                          </>
-                        )}
-                        <p>
-                          <b>Prize Pool: </b> {prizePool}
-                        </p>
-                        <p>
-                          <b>Unclaimed Prizes:</b> {pendingPrize}
-                        </p>
-                        {Number(pendingPrize) > 0 ? (
-                          <>
-                            <Button primary onPress={() => handleClaim()}>
-                              Claim Prizes
-                            </Button>
-                          </>
-                        ) : (
-                          <Button primary>
-                            <span style={{ color: '#8c8c8c' }}>
-                              Claim Prizes
-                            </span>
-                          </Button>
-                        )}
-                      </>
-                    ) : (
-                      <>
-                        <Button primary onPress={() => connect()}>
-                          Use MetaMask
-                        </Button>
-                        {isWrongNetwork ? (
-                          <p>
-                            Wrong Network! Please switch to Binance Smart Chain.
-                          </p>
-                        ) : (
-                          <></>
-                        )}
-                      </>
-                    )}
+                        </>
+                      )}
+                    <p>
+                      {prizePool ? (<p></p>) : (<p><b>Prize Pool: </b> {prizePool}</p>)}
+                    </p>
+                    <p>
+                      {pendingPrize ? (<p></p>) : (<p><b>Unclaimed Prizes:</b> {pendingPrize}</p>)}
+                    </p>
+                    <Button primary disabled={!Boolean(Number(pendingPrize) > 0)}>Claim Prizes</Button>
 
-                    {/*displayWC()*/}
+                  {/*displayWC()*/}
 
-                    {/* {ViewClaimable()} */}
-                    {/* {ViewLockDuration()}
-                    {ViewClaimTime()}
-                    {ViewUserStaked()}
-                    {ViewTokensToLock}
-                    {ViewHoldersLength}
-                    {ViewTokenBalance}
-                    {ViewUserTimeLeft}
-                    {CheckHolderAddress(uint256 i)}
-                    {SetLockDuration(uint256 secs)}
-                    {WithdrawTokens(uint256 amount)}
-                    {UserStakeTokens}
-                    {UserClaimTokens} */}
-                    <br />
-                    <br />
+                  {/* {ViewClaimable()} */}
+                  {/* {ViewLockDuration()}
+                  {ViewClaimTime()}
+                  {ViewUserStaked()}
+                  {ViewTokensToLock}
+                  {ViewHoldersLength}
+                  {ViewTokenBalance}
+                  {ViewUserTimeLeft}
+                  {CheckHolderAddress(uint256 i)}
+                  {SetLockDuration(uint256 secs)}
+                  {WithdrawTokens(uint256 amount)}
+                  {UserStakeTokens}
+                  {UserClaimTokens} */}
+                  <br />
+                  <br />
                   </div>
                 </Text>
               </Panel>
 
-              <Panel variant='raised' style={[styles.slotpanel]}>
 
-              </Panel>
             </ScrollView>
           </Panel>
           <View style={[styles.statusBar]}>
