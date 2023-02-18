@@ -40,6 +40,7 @@ import SlotMachine from './assets/images/slots.png';
 // import Reel from './assets/images/slots.png';
 
 const AppScreen = () => {
+  const visibility = false;
   // Web3 implementation
   const web3 = new Web3(Web3.givenProvider);
   const { active, account, activate } = useWeb3React();
@@ -146,6 +147,7 @@ const AppScreen = () => {
   };
 
   const rollEth = async () => {
+    setIsRoundFetch(false);
     if (!!slotContract) {
       try {
         // Obtain the roll price directly from the contract and update it in the case it gets modified at some point.
@@ -209,6 +211,7 @@ const AppScreen = () => {
   };
 
   const rollToken = async () => {
+    setIsRoundFetch(false);
     if (!!slotContract) {
       try {
         // Obtain the roll price directly from the contract and update it in the case it gets modified at some point.
@@ -311,183 +314,202 @@ const AppScreen = () => {
               alwaysShowScrollbars
             >
 
-              <Panel variant='raised' style={[styles.slotpanel]}>
-
-                <Image style={styles.logoImage} source={SlotMachine} />
-                {/* <svg viewbox="0 0 400 400">
-                <defs>
-                  <clipPath id="counter-clippath">
-                    <rect x="50" y="0" width="320" height="72" />
-                  </clipPath>
-                </defs>
-                <circle fill="#ccc" cx="200" cy="200" r="200" />
-                <circle
-                  cx="200"
-                  cy="200"
-                  r="160"
-                  transform="rotate(-90, 200, 200)"
-                  stroke-dasharray="0, 1000"
-                  stroke="#7cb342"
-                  stroke-width="80"
-                  data-fallback="edge"
-                >
-                  <animate
-                    attributeName="stroke-dasharray"
-                    dur="1s"
-                    to="300,1000"
-                    fill="freeze"
-                    begin="1s;op.end+1s"
-                  />
-                </circle>
-                <circle cx="200" cy="200" r="160" fill="#fff" />
-                <g
-                  class="counter-clippath"
-                  clip-path="url(#counter-clippath)"
-                  transform="translate(0, 165)"
-                >
-                  <g class="move-svg-text">
-                    <animateTransform
-                      attributeName="transform"
-                      type="translate"
+              {visibility ? (
+                <Panel variant='raised' style={[styles.slotpanel]}>
+                  <Image style={styles.slotmachine} source={SlotMachine} />
+                  {/* <svg viewbox="0 0 400 400">
+                  <defs>
+                    <clipPath id="counter-clippath">
+                      <rect x="50" y="0" width="320" height="72" />
+                    </clipPath>
+                  </defs>
+                  <circle fill="#ccc" cx="200" cy="200" r="200" />
+                  <circle
+                    cx="200"
+                    cy="200"
+                    r="160"
+                    transform="rotate(-90, 200, 200)"
+                    stroke-dasharray="0, 1000"
+                    stroke="#7cb342"
+                    stroke-width="80"
+                    data-fallback="edge"
+                  >
+                    <animate
+                      attributeName="stroke-dasharray"
                       dur="1s"
-                      calcMode="discrete"
-                      values="0 0; 0 -90; 0 -180; 0 -270; 0 -360; 0 -450; 0 -540"
+                      to="300,1000"
                       fill="freeze"
                       begin="1s;op.end+1s"
                     />
-                    <text
-                      x="200"
-                      y="70"
-                      text-anchor="middle"
-                      font-size="100"
-                      fill="#3c4946"
-                    >
-                      1%
-                    </text>
-                    <text
-                      x="200"
-                      y="160"
-                      text-anchor="middle"
-                      font-size="100"
-                      fill="#3c4946"
-                    >
-                      3%
-                    </text>
-                    <text
-                      x="200"
-                      y="250"
-                      text-anchor="middle"
-                      font-size="100"
-                      fill="#3c4946"
-                    >
-                      5%
-                    </text>
-                    <text
-                      x="200"
-                      y="340"
-                      text-anchor="middle"
-                      font-size="100"
-                      fill="#3c4946"
-                    >
-                      7%
-                    </text>
-                    <text
-                      x="200"
-                      y="430"
-                      text-anchor="middle"
-                      font-size="100"
-                      fill="#3c4946"
-                    >
-                      9%
-                    </text>
-                    <text
-                      x="200"
-                      y="520"
-                      text-anchor="middle"
-                      font-size="100"
-                      fill="#3c4946"
-                    >
-                      11%
-                    </text>
-                    <text
-                      x="200"
-                      y="610"
-                      text-anchor="middle"
-                      font-size="100"
-                      fill="#3c4946"
-                    >
-                      13%
-                    </text>
+                  </circle>
+                  <circle cx="200" cy="200" r="160" fill="#fff" />
+                  <g
+                    class="counter-clippath"
+                    clip-path="url(#counter-clippath)"
+                    transform="translate(0, 165)"
+                  >
+                    <g class="move-svg-text">
+                      <animateTransform
+                        attributeName="transform"
+                        type="translate"
+                        dur="1s"
+                        calcMode="discrete"
+                        values="0 0; 0 -90; 0 -180; 0 -270; 0 -360; 0 -450; 0 -540"
+                        fill="freeze"
+                        begin="1s;op.end+1s"
+                      />
+                      <text
+                        x="200"
+                        y="70"
+                        text-anchor="middle"
+                        font-size="100"
+                        fill="#3c4946"
+                      >
+                        1%
+                      </text>
+                      <text
+                        x="200"
+                        y="160"
+                        text-anchor="middle"
+                        font-size="100"
+                        fill="#3c4946"
+                      >
+                        3%
+                      </text>
+                      <text
+                        x="200"
+                        y="250"
+                        text-anchor="middle"
+                        font-size="100"
+                        fill="#3c4946"
+                      >
+                        5%
+                      </text>
+                      <text
+                        x="200"
+                        y="340"
+                        text-anchor="middle"
+                        font-size="100"
+                        fill="#3c4946"
+                      >
+                        7%
+                      </text>
+                      <text
+                        x="200"
+                        y="430"
+                        text-anchor="middle"
+                        font-size="100"
+                        fill="#3c4946"
+                      >
+                        9%
+                      </text>
+                      <text
+                        x="200"
+                        y="520"
+                        text-anchor="middle"
+                        font-size="100"
+                        fill="#3c4946"
+                      >
+                        11%
+                      </text>
+                      <text
+                        x="200"
+                        y="610"
+                        text-anchor="middle"
+                        font-size="100"
+                        fill="#3c4946"
+                      >
+                        13%
+                      </text>
+                    </g>
                   </g>
-                </g>
-              </svg> */}
+                </svg> */}
+                </Panel>
+              ) : (
+                <p></p>
+              )}
 
-              </Panel>
 
 
               <Panel variant='raised' style={[styles.zpanel]}>
-                <Text
-                  bold
-                  style={{
-                    fontSize: 22,
-                    margin: 12,
-                    marginBottom: 24,
-                  }}
-                >
-                  Generic Slots Beta 0.8
-                </Text>
-                <Text style={styles.textIndent}>
-                  <div>
+                <div style={{width: '100%', display: 'flex'}}>
+                  <div style={{float: 'left', margin: '.75rem 0'}}>
+                    <Text
+                      bold
+                      style={{
+                        fontSize: 22,
+                        margin: 12,
+                        marginBottom: 24,
+                      }}
+                    >
+                      Generic Slots Beta 0.8
+                    </Text>
+                  </div>
+                  <div style={{float: 'right', right: '0.7rem', position: 'absolute',}}>
                     <Button primary onPress={() => connect()}>Use MetaMask</Button>
                     {isWrongNetwork ? (
                       <p>Wrong Network! Please switch to Binance Smart Chain.</p>
                     ) : (<></>)}
+                  </div>
+                </div>
+                
+                <Text style={styles.textIndent}>
+                  <div>
                     
-                    <p><b>Roll with BNB:</b></p>
-                    <Button primary disabled={isSlotRolling || !active} onPress={() => rollEth()}>Roll</Button>
-                    {priceETH ? (<p></p>) : (<p>Price: {priceETH}</p>)}
-                    {BNBBalance ? (<p></p>) : (<p>Your BNB Balance: {BNBBalance}</p>)}
-
-                    <p><b>Roll with GENv3:</b></p>
-                    {hasAllowance ? (
-                      <Button primary disabled={isSlotRolling || !active} onPress={() => rollToken()}>Roll</Button>
-                      ) : (
-                        <Button primary disabled={!hasAllowance} onPress={() => handleApprove()}>Approve</Button>
-                      )
-                    }
-
-                    {priceGEN ? (<p></p>) : (<p>Price: {priceGEN}</p>)}
-
-                    {tokenBalance ? (<p></p>) : (<p>Your GENv3 Balance: {tokenBalance}</p>)}
-                    
-                    {isRoundFetch ? (
-                      <Panel>
-                        <Text>
-                          <b>Round results:</b>
-                          <p>First Symbol: {roundInfo.['symbols'][0]}</p>
-                          <p>Second Symbol: {roundInfo['symbols'][1]}</p>
-                          <p>Third Symbol: {roundInfo['symbols'][2]}</p>
-                          <p>
-                            <b>Payout: {roundInfo['payout']}</b>
-                          </p>
-                        </Text>
-                      </Panel>
-                    ) : (
-                        <>
-                          {isSlotRolling ? (
-                            <>Slot machine rolling...</>
+                    <div style={{width: '100%', display: 'flex'}}>
+                      <div style={{paddingRight: '2%', float: 'left'}}>
+                        <p><b>Roll with BNB:</b></p>
+                        <Button primary disabled={isSlotRolling || !active} onPress={() => rollEth()}>Roll</Button>
+                        {priceETH ? (<p></p>) : (<p>Price: {priceETH}</p>)}
+                        {BNBBalance ? (<p></p>) : (<p>Your BNB Balance: {BNBBalance}</p>)}
+                      </div>
+                      <div style={{paddingRight: '2%', float: 'left'}}>
+                        <p><b>Roll with GENv3:</b></p>
+                        {hasAllowance ? (
+                          <Button primary disabled={isSlotRolling || !active} onPress={() => rollToken()}>Roll</Button>
                           ) : (
-                              <></>
-                            )}
-                        </>
-                      )}
-                    <p>
-                      {prizePool ? (<p></p>) : (<p><b>Prize Pool: </b> {prizePool}</p>)}
-                    </p>
-                    <p>
-                      {pendingPrize ? (<p></p>) : (<p><b>Unclaimed Prizes:</b> {pendingPrize}</p>)}
-                    </p>
-                    <Button primary disabled={!Boolean(Number(pendingPrize) > 0)}>Claim Prizes</Button>
+                            // <Button primary disabled={!hasAllowance} onPress={() => handleApprove()}>Approve</Button>
+                            <Button primary disabled={!hasAllowance} onPress={() => handleApprove()}>Approve</Button>
+                          )
+                        }
+                      </div>
+                    </div>
+
+                    <div style={{width: '100%'}}>
+                      {priceGEN ? (<p></p>) : (<p>Price: {priceGEN}</p>)}
+                      
+                      {tokenBalance ? (<p></p>) : (<p>Your GENv3 Balance: {tokenBalance}</p>)}
+                      
+                      {isRoundFetch === true ? (
+                          <Text>
+                            <b>Round results:</b>
+                            <p
+                            bold
+                            style={{
+                              fontSize: 26,
+                            }}>{roundInfo.['symbols'][0]} | {roundInfo['symbols'][1]} | {roundInfo['symbols'][2]}</p>
+                            <p>
+                              <b>Payout: {roundInfo['payout']}</b>
+                            </p>
+                          </Text>
+                      ) : (
+                          <>
+                            {isSlotRolling ? (
+                              <p>Slot machine rolling...</p>
+                            ) : (
+                                <p></p>
+                              )}
+                          </>
+                        )}
+                      <p>
+                        {prizePool ? (<p></p>) : (<p><b>Prize Pool: </b> {prizePool}</p>)}
+                      </p>
+                      <p>
+                        {pendingPrize ? (<p></p>) : (<p><b>Unclaimed Prizes:</b> {pendingPrize}</p>)}
+                      </p>
+                      <Button primary disabled={!Boolean(Number(pendingPrize) > 0)}>Claim Prizes</Button>
+                    </div>
+
 
                   {/*displayWC()*/}
 
@@ -538,15 +560,23 @@ const AppScreen = () => {
 
 const styles = StyleSheet.create({
   slotmachine: {
-    width: '100%',
-    height: '74vw',
-    position: 'relative',
-    padding: 0,
+    flex: 1,
+    padding: 8,
+    marginTop: -4,
+    paddingTop: 12,
+    paddingBottom: 100,
+    marginBottom: 18,
+    minHeight: '76.6vw',
+    // width: '100%',
+    height: '34rem',
+    maxHeight: '76vw',
+    position: 'absolute',
+    // padding: 0,
     maxWidth: '97%',
     margin: 'auto',
     left: 0,
     right: 0,
-    top: '1.2vw',
+    // top: '1.2vw',
     pointerEvents: 'none',
     overflow: 'hidden',
   },
