@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import useAnimation from './use-animation';
 import {
   StyleSheet,
   View,
@@ -28,6 +29,7 @@ import {
   withWalletConnect,
 } from '@walletconnect/react-native-dapp';
 
+
 import { useWeb3React } from '@web3-react/core';
 import Web3 from 'web3';
 import { injected } from './supportedNetworks';
@@ -44,11 +46,16 @@ const AppScreen = () => {
   // Web3 implementation
   const web3 = new Web3(Web3.givenProvider);
   const { active, account, activate } = useWeb3React();
-  // Load Slot Machine Interface
-  const slotContractAddy = '0xF05FD4FdEcb26bAD729f05FE9267aEFb397Bb826';
+  // Load Slot Machine Interface Test
+  const slotContractAddy = '0xc0Db165141d0dF79Bf2Db2b7498dAEeb88496a20';
+  // // Load Slot Machine Interface Live
+  // const slotContractAddy = '0x8e507a4eb9979d61ae6dca9bafdf3c346e9be82f';
   const slotContract = new web3.eth.Contract(slotContractABI, slotContractAddy);
-  // Load GENv3 Interface
-  const tokenContractAddy = '0xe541eC6E868E61c384d2d0B16b972443cc1D8996';
+  // Load GENv3 Interface Test
+  // const tokenContractAddy = '0x91AaC8770958E95B77384b2878D3D9f7A79d9562';
+  const tokenContractAddy = '0xd44130b87B590d88B414727407B32999a7Cebdd6';
+  // // Load GENv3 Interface Live
+  // const tokenContractAddy = '0xe541eC6E868E61c384d2d0B16b972443cc1D8996';
   const tokenContract = new web3.eth.Contract(tokenABI, tokenContractAddy);
 
   // React states for the dApp
@@ -66,6 +73,29 @@ const AppScreen = () => {
 
   // Define timer for usage with Async requests
   const timer = ms => new Promise(res => setTimeout(res, ms));
+  
+  const animation1 = useAnimation('elastic', 600, 0);
+  const animation2 = useAnimation('elastic', 600, 150);
+  const animation3 = useAnimation('elastic', 600, 300);
+  
+  let dot1: boolean = false;
+  let dot2: boolean = false;
+  let dot3: boolean = false;
+  let dotCounter: number = 0;
+  
+  const stupidAnimationSolution = async () => {
+    if (dotCounter > 3 ) {
+      dotCounter = 0;
+      dot1 = false;
+      dot2 = false;
+      dot3 = false;
+    }
+    if (dotCounter === 1) {dot1 = true;}
+    if (dotCounter === 2) {dot2 = true;}
+    if (dotCounter === 3) {dot3 = true;}
+    stupidAnimationSolution();
+  }
+  
 
   useEffect(() => {
     if (web3.givenProvider !== null) {
@@ -118,7 +148,7 @@ const AppScreen = () => {
   };
 
   const fetchContractData = async () => {
-    if (!!slotContract) {
+    // if (!!slotContract) {
       try {
         const priceEth = await slotContract.methods.ethSpinPrice().call();
         const priceGEN = await slotContract.methods.tokenSpinPrice().call();
@@ -139,11 +169,11 @@ const AppScreen = () => {
         setPriceETH(web3.utils.fromWei(priceEth) + ' BNB');
         setPriceGEN(web3.utils.fromWei(priceGEN) + ' GENv3');
         setPendingPrize(web3.utils.fromWei(pendingPrizes) + ' GENv3');
-        setPrizePool(web3.utils.fromWei(prizesPool) + ' GENv3');
+        setPrizePool( Math.round(web3.utils.fromWei(prizesPool)).toLocaleString() + ' GENv3');
         setBNBBalance(web3.utils.fromWei(balanceBNB) + ' BNB');
         setTokenBalance(web3.utils.fromWei(balanceToken) + ' GENv3');
       } catch (ex) { }
-    }
+    // }
   };
 
   const rollEth = async () => {
@@ -445,28 +475,45 @@ const AppScreen = () => {
                       Generic Slots Beta 0.8
                     </Text>
                   </div>
-                  <div style={{float: 'right', right: '0.7rem', position: 'absolute',}}>
-                    <Button primary onPress={() => connect()}>Use MetaMask</Button>
-                    {isWrongNetwork ? (
-                      <p>Wrong Network! Please switch to Binance Smart Chain.</p>
-                    ) : (<></>)}
-                  </div>
                 </div>
+                {active ? (
+                  <div style={{width: '100%', display: 'flex'}}>
+                    <div style={{width: '100%'}}>
+                      <Button primary>MetaMask Connected</Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div style={{width: '100%', display: 'flex'}}>
+                    <div style={{width: '100%'}}>
+                      <Button primary onPress={() => connect()}>Use MetaMask</Button>
+                      {isWrongNetwork ? (
+                        <p>Wrong Network! Please switch to Binance Smart Chain.</p>
+                      ) : (<></>)}
+                    </div>
+                  </div>
+                )}
+                
                 
                 <Text style={styles.textIndent}>
                   <div>
                     
+                    {active ? (
+                      <p><b>Pot: </b> {prizePool}</p>
+                    ) : (
+                      <></>
+                    )}
+                    
                     <div style={{width: '100%', display: 'flex'}}>
                       <div style={{paddingRight: '2%', float: 'left'}}>
-                        <p><b>Roll with BNB:</b></p>
-                        <Button primary disabled={isSlotRolling || !active} onPress={() => rollEth()}>Roll</Button>
+                        <p><b>Spin with BNB:</b></p>
+                        <Button primary disabled={isSlotRolling || !active} onPress={() => rollEth()}>Spin</Button>
                         {priceETH ? (<p></p>) : (<p>Price: {priceETH}</p>)}
                         {BNBBalance ? (<p></p>) : (<p>Your BNB Balance: {BNBBalance}</p>)}
                       </div>
                       <div style={{paddingRight: '2%', float: 'left'}}>
-                        <p><b>Roll with GENv3:</b></p>
+                        <p><b>Spin with GENv3:</b></p>
                         {hasAllowance ? (
-                          <Button primary disabled={isSlotRolling || !active} onPress={() => rollToken()}>Roll</Button>
+                          <Button primary disabled={isSlotRolling || !active} onPress={() => rollToken()}>Spin</Button>
                           ) : (
                             // <Button primary disabled={!hasAllowance} onPress={() => handleApprove()}>Approve</Button>
                             <Button primary disabled={!hasAllowance} onPress={() => handleApprove()}>Approve</Button>
@@ -480,14 +527,26 @@ const AppScreen = () => {
                       
                       {tokenBalance ? (<p></p>) : (<p>Your GENv3 Balance: {tokenBalance}</p>)}
                       
+                      {/* <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        {dot1 ? (<p></p>) : (<p>.</p>)} 
+                        {dot2 ? (<p></p>) : (<p>.</p>)} 
+                        {dot3 ? (<p></p>) : (<p>.</p>)} 
+                      </div>
+                      
+                      <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <div style={{marginTop: animation1 * 3 - 1}}>.</div>
+                        <div style={{marginTop: animation2 * 3 - 1}}>.</div>
+                        <div style={{marginTop: animation3 * 3 - 1}}>.</div>
+                      </div>
+                      
+                      <div>isRoundFetch: {isRoundFetch}</div> */}
+                      
                       {isRoundFetch === true ? (
                           <Text>
-                            <b>Round results:</b>
-                            <p
-                            bold
-                            style={{
-                              fontSize: 26,
-                            }}>{roundInfo.['symbols'][0]} | {roundInfo['symbols'][1]} | {roundInfo['symbols'][2]}</p>
+                            <b>Spin result:</b>
+                            <p bold="true" style={{fontSize: 26}}>
+                              {roundInfo.['symbols'][0]} | {roundInfo['symbols'][1]} | {roundInfo['symbols'][2]}
+                            </p>
                             <p>
                               <b>Payout: {roundInfo['payout']}</b>
                             </p>
@@ -495,19 +554,17 @@ const AppScreen = () => {
                       ) : (
                           <>
                             {isSlotRolling ? (
-                              <p>Slot machine rolling...</p>
+                              <div>Slot machine spinning...</div>
                             ) : (
                                 <p></p>
                               )}
                           </>
                         )}
-                      <p>
-                        {prizePool ? (<p></p>) : (<p><b>Prize Pool: </b> {prizePool}</p>)}
-                      </p>
-                      <p>
-                        {pendingPrize ? (<p></p>) : (<p><b>Unclaimed Prizes:</b> {pendingPrize}</p>)}
-                      </p>
-                      <Button primary disabled={!Boolean(Number(pendingPrize) > 0)}>Claim Prizes</Button>
+                      <div>
+                        {/* {prizePool ? (<p></p>) : (<p><b>Prize Pool: </b> {prizePool}</p>)} */}
+                      </div>
+                      
+
                     </div>
 
 
@@ -526,10 +583,22 @@ const AppScreen = () => {
                   {WithdrawTokens(uint256 amount)}
                   {UserStakeTokens}
                   {UserClaimTokens} */}
-                  <br />
-                  <br />
                   </div>
                 </Text>
+                <div style={{height: '3rem'}}></div>
+                {pendingPrize ? (
+                  <div style={{width: '100%', display: 'flex'}}>
+                    <div style={{width: '100%'}}>
+                      <Button primary disabled>No Unclaimed Winnings</Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div style={{width: '100%', display: 'flex'}}>
+                    <div style={{width: '100%'}}>
+                      <Button primary onPress={() => handleClaim()}>Claim Winnings</Button>
+                    </div>
+                  </div>
+                )}
               </Panel>
 
 

@@ -60,26 +60,27 @@ const GenericScreen = () => {
         Math.round(responseJson.quotes.USD.price * 1000000 * 100) / 100;
       setShowGenericPrice(digestedResponse);
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     }
   };
 
   const [showAboutModal, setShowAboutModal] = useState(false);
   const openLink = (url: string) => {
+    // Linking.openURL(url).catch(err => console.warn("Couldn't load page", err));
     Linking.openURL(url).catch(err => console.warn("Couldn't load page", err));
   };
 
-  let [memberImage, setMemberImage] = useState({ uri: James });
-  let renderMemberImage = () => {
+  const [memberImage, setMemberImage] = useState({ uri: James });
+  const renderMemberImage = () => {
     return (
       <ImageBackground source={memberImage} resizeMode='cover'>
-        <div style={{ width: 190, height: 180 }}></div>
+        <div style={{ width: 190, height: 180 }}>&nbsp;</div>
       </ImageBackground>
     );
   };
 
-  let [memberTitle, setMemberTitle] = useState('Generic CEO');
-  let renderMemberTitle = () => {
+  const [memberTitle, setMemberTitle] = useState('Generic CEO');
+  const renderMemberTitle = () => {
     if (memberTitle) {
       return (
         <Text>
@@ -87,24 +88,20 @@ const GenericScreen = () => {
           <br />
         </Text>
       );
-    } else {
-      return null;
-    }
+    } else return null;
   };
 
-  let [memberUrl, setMemberUrl] = useState(
+  const [memberUrl, setMemberUrl] = useState(
     'https://www.linkedin.com/in/james-smith-770045238/',
   );
-  let renderMemberLink = () => {
+  const renderMemberLink = () => {
     if (memberUrl) {
       return (
         <a href={memberUrl} target='_blank' rel='noreferrer'>
           LinkedIn
         </a>
       );
-    } else {
-      return null;
-    }
+    } else return null;
   };
 
   const options = [
@@ -117,7 +114,7 @@ const GenericScreen = () => {
     label: o,
     value: o,
   }));
-  let [value, setValue] = useState(options[0].value);
+  const [value, setValue] = useState(options[0].value);
 
   const changeMember = (newValue: string) => {
     setValue(newValue);
@@ -178,7 +175,7 @@ const GenericScreen = () => {
                 >
                   <View style={styles.infoView}>
                     <Text style={{ lineHeight: 24 }}>
-                      <div></div>
+                      <></>
 
                       <br />
                       <div style={{ float: 'left', width: '100%' }}>
