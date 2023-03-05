@@ -158,6 +158,7 @@ const AppScreen = () => {
         const pendingPrizes = await slotContract.methods
           .pendingWinnings(account)
           .call();
+        console.warn('pendingPrizes', pendingPrizes)
         const prizesPool = await slotContract.methods.prizePool().call();
         const balanceBNB = await web3.eth.getBalance(account);
         const balanceToken = await tokenContract.methods
@@ -166,12 +167,18 @@ const AppScreen = () => {
         if (allowance > 1000000000) {
           setHasAllowance(true);
         }
-        setPriceETH(web3.utils.fromWei(priceEth) + ' BNB');
-        setPriceGEN(web3.utils.fromWei(priceGEN) + ' GENv3');
-        setPendingPrize(web3.utils.fromWei(pendingPrizes) + ' GENv3');
+        // setPriceETH(web3.utils.fromWei(priceEth) + ' BNB');
+        setPriceETH(web3.utils.fromWei(priceEth));
+        // setPriceGEN(web3.utils.fromWei(priceGEN) + ' GENv3');
+        setPriceGEN(web3.utils.fromWei(priceGEN));
+        // setPendingPrize(web3.utils.fromWei(pendingPrizes) + ' GENv3');
+        setPendingPrize(web3.utils.fromWei(pendingPrizes));
+        // setPrizePool( Math.round(web3.utils.fromWei(prizesPool)).toLocaleString() + ' GENv3');
         setPrizePool( Math.round(web3.utils.fromWei(prizesPool)).toLocaleString() + ' GENv3');
-        setBNBBalance(web3.utils.fromWei(balanceBNB) + ' BNB');
-        setTokenBalance(web3.utils.fromWei(balanceToken) + ' GENv3');
+        // setBNBBalance(web3.utils.fromWei(balanceBNB) + ' BNB');
+        setBNBBalance(web3.utils.fromWei(balanceBNB));
+        // setTokenBalance(web3.utils.fromWei(balanceToken) + ' GENv3');
+        setTokenBalance(web3.utils.fromWei(balanceToken));
       } catch (ex) { }
     // }
   };
@@ -197,11 +204,12 @@ const AppScreen = () => {
           .roundInfo(roundsplayed[roundsplayed.length - 1])
           .call();
         // While Chainlink is processing the VRF, send a request every three seconds until it's fulfilled.
-        while (resp[4] === false) {
+        while (resp[5] === false && resp['payout'] === '0') {
           await timer(3000);
           resp = await slotContract.methods
             .roundInfo(roundsplayed[roundsplayed.length - 1])
             .call();
+          console.warn('ok', resp);
         }
 
         // Finish the rolling state and display the results
@@ -233,6 +241,7 @@ const AppScreen = () => {
       try {
         await slotContract.methods.claimPrizes().send({ from: account });
         setPendingPrize('0');
+        roundInfo['payout'] = '0';
       } catch (ex) {
         console.log(ex);
         return;
@@ -259,7 +268,7 @@ const AppScreen = () => {
           .roundInfo(roundsplayed[roundsplayed.length - 1])
           .call();
         // While Chainlink is processing the VRF, send a request every three seconds until it's fulfilled.
-        while (resp[4] === false) {
+        while (resp[5] === false) {
           await timer(3000);
           resp = await slotContract.methods
             .roundInfo(roundsplayed[roundsplayed.length - 1])
@@ -493,34 +502,39 @@ const AppScreen = () => {
                   </div>
                 )}
                 
+                <div style={{width: '100%', display: 'flex', marginTop: '1rem'}}>
+                  <div style={{width: '100%'}}>
+                    {/* <p><b>Spin with BNB:</b></p>
+                    <Button primary disabled={isSlotRolling || !active} onPress={() => rollEth()}>Spin</Button> */}
+                    <Button primary disabled={isSlotRolling || !active} onPress={() => rollEth()}>Spin</Button>
+                    {priceETH ? (<p></p>) : (<p>Price: {priceETH}</p>)}
+                    {BNBBalance ? (<p></p>) : (<p>Your BNB Balance: {BNBBalance}</p>)}
+                  </div>
+                  {/* <div style={{paddingRight: '2%', float: 'left'}}>
+                    <p><b>Spin with GENv3:</b></p>
+                    {hasAllowance ? (
+                      <Button primary disabled={isSlotRolling || !active} onPress={() => rollToken()}>Spin</Button>
+                      ) : (
+                        // <Button primary disabled={!hasAllowance} onPress={() => handleApprove()}>Approve</Button>
+                        <Button primary disabled={!hasAllowance} onPress={() => handleApprove()}>Approve</Button>
+                      )
+                    }
+                  </div> */}
+                </div>
                 
                 <Text style={styles.textIndent}>
                   <div>
                     
                     {active ? (
-                      <p><b>Pot: </b> {prizePool}</p>
+                      <div style={{textAlign: 'center'}}>
+                        <p><b>Pot: </b> {prizePool}</p>
+                      </div>
                     ) : (
                       <></>
                     )}
                     
-                    <div style={{width: '100%', display: 'flex'}}>
-                      <div style={{paddingRight: '2%', float: 'left'}}>
-                        <p><b>Spin with BNB:</b></p>
-                        <Button primary disabled={isSlotRolling || !active} onPress={() => rollEth()}>Spin</Button>
-                        {priceETH ? (<p></p>) : (<p>Price: {priceETH}</p>)}
-                        {BNBBalance ? (<p></p>) : (<p>Your BNB Balance: {BNBBalance}</p>)}
-                      </div>
-                      <div style={{paddingRight: '2%', float: 'left'}}>
-                        <p><b>Spin with GENv3:</b></p>
-                        {hasAllowance ? (
-                          <Button primary disabled={isSlotRolling || !active} onPress={() => rollToken()}>Spin</Button>
-                          ) : (
-                            // <Button primary disabled={!hasAllowance} onPress={() => handleApprove()}>Approve</Button>
-                            <Button primary disabled={!hasAllowance} onPress={() => handleApprove()}>Approve</Button>
-                          )
-                        }
-                      </div>
-                    </div>
+                    
+
 
                     <div style={{width: '100%'}}>
                       {priceGEN ? (<p></p>) : (<p>Price: {priceGEN}</p>)}
@@ -548,13 +562,13 @@ const AppScreen = () => {
                               {roundInfo.['symbols'][0]} | {roundInfo['symbols'][1]} | {roundInfo['symbols'][2]}
                             </p>
                             <p>
-                              <b>Payout: {roundInfo['payout']}</b>
+                              <b>Payout: {Math.round(web3.utils.fromWei(roundInfo['payout'])).toLocaleString()}</b>
                             </p>
                           </Text>
                       ) : (
                           <>
                             {isSlotRolling ? (
-                              <div>Slot machine spinning...</div>
+                              <div style={{textAlign: 'center'}}>Slot machine spinning...</div>
                             ) : (
                                 <p></p>
                               )}
@@ -566,7 +580,6 @@ const AppScreen = () => {
                       
 
                     </div>
-
 
                   {/*displayWC()*/}
 
@@ -586,18 +599,22 @@ const AppScreen = () => {
                   </div>
                 </Text>
                 <div style={{height: '3rem'}}></div>
-                {pendingPrize ? (
-                  <div style={{width: '100%', display: 'flex'}}>
-                    <div style={{width: '100%'}}>
-                      <Button primary disabled>No Unclaimed Winnings</Button>
-                    </div>
-                  </div>
-                ) : (
+                {active && ( Number(pendingPrize) > 0 || Number(roundInfo['payout']) > 0) ? (
                   <div style={{width: '100%', display: 'flex'}}>
                     <div style={{width: '100%'}}>
                       <Button primary onPress={() => handleClaim()}>Claim Winnings</Button>
                     </div>
                   </div>
+                ) : (
+                  <div style={{width: '100%', display: 'flex'}}>
+                  <div style={{width: '100%'}}>
+                    {active ? (
+                      <Button primary disabled>No Unclaimed Winnings</Button>
+                    ) : (
+                      <Button primary disabled>Connect to Check for Winnings</Button>
+                    )}
+                  </div>
+                </div>
                 )}
               </Panel>
 
@@ -628,6 +645,9 @@ const AppScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  textCenter: {
+    textAlign: 'center',
+  },
   slotmachine: {
     flex: 1,
     padding: 8,
