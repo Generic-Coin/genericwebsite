@@ -47,7 +47,7 @@ const AppScreen = () => {
   const web3 = new Web3(Web3.givenProvider);
   const { active, account, activate } = useWeb3React();
   // Load Slot Machine Interface Test
-  const slotContractAddy = '0xc0Db165141d0dF79Bf2Db2b7498dAEeb88496a20';
+  const slotContractAddy = '0x07373412f3c23eaca55990c58a93e31d8dc0cd79';
   // // Load Slot Machine Interface Live
   // const slotContractAddy = '0x8e507a4eb9979d61ae6dca9bafdf3c346e9be82f';
   const slotContract = new web3.eth.Contract(slotContractABI, slotContractAddy);
@@ -70,42 +70,24 @@ const AppScreen = () => {
   const [isWrongNetwork, setIsWrongNetwork] = useState(false);
   const [isRoundFetch, setIsRoundFetch] = useState(false);
   const [isSlotRolling, setIsSlotRolling] = useState(false);
+  const [isFreeSpin, setIsFreeSpin] = useState(false);
+  
+  let currentBlockNumber: number;
 
   // Define timer for usage with Async requests
   const timer = ms => new Promise(res => setTimeout(res, ms));
-  
-  const animation1 = useAnimation('elastic', 600, 0);
-  const animation2 = useAnimation('elastic', 600, 150);
-  const animation3 = useAnimation('elastic', 600, 300);
-  
-  let dot1: boolean = false;
-  let dot2: boolean = false;
-  let dot3: boolean = false;
+    
   let dotCounter: number = 0;
   
-  const stupidAnimationSolution = async () => {
-    if (dotCounter > 3 ) {
-      dotCounter = 0;
-      dot1 = false;
-      dot2 = false;
-      dot3 = false;
-    }
-    if (dotCounter === 1) {dot1 = true;}
-    if (dotCounter === 2) {dot2 = true;}
-    if (dotCounter === 3) {dot3 = true;}
-    stupidAnimationSolution();
-  }
-  
-
   useEffect(() => {
     if (web3.givenProvider !== null) {
       const id = setInterval(() => {
         fetchContractData();
       }, 5000);
-
       fetchContractData();
-
       return () => clearInterval(id);
+    } else {
+      return null;
     }
   }, [active]);
 
@@ -155,11 +137,12 @@ const AppScreen = () => {
         const allowance = await tokenContract.methods
           .allowance(account, slotContractAddy)
           .call();
-        const pendingPrizes = await slotContract.methods
-          .pendingWinnings(account)
-          .call();
-        console.warn('pendingPrizes', pendingPrizes)
+        // const pendingPrizes = await slotContract.methods
+        //   .pendingWinnings(account)
+        //   .call();
+        // console.warn('pendingPrizes', pendingPrizes)
         const prizesPool = await slotContract.methods.prizePool().call();
+        // console.warn('prizesPool', prizesPool);
         const balanceBNB = await web3.eth.getBalance(account);
         const balanceToken = await tokenContract.methods
           .balanceOf(account)
@@ -172,8 +155,7 @@ const AppScreen = () => {
         // setPriceGEN(web3.utils.fromWei(priceGEN) + ' GENv3');
         setPriceGEN(web3.utils.fromWei(priceGEN));
         // setPendingPrize(web3.utils.fromWei(pendingPrizes) + ' GENv3');
-        setPendingPrize(web3.utils.fromWei(pendingPrizes));
-        // setPrizePool( Math.round(web3.utils.fromWei(prizesPool)).toLocaleString() + ' GENv3');
+        // setPendingPrize(web3.utils.fromWei(pendingPrizes));
         setPrizePool( Math.round(web3.utils.fromWei(prizesPool)).toLocaleString() + ' GENv3');
         // setBNBBalance(web3.utils.fromWei(balanceBNB) + ' BNB');
         setBNBBalance(web3.utils.fromWei(balanceBNB));
@@ -219,96 +201,120 @@ const AppScreen = () => {
       } catch (ex) { }
     }
   };
-
-  const handleApprove = async () => {
-    if (!!tokenContract) {
-      try {
-        await tokenContract.methods
-          .approve(
-            slotContractAddy,
-            '115792089237316195423570985008687907853269984665640564039457584007913129639935',
-          )
-          .send({ from: account });
-        setHasAllowance(true);
-      } catch (ex) {
-        return;
+  
+  const blockNumber = async () => {
+    try {
+      currentBlockNumber = await web3.eth.getBlockNumber();
+      
+      if (currentBlockNumber) {
+        slotContract.events.Spin({
+          fromBlock: currentBlockNumber - 10
+        }, function (error, event) {
+        // callback
+        })
+        .on('connected', function (subscriptionId) {
+          console.log(subscriptionId);
+        })
+        .on('data', function (event) {
+        console.log(event); // same results as the optional callback above
+        })
       }
-    }
-  };
+      
+    } catch (ex) { }
+  }
+  
 
-  const handleClaim = async () => {
-    if (!!slotContract) {
-      try {
-        await slotContract.methods.claimPrizes().send({ from: account });
-        setPendingPrize('0');
-        roundInfo['payout'] = '0';
-      } catch (ex) {
-        console.log(ex);
-        return;
-      }
-    }
-  };
 
-  const rollToken = async () => {
-    setIsRoundFetch(false);
-    if (!!slotContract) {
-      try {
-        // Obtain the roll price directly from the contract and update it in the case it gets modified at some point.
-        const price = await slotContract.methods.tokenSpinPrice().call();
-        setPriceGEN(web3.utils.fromWei(price) + ' GENv3');
-        // Roll the slot machine
-        await slotContract.methods.tokenSpin().send({ from: account });
-        // Rolling state for the UI
-        setIsSlotRolling(true);
-        // Obtain the array of round IDs played by the connected wallet (so that we may acquire the latest)
-        const roundsplayed = await slotContract.methods
-          .getRoundsPlayed(account)
-          .call();
-        let resp = await slotContract.methods
-          .roundInfo(roundsplayed[roundsplayed.length - 1])
-          .call();
-        // While Chainlink is processing the VRF, send a request every three seconds until it's fulfilled.
-        while (resp[5] === false) {
-          await timer(3000);
-          resp = await slotContract.methods
-            .roundInfo(roundsplayed[roundsplayed.length - 1])
-            .call();
-        }
 
-        // Finish the rolling state and display the results
-        setRoundInfo(resp);
-        setIsRoundFetch(true);
-        setIsSlotRolling(false);
-      } catch (ex) { }
-    }
-  };
+  // const handleApprove = async () => {
+  //   if (!!tokenContract) {
+  //     try {
+  //       await tokenContract.methods
+  //         .approve(
+  //           slotContractAddy,
+  //           '115792089237316195423570985008687907853269984665640564039457584007913129639935',
+  //         )
+  //         .send({ from: account });
+  //       setHasAllowance(true);
+  //     } catch (ex) {
+  //       return;
+  //     }
+  //   }
+  // };
+
+  // const handleClaim = async () => {
+  //   if (!!slotContract) {
+  //     try {
+  //       await slotContract.methods.claimPrizes().send({ from: account });
+  //       setPendingPrize('0');
+  //       roundInfo['payout'] = '0';
+  //     } catch (ex) {
+  //       console.log(ex);
+  //       return;
+  //     }
+  //   }
+  // };
+
+//   const rollToken = async () => {
+//     setIsRoundFetch(false);
+//     if (!!slotContract) {
+//       try {
+//         // Obtain the roll price directly from the contract and update it in the case it gets modified at some point.
+//         const price = await slotContract.methods.tokenSpinPrice().call();
+//         setPriceGEN(web3.utils.fromWei(price) + ' GENv3');
+//         // Roll the slot machine
+//         await slotContract.methods.tokenSpin().send({ from: account });
+//         // Rolling state for the UI
+//         setIsSlotRolling(true);
+//         // Obtain the array of round IDs played by the connected wallet (so that we may acquire the latest)
+//         const roundsplayed = await slotContract.methods
+//           .getRoundsPlayed(account)
+//           .call();
+//         let resp = await slotContract.methods
+//           .roundInfo(roundsplayed[roundsplayed.length - 1])
+//           .call();
+//         // While Chainlink is processing the VRF, send a request every three seconds until it's fulfilled.
+//         while (resp[5] === false) {
+//           await timer(3000);
+//           resp = await slotContract.methods
+//             .roundInfo(roundsplayed[roundsplayed.length - 1])
+//             .call();
+//         }
+// 
+//         // Finish the rolling state and display the results
+//         setRoundInfo(resp);
+//         setIsRoundFetch(true);
+//         setIsSlotRolling(false);
+//       } catch (ex) { }
+//     }
+//   };
 
   const openLink = (url: string) => {
     Linking.openURL(url).catch(err => console.warn("Couldn't load page", err));
   };
 
-  const displayWC = () => {
-    const connector = useWalletConnect();
-    if (!connector.connected) {
-      /**
-       *  Connect! 🎉
-       */
-      return (
-        <Button primary onPress={() => connector.connect()}>
-          Use WalletConnect
-        </Button>
-      );
-    }
-    return (
-      <Button primary onPress={() => connector.killSession()}>
-        Disconnect WalletConnect
-      </Button>
-    );
-  };
-  const connectToMM = async () => {
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
-    await provider.send('eth_requestAccounts', []);
-  };
+  // const displayWC = () => {
+  //   const connector = useWalletConnect();
+  //   if (!connector.connected) {
+  //     /**
+  //      *  Connect! 🎉
+  //      */
+  //     return (
+  //       <Button primary onPress={() => connector.connect()}>
+  //         Use WalletConnect
+  //       </Button>
+  //     );
+  //   }
+  //   return (
+  //     <Button primary onPress={() => connector.killSession()}>
+  //       Disconnect WalletConnect
+  //     </Button>
+  //   );
+  // };
+  // const connectToMM = async () => {
+  //   const provider = new ethers.providers.Web3Provider(window.ethereum);
+  //   await provider.send('eth_requestAccounts', []);
+  // };
 
   /*const connectToMM = async () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -522,7 +528,7 @@ const AppScreen = () => {
                   </div> */}
                 </div>
                 
-                <Text style={styles.textIndent}>
+                <Text>
                   <div>
                     
                     {active ? (
@@ -536,7 +542,7 @@ const AppScreen = () => {
                     
 
 
-                    <div style={{width: '100%'}}>
+                    <div style={{width: '100%', textAlign: 'center'}}>
                       {priceGEN ? (<p></p>) : (<p>Price: {priceGEN}</p>)}
                       
                       {tokenBalance ? (<p></p>) : (<p>Your GENv3 Balance: {tokenBalance}</p>)}
@@ -598,7 +604,7 @@ const AppScreen = () => {
                   {UserClaimTokens} */}
                   </div>
                 </Text>
-                <div style={{height: '3rem'}}></div>
+                {/* <div style={{height: '3rem'}}></div>
                 {active && ( Number(pendingPrize) > 0 || Number(roundInfo['payout']) > 0) ? (
                   <div style={{width: '100%', display: 'flex'}}>
                     <div style={{width: '100%'}}>
@@ -615,7 +621,7 @@ const AppScreen = () => {
                     )}
                   </div>
                 </div>
-                )}
+                )} */}
               </Panel>
 
 
