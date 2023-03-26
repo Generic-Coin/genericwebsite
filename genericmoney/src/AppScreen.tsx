@@ -47,7 +47,7 @@ const AppScreen = () => {
   const web3 = new Web3(Web3.givenProvider);
   const { active, account, activate } = useWeb3React();
   // Load Slot Machine Interface Test
-  const slotContractAddy = '0x07373412f3c23eaca55990c58a93e31d8dc0cd79';
+  const slotContractAddy = '0x06945f5f639edf92152be57ccb7be6f4cc1cdc92';
   // // Load Slot Machine Interface Live
   // const slotContractAddy = '0x8e507a4eb9979d61ae6dca9bafdf3c346e9be82f';
   const slotContract = new web3.eth.Contract(slotContractABI, slotContractAddy);
