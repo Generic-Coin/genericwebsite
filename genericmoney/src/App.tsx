@@ -24,6 +24,7 @@ const App = () => {
       screens: {
         home: '',
         app: 'app',
+        staking: 'staking',
       },
     },
   };
