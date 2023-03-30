@@ -4,6 +4,7 @@ import { AppBar } from 'react95-native';
 import type { Theme } from 'react95-native';
 import GenericScreen from './GenericScreen';
 import AppScreen from './AppScreen';
+import StakingScreen from './StakingScreen';
 
 const Stack = createStackNavigator();
 
@@ -34,6 +35,9 @@ const MainNavigation = (props: Props) => {
         </Stack.Screen>
         <Stack.Screen name='app' options={{ title: 'Generic App' }}>
           {() => <AppScreen {...props} />}
+        </Stack.Screen>
+        <Stack.Screen name='staking' options={{ title: 'Generic Staking' }}>
+          {() => <StakingScreen {...props} />}
         </Stack.Screen>
       </Stack.Navigator>
     </>
