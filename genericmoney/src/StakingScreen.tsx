@@ -24,28 +24,30 @@ import {
 import GenericLogo from './assets/images/gcp.png';
 import { useWeb3React } from '@web3-react/core';
 import Web3 from 'web3';
-import { injected } from './supportedNetworks';
 import tokenABI from './assets/contracts/tokenABI.json';
 import stakingABI from './assets/contracts/stakingABI.json';
 import stakingTokenABI from './assets/contracts/stakingTokenABI.json';
 import ADDRESSES from './constants/addresses';
+import ConnectMetamask from './components/ConnectMetamask';
+import type {Contract} from 'web3-eth-contract';
 
 const StakingScreen = () => {
     // Web3 implementation
     const web3 = new Web3(Web3.givenProvider);
-    const { active, account, activate } = useWeb3React();
+    const { active, account, chainId } = useWeb3React();
 
-    // GENv3
-    const tokenContractAddy = ADDRESSES['97'].genericToken;
-    const tokenContract = new web3.eth.Contract(tokenABI, tokenContractAddy);
+    var tokenContractAddress = ADDRESSES['97'].genericToken;
+       var tokenContract = new web3.eth.Contract(tokenABI, tokenContractAddress);
 
-    // LP Staking contract
-    const stakingContractAddress = ADDRESSES['97'].staking;
-    const stakingContract = new web3.eth.Contract(stakingABI, stakingContractAddress);
+        // LP Staking contract
+      var  stakingContractAddress = ADDRESSES['97'].staking;
+      var  stakingContract = new web3.eth.Contract(stakingABI, stakingContractAddress);
 
-    // The LP token
-    const stakingTokenContractAddress = ADDRESSES['97'].stakingToken;
-    const stakingTokenContract = new web3.eth.Contract(stakingTokenABI, stakingTokenContractAddress);
+        // The LP token
+       var stakingTokenContractAddress = ADDRESSES['97'].stakingToken;
+       var stakingTokenContract = new web3.eth.Contract(stakingTokenABI, stakingTokenContractAddress);
+
+    //var selectedAccount = '';
 
     // React states for the dApp
     const [tokenBalance, setTokenBalance] = useState('Loading...');
@@ -53,11 +55,15 @@ const StakingScreen = () => {
     const [stakingAmount, setStakingAmount] = useState('Loading...');
     const [pendingRewards, setPendingRewards] = useState('Loading...');
     const [depositAmount, setDepositAmount] = useState('0');
-    const [isWrongNetwork, setIsWrongNetwork] = useState(false);
     const [allowance, setAllowance] = useState('0');
     const [hasAllowance, setHasAllowance] = useState(false);
 
     useEffect(() => {
+        /*ethereum.on('accountsChanged', function (accounts) {
+            selectedAccount = accounts[0];
+            fetchContractData();
+          });*/
+
         if (web3.givenProvider !== null) {
             const id = setInterval(() => {
                 fetchContractData();
@@ -68,44 +74,6 @@ const StakingScreen = () => {
             return null;
         }
     }, [active]);
-
-    async function connect() {
-        await activate(injected);
-        if (web3.givenProvider !== null) {
-            web3.eth.net.getId().then(async function (result) {
-                if (result === 97) {
-                    //fetchContractData();
-                } else {
-                    setIsWrongNetwork(true);
-                    addBSCNetwork();
-                }
-            });
-        }
-    }
-
-    const addBSCNetwork = async () => {
-        window.ethereum
-            .request({
-                method: 'wallet_addEthereumChain',
-                params: [
-                    {
-                        chainId: '0x61',
-                        chainName: 'Smart Chain - Testnet',
-                        nativeCurrency: {
-                            name: 'Binance Coin',
-                            symbol: 'BNB',
-                            decimals: 18,
-                        },
-                        rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
-                        blockExplorerUrls: ['https://testnet.bscscan.com'],
-                    },
-                ],
-            })
-            .then(() => {
-                setIsWrongNetwork(false);
-            })
-            .catch(ex => { });
-    };
 
     const fetchContractData = async () => {
         try {
@@ -238,22 +206,7 @@ const StakingScreen = () => {
                     </Text>
                 </div>
             </div>
-            {active ? (
-                <div style={{ width: '100%', display: 'flex' }}>
-                    <div style={{ width: '100%' }}>
-                        <Button primary>MetaMask Connected</Button>
-                    </div>
-                </div>
-            ) : (
-                <div style={{ width: '100%', display: 'flex' }}>
-                    <div style={{ width: '100%' }}>
-                        <Button primary onPress={() => connect()}>Use MetaMask</Button>
-                        {isWrongNetwork ? (
-                            <p>Wrong Network! Please switch to Binance Smart Chain.</p>
-                        ) : (<></>)}
-                    </div>
-                </div>
-            )}
+            <ConnectMetamask />
             {active ? (
                 <div>
                     <Text style={[styles.textInput]}>
