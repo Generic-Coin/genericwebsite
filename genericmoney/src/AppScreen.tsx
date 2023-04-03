@@ -40,6 +40,8 @@ import GenericLogo from './assets/images/gcp.png';
 import SlotMachine from './assets/images/slots.png';
 // import ReelMetaMask from './assets/images/slots.png';
 // import Reel from './assets/images/slots.png';
+import ADDRESSES from './constants/addresses';
+import ConnectMetamask from './components/ConnectMetamask';
 
 const AppScreen = () => {
   const visibility = false;
@@ -47,13 +49,13 @@ const AppScreen = () => {
   const web3 = new Web3(Web3.givenProvider);
   const { active, account, activate } = useWeb3React();
   // Load Slot Machine Interface Test
-  const slotContractAddy = '0x06945f5f639edf92152be57ccb7be6f4cc1cdc92';
+  const slotContractAddy = ADDRESSES['97'].slots;
   // // Load Slot Machine Interface Live
   // const slotContractAddy = '0x8e507a4eb9979d61ae6dca9bafdf3c346e9be82f';
   const slotContract = new web3.eth.Contract(slotContractABI, slotContractAddy);
   // Load GENv3 Interface Test
   // const tokenContractAddy = '0x91AaC8770958E95B77384b2878D3D9f7A79d9562';
-  const tokenContractAddy = '0xd44130b87B590d88B414727407B32999a7Cebdd6';
+  const tokenContractAddy = ADDRESSES['97'].genericToken;
   // // Load GENv3 Interface Live
   // const tokenContractAddy = '0xe541eC6E868E61c384d2d0B16b972443cc1D8996';
   const tokenContract = new web3.eth.Contract(tokenABI, tokenContractAddy);
@@ -90,44 +92,6 @@ const AppScreen = () => {
       return null;
     }
   }, [active]);
-
-  async function connect() {
-    await activate(injected);
-    if (web3.givenProvider !== null) {
-      web3.eth.net.getId().then(async function(result) {
-        if (result === 97) {
-          // fetchContractData();
-        } else {
-          setIsWrongNetwork(true);
-          addBSCNetwork();
-        }
-      });
-    }
-  }
-
-  const addBSCNetwork = async () => {
-    window.ethereum
-      .request({
-        method: 'wallet_addEthereumChain',
-        params: [
-          {
-            chainId: '0x61',
-            chainName: 'Smart Chain - Testnet',
-            nativeCurrency: {
-              name: 'Binance Coin',
-              symbol: 'BNB',
-              decimals: 18,
-            },
-            rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
-            blockExplorerUrls: ['https://testnet.bscscan.com'],
-          },
-        ],
-      })
-      .then(() => {
-        setIsWrongNetwork(false);
-      })
-      .catch(ex => { });
-  };
 
   const fetchContractData = async () => {
     // if (!!slotContract) {
@@ -491,22 +455,7 @@ const AppScreen = () => {
                     </Text>
                   </div>
                 </div>
-                {active ? (
-                  <div style={{width: '100%', display: 'flex'}}>
-                    <div style={{width: '100%'}}>
-                      <Button primary>MetaMask Connected</Button>
-                    </div>
-                  </div>
-                ) : (
-                  <div style={{width: '100%', display: 'flex'}}>
-                    <div style={{width: '100%'}}>
-                      <Button primary onPress={() => connect()}>Use MetaMask</Button>
-                      {isWrongNetwork ? (
-                        <p>Wrong Network! Please switch to Binance Smart Chain.</p>
-                      ) : (<></>)}
-                    </div>
-                  </div>
-                )}
+                <ConnectMetamask />
                 
                 <div style={{width: '100%', display: 'flex', marginTop: '1rem'}}>
                   <div style={{width: '100%'}}>
