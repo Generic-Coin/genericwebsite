@@ -32,6 +32,8 @@ import ConnectMetamask from './components/ConnectMetamask';
 import type { Contract } from 'web3-eth-contract';
 
 const StakingScreen = () => {
+    
+    
     // Web3 implementation
     const web3 = new Web3(Web3.givenProvider);
     const { active, account, chainId } = useWeb3React();
@@ -54,7 +56,7 @@ const StakingScreen = () => {
     const [stakingTokenBalance, setStakingTokenBalance] = useState('Loading...');
     const [stakingAmount, setStakingAmount] = useState('Loading...');
     const [pendingRewards, setPendingRewards] = useState('Loading...');
-    const [depositAmount, setDepositAmount] = useState('0');
+    const [depositAmount, setDepositAmount] = React.useState('0');
     const [allowance, setAllowance] = useState('0');
     const [hasAllowance, setHasAllowance] = useState(false);
 
@@ -210,22 +212,31 @@ const StakingScreen = () => {
                                 {active ? (
                                     <div>
                                         <Text style={[styles.textInput]}>
-                                            {tokenBalance ? (<p>Your GENv3 Balance: {tokenBalance} GEN</p>) : (<p></p>)}
-                                            {stakingTokenBalance ? (<p>Stake token balance: {stakingTokenBalance} LP tokens</p>) : (<p></p>)}
-                                            {stakingAmount ? (<p>Staked amount: {stakingAmount} LP tokens</p>) : (<p></p>)}
-                                            {pendingRewards ? (<p>Claimable rewards: {pendingRewards} GEN</p>) : (<p></p>)}
-                                            <input value={depositAmount} onChange={handleDepositAmountChange} />
-                                            {hasAllowance ? (
-                                                <Button primary disabled={!hasAllowance} onPress={() => deposit()}>Deposit</Button>
-                                            ) : (
-                                                <>
-                                                    <Button primary disabled={hasAllowance} onPress={() => handleApprove()}>Approve</Button>
-                                                    <Button primary disabled={hasAllowance} onPress={() => deposit()}>Deposit</Button>
-                                                </>
-                                            )
-                                            }
-                                            <Button primary onPress={() => withdraw()}>Withdraw stake</Button>
-                                            <Button primary onPress={() => claimRewards()}>Claim rewards</Button>
+                                            {tokenBalance ? (<p>{tokenBalance} Unstaked GEN</p>) : (<p></p>)}
+                                            {Number(tokenBalance) > 0 ? (<p>
+                                                <input value={depositAmount} onChange={handleDepositAmountChange} />
+                                                {hasAllowance ? (
+                                                    <Button primary disabled={!hasAllowance} onPress={() => deposit()}>Deposit</Button>
+                                                ) : (
+                                                    <>
+                                                        <Button primary disabled={hasAllowance} onPress={() => handleApprove()}>Approve</Button>
+                                                        <Button primary disabled={hasAllowance} onPress={() => deposit()}>Deposit</Button>
+                                                    </>
+                                                )}    
+                                            </p>) : (<p></p>)}
+                                            {stakingTokenBalance ? (<p>{stakingTokenBalance} Total LP tokens</p>) : (<p></p>)}
+                                            {stakingAmount ? (<p>{stakingAmount} Staked LP tokens</p>) : (<p></p>)}
+                                            {Number(stakingAmount) > 0 ? (<p><Button primary onPress={() => withdraw()}>Withdraw stake</Button></p>) : (<p></p>)}
+                                            {pendingRewards ? (<p>{pendingRewards} Claimable GEN</p>) : (<p></p>)}
+                                            {Number(pendingRewards) > 0 ? (<p><Button primary onPress={() => claimRewards()}>Claim rewards</Button></p>) : (<p></p>)}
+                                            {/* <TextInput 
+                                                value={depositAmount} 
+                                                onChange={handleDepositAmountChange} 
+                                            /> */}
+                                            <div>
+                                            </div>
+                                            <div>
+                                            </div>
                                         </Text>
                                     </div>
                                 ) : (<></>)}
@@ -240,7 +251,8 @@ const StakingScreen = () => {
 };
 
 const styles = StyleSheet.create({
-    textInput: {
+    textInput: { 
+        textAlign: 'center',
         input: {
             fontSize: '3rem',
         }
