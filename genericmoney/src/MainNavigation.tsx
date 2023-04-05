@@ -5,6 +5,7 @@ import type { Theme } from 'react95-native';
 import GenericScreen from './GenericScreen';
 import AppScreen from './AppScreen';
 import StakingScreen from './StakingScreen';
+import NFTScreen from './NFTScreen';
 
 const Stack = createStackNavigator();
 
@@ -38,6 +39,9 @@ const MainNavigation = (props: Props) => {
         </Stack.Screen>
         <Stack.Screen name='staking' options={{ title: 'Generic Staking' }}>
           {() => <StakingScreen {...props} />}
+        </Stack.Screen>
+        <Stack.Screen name='nft' options={{ title: 'Generic NFT' }}>
+          {() => <NFTScreen {...props} />}
         </Stack.Screen>
       </Stack.Navigator>
     </>
