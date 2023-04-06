@@ -56,7 +56,7 @@ const StakingScreen = () => {
     const [stakingTokenBalance, setStakingTokenBalance] = useState('Loading...');
     const [stakingAmount, setStakingAmount] = useState('Loading...');
     const [pendingRewards, setPendingRewards] = useState('Loading...');
-    const [depositAmount, setDepositAmount] = React.useState('0');
+    const [depositAmount, setDepositAmount] = React.useState('');
     const [allowance, setAllowance] = useState('0');
     const [hasAllowance, setHasAllowance] = useState(false);
 
@@ -148,12 +148,15 @@ const StakingScreen = () => {
     const handleDepositAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setDepositAmount(e.target.value);
         var trimmed = String(e.target.value).trim();
-
-        if (trimmed !== '') {
-
-            const hasAllowance = web3.utils.toBN(allowance).gte(web3.utils.toBN(web3.utils.toWei(trimmed, 'ether')));
-            setHasAllowance(hasAllowance);
-        }
+        if (Number(trimmed) > 0) {
+            console.warn('allowance', allowance);
+            // console.warn('trim', web3.utils.toBN(allowance).gte(web3.utils.toBN(web3.utils.toWei(trimmed, 'ether'))));
+            // 
+            // const hasAllowance = web3.utils.toBN(allowance).gte(web3.utils.toBN(web3.utils.toWei(trimmed, 'ether')));
+            // setHasAllowance(hasAllowance);
+            setHasAllowance(true);
+            console.warn('hasAllowance', hasAllowance);
+        } else { setHasAllowance(false) }
     }
 
     return (
@@ -210,20 +213,16 @@ const StakingScreen = () => {
                                 </div>
                                 <ConnectMetamask />
                                 {active ? (
-                                    <div>
-                                        <Text style={[styles.textInput]}>
+                                        <Text style={styles.textInputArea}>
                                             {tokenBalance ? (<p>{tokenBalance} Unstaked GEN</p>) : (<p></p>)}
-                                            {Number(tokenBalance) > 0 ? (<p>
-                                                <input value={depositAmount} onChange={handleDepositAmountChange} />
-                                                {hasAllowance ? (
-                                                    <Button primary disabled={!hasAllowance} onPress={() => deposit()}>Deposit</Button>
-                                                ) : (
-                                                    <>
-                                                        <Button primary disabled={hasAllowance} onPress={() => handleApprove()}>Approve</Button>
-                                                        <Button primary disabled={hasAllowance} onPress={() => deposit()}>Deposit</Button>
-                                                    </>
-                                                )}    
-                                            </p>) : (<p></p>)}
+                                            {Number(tokenBalance) > 0 ? (<div>
+                                                <input style={{ border: '3px solid #848584', fontFamily: 'MS Sans Serif', fontSize: '1rem', padding: '0.43rem' }} 
+                                                    value={depositAmount} 
+                                                    onChange={handleDepositAmountChange} 
+                                                />
+                                                <Button primary disabled={!hasAllowance} onPress={() => handleApprove()}>Approve</Button>
+                                                <Button primary disabled={!hasAllowance} onPress={() => deposit()}>Deposit</Button>
+                                            </div>) : (<p></p>)}
                                             {stakingTokenBalance ? (<p>{stakingTokenBalance} Total LP tokens</p>) : (<p></p>)}
                                             {stakingAmount ? (<p>{stakingAmount} Staked LP tokens</p>) : (<p></p>)}
                                             {Number(stakingAmount) > 0 ? (<p><Button primary onPress={() => withdraw()}>Withdraw stake</Button></p>) : (<p></p>)}
@@ -233,12 +232,7 @@ const StakingScreen = () => {
                                                 value={depositAmount} 
                                                 onChange={handleDepositAmountChange} 
                                             /> */}
-                                            <div>
-                                            </div>
-                                            <div>
-                                            </div>
                                         </Text>
-                                    </div>
                                 ) : (<></>)}
                             </div>
 
@@ -251,11 +245,14 @@ const StakingScreen = () => {
 };
 
 const styles = StyleSheet.create({
-    textInput: { 
+    textInputArea: { 
         textAlign: 'center',
-        input: {
-            fontSize: '3rem',
-        }
+    },
+    textInput: {
+        border: '3px solid #848584',
+        fontFamily: 'MS Sans Serif',
+        fontSize: '1rem',
+        padding: '0.43rem' 
     },
     textCenter: {
         textAlign: 'center',

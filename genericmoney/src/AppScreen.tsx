@@ -73,6 +73,7 @@ const AppScreen = () => {
   const [isRoundFetch, setIsRoundFetch] = useState(false);
   const [isSlotRolling, setIsSlotRolling] = useState(false);
   const [isFreeSpin, setIsFreeSpin] = useState(false);
+  const [spinHistory, setSpinHistory] = useState([]);
   
   let currentBlockNumber: number;
 
@@ -96,6 +97,22 @@ const AppScreen = () => {
   const fetchContractData = async () => {
     // if (!!slotContract) {
       try {
+        let historyArray = [];
+        let roundsplayed = await slotContract.methods
+          .getRoundsPlayed(account)
+          .call();
+        if (roundsplayed.length > 10) {
+          roundsplayed = roundsplayed.slice(-10); 
+        }
+        roundsplayed.forEach(e => {
+          getRoundHistory(e).then(response => {
+            historyArray.push({response});
+          });
+        });
+        setSpinHistory(historyArray);
+        console.warn('spinHistory', spinHistory);
+        
+          
         const priceEth = await slotContract.methods.ethSpinPrice().call();
         const priceGEN = await slotContract.methods.tokenSpinPrice().call();
         const allowance = await tokenContract.methods
@@ -120,7 +137,7 @@ const AppScreen = () => {
         setPriceGEN(web3.utils.fromWei(priceGEN));
         // setPendingPrize(web3.utils.fromWei(pendingPrizes) + ' GENv3');
         // setPendingPrize(web3.utils.fromWei(pendingPrizes));
-        setPrizePool( Math.round(web3.utils.fromWei(prizesPool)).toLocaleString() + ' GENv3');
+        setPrizePool( Math.round(web3.utils.fromWei(prizesPool)).toLocaleString() + ' GEN');
         // setBNBBalance(web3.utils.fromWei(balanceBNB) + ' BNB');
         setBNBBalance(web3.utils.fromWei(balanceBNB));
         // setTokenBalance(web3.utils.fromWei(balanceToken) + ' GENv3');
@@ -128,6 +145,11 @@ const AppScreen = () => {
       } catch (ex) { }
     // }
   };
+  
+  const getRoundHistory = async (e) => {
+    let response: Promise<Number> = await slotContract.methods.roundInfo(e).call();
+    return response;
+  }
 
   const rollEth = async () => {
     setIsRoundFetch(false);
@@ -166,26 +188,27 @@ const AppScreen = () => {
     }
   };
   
-  const blockNumber = async () => {
-    try {
-      currentBlockNumber = await web3.eth.getBlockNumber();
-      
-      if (currentBlockNumber) {
-        slotContract.events.Spin({
-          fromBlock: currentBlockNumber - 10
-        }, function (error, event) {
-        // callback
-        })
-        .on('connected', function (subscriptionId) {
-          console.log(subscriptionId);
-        })
-        .on('data', function (event) {
-        console.log(event); // same results as the optional callback above
-        })
-      }
-      
-    } catch (ex) { }
-  }
+  
+  // const blockNumber = async () => {
+  //   try {
+  //     currentBlockNumber = await web3.eth.getBlockNumber();
+  //     
+  //     if (currentBlockNumber) {
+  //       slotContract.events.Spin({
+  //         fromBlock: currentBlockNumber - 10
+  //       }, function (error, event) {
+  //       // callback
+  //       })
+  //       .on('connected', function (subscriptionId) {
+  //         console.log(subscriptionId);
+  //       })
+  //       .on('data', function (event) {
+  //       console.log(event); // same results as the optional callback above
+  //       })
+  //     }
+  //     
+  //   } catch (ex) { }
+  // }
   
 
 
@@ -494,7 +517,7 @@ const AppScreen = () => {
                     <div style={{width: '100%', textAlign: 'center'}}>
                       {priceGEN ? (<p></p>) : (<p>Price: {priceGEN}</p>)}
                       
-                      {tokenBalance ? (<p></p>) : (<p>Your GENv3 Balance: {tokenBalance}</p>)}
+                      {tokenBalance ? (<p></p>) : (<p>Your GEN Balance: {tokenBalance}</p>)}
                       
                       {/* <div style={{ display: 'flex', justifyContent: 'center' }}>
                         {dot1 ? (<p></p>) : (<p>.</p>)} 
@@ -523,7 +546,7 @@ const AppScreen = () => {
                       ) : (
                           <>
                             {isSlotRolling ? (
-                              <div style={{textAlign: 'center'}}>Slot machine spinning...</div>
+                              <div style={{textAlign: 'center'}}>Slot Machine Spinning...</div>
                             ) : (
                                 <p></p>
                               )}
@@ -533,6 +556,20 @@ const AppScreen = () => {
                         {/* {prizePool ? (<p></p>) : (<p><b>Prize Pool: </b> {prizePool}</p>)} */}
                       </div>
                       
+                      {active ? (
+                        <div style={{textAlign: 'center'}}>
+                          History:                          
+                          <ul>
+                            {spinHistory.map(item => {
+                              return <li>{item[5]}</li>;
+                            })}
+                          </ul>
+                        </div>
+                      ) : (
+                        <></>
+                      )}
+                      
+
 
                     </div>
 
