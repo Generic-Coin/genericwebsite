@@ -42,6 +42,7 @@ import SlotMachine from './assets/images/slots.png';
 // import Reel from './assets/images/slots.png';
 import ADDRESSES from './constants/addresses';
 import ConnectMetamask from './components/ConnectMetamask';
+import { DEFAULT_CHAIN_ID } from './constants/chains';
 
 const AppScreen = () => {
   const visibility = false;
@@ -49,13 +50,13 @@ const AppScreen = () => {
   const web3 = new Web3(Web3.givenProvider);
   const { active, account, activate } = useWeb3React();
   // Load Slot Machine Interface Test
-  const slotContractAddy = ADDRESSES['97'].slots;
+  const slotContractAddy = ADDRESSES[DEFAULT_CHAIN_ID].slots;
   // // Load Slot Machine Interface Live
   // const slotContractAddy = '0x8e507a4eb9979d61ae6dca9bafdf3c346e9be82f';
   const slotContract = new web3.eth.Contract(slotContractABI, slotContractAddy);
   // Load GENv3 Interface Test
   // const tokenContractAddy = '0x91AaC8770958E95B77384b2878D3D9f7A79d9562';
-  const tokenContractAddy = ADDRESSES['97'].genericToken;
+  const tokenContractAddy = ADDRESSES[DEFAULT_CHAIN_ID].genericToken;
   // // Load GENv3 Interface Live
   // const tokenContractAddy = '0xe541eC6E868E61c384d2d0B16b972443cc1D8996';
   const tokenContract = new web3.eth.Contract(tokenABI, tokenContractAddy);
@@ -104,13 +105,15 @@ const AppScreen = () => {
         if (roundsplayed.length > 10) {
           roundsplayed = roundsplayed.slice(-10); 
         }
-        roundsplayed.forEach(e => {
-          getRoundHistory(e).then(response => {
-            historyArray.push({response});
-          });
-        });
+
+        let roundInfo;
+        for(const round in roundsplayed){
+          roundInfo = await slotContract.methods.roundInfo(roundsplayed[round]).call();
+          historyArray.push({roundInfo});
+        }
+
         setSpinHistory(historyArray);
-        console.warn('spinHistory', spinHistory);
+        console.warn('spinHistory', historyArray);
         
           
         const priceEth = await slotContract.methods.ethSpinPrice().call();
@@ -147,7 +150,8 @@ const AppScreen = () => {
   };
   
   const getRoundHistory = async (e) => {
-    let response: Promise<Number> = await slotContract.methods.roundInfo(e).call();
+    let response : Promise<Number> = await slotContract.methods.roundInfo(e).call(); // : Promise<Number>
+    console.log(response);
     return response;
   }
 
@@ -561,7 +565,7 @@ const AppScreen = () => {
                           History:                          
                           <ul>
                             {spinHistory.map(item => {
-                              return <li>{item[5]}</li>;
+                              return <li key={item.roundInfo.round}>{item.roundInfo.symbols[0]} | {item.roundInfo.symbols[1]} | {item.roundInfo.symbols[2]}</li>;
                             })}
                           </ul>
                         </div>
