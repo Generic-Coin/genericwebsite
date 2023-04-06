@@ -25,6 +25,7 @@ const App = () => {
         home: '',
         app: 'app',
         staking: 'staking',
+        nft: 'nft',
       },
     },
   };
