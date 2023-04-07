@@ -30,6 +30,7 @@ import stakingTokenABI from './assets/contracts/stakingTokenABI.json';
 import ADDRESSES from './constants/addresses';
 import ConnectMetamask from './components/ConnectMetamask';
 import type { Contract } from 'web3-eth-contract';
+import { DEFAULT_CHAIN_ID } from './constants/chains';
 
 const StakingScreen = () => {
     
@@ -38,15 +39,15 @@ const StakingScreen = () => {
     const web3 = new Web3(Web3.givenProvider);
     const { active, account, chainId } = useWeb3React();
 
-    var tokenContractAddress = ADDRESSES['97'].genericToken;
+    var tokenContractAddress = ADDRESSES[DEFAULT_CHAIN_ID].genericToken;
     var tokenContract = new web3.eth.Contract(tokenABI, tokenContractAddress);
 
     // LP Staking contract
-    var stakingContractAddress = ADDRESSES['97'].staking;
+    var stakingContractAddress = ADDRESSES[DEFAULT_CHAIN_ID].staking;
     var stakingContract = new web3.eth.Contract(stakingABI, stakingContractAddress);
 
     // The LP token
-    var stakingTokenContractAddress = ADDRESSES['97'].stakingToken;
+    var stakingTokenContractAddress = ADDRESSES[DEFAULT_CHAIN_ID].stakingToken;
     var stakingTokenContract = new web3.eth.Contract(stakingTokenABI, stakingTokenContractAddress);
 
     //var selectedAccount = '';
@@ -69,7 +70,7 @@ const StakingScreen = () => {
         if (web3.givenProvider !== null) {
             const id = setInterval(() => {
                 fetchContractData();
-            }, 5000);
+            }, 10000);
             fetchContractData();
             return () => clearInterval(id);
         } else {
@@ -90,17 +91,19 @@ const StakingScreen = () => {
             const pendingRewards = await stakingContract.methods.pendingRewards(account).call();
 
             const allowance = await stakingTokenContract.methods
-                .allowance(account, ADDRESSES['97'].staking)
+                .allowance(account, ADDRESSES[DEFAULT_CHAIN_ID].staking)
                 .call();
 
-            const hasAllowance = web3.utils.toBN(allowance).gte(web3.utils.toBN(depositAmount));
+            if(depositAmount !== ''){
+                const hasAllowance = web3.utils.toBN(allowance).gte(web3.utils.toBN(web3.utils.toWei(depositAmount, 'ether')));
+                setHasAllowance(hasAllowance);
+            }
 
             setStakingAmount(web3.utils.fromWei(stakingAmount).toLocaleString());
             setStakingTokenBalance(web3.utils.fromWei(stakingTokenBalance));
             setPendingRewards(web3.utils.fromWei(pendingRewards));
             setTokenBalance(web3.utils.fromWei(tokenBalance).toLocaleString());
-            setAllowance(allowance);
-            setHasAllowance(hasAllowance);
+            setAllowance(allowance);        
         } catch (ex) { }
     };
 
@@ -108,7 +111,10 @@ const StakingScreen = () => {
         try {
             await stakingContract.methods
                 .deposit(web3.utils.toWei(depositAmount, 'ether'))
-                .send({ from: account });
+                .send({ from: account }).then(resp => {
+                    setDepositAmount('');
+                    fetchContractData();
+                });
         }
         catch (ex) { }
     };
@@ -117,7 +123,9 @@ const StakingScreen = () => {
         try {
             await stakingContract.methods
                 .withdraw()
-                .send({ from: account });
+                .send({ from: account }).then(resp => {
+                    fetchContractData();
+                });
         }
         catch (ex) { }
     };
@@ -126,7 +134,9 @@ const StakingScreen = () => {
         try {
             await stakingContract.methods
                 .harvestRewards()
-                .send({ from: account });
+                .send({ from: account }).then(resp => {
+                    fetchContractData();
+                });
         }
         catch (ex) { }
     };
@@ -135,7 +145,7 @@ const StakingScreen = () => {
         try {
             await stakingTokenContract.methods
                 .approve(
-                    ADDRESSES['97'].staking,
+                    ADDRESSES[DEFAULT_CHAIN_ID].staking,
                     web3.utils.toWei(depositAmount, 'ether'),
                 )
                 .send({ from: account });
@@ -149,15 +159,14 @@ const StakingScreen = () => {
         setDepositAmount(e.target.value);
         var trimmed = String(e.target.value).trim();
         if (Number(trimmed) > 0) {
-            console.warn('allowance', allowance);
-            // console.warn('trim', web3.utils.toBN(allowance).gte(web3.utils.toBN(web3.utils.toWei(trimmed, 'ether'))));
-            // 
-            // const hasAllowance = web3.utils.toBN(allowance).gte(web3.utils.toBN(web3.utils.toWei(trimmed, 'ether')));
-            // setHasAllowance(hasAllowance);
-            setHasAllowance(true);
-            console.warn('hasAllowance', hasAllowance);
+             const hasAllowance = web3.utils.toBN(allowance).gte(web3.utils.toBN(web3.utils.toWei(trimmed, 'ether')));
+             setHasAllowance(hasAllowance);
         } else { setHasAllowance(false) }
     }
+
+    const openLink = (url: string) => {
+        Linking.openURL(url).catch(err => console.warn("Couldn't load page", err));
+      };
 
     return (
         <View style={styles.background}>
@@ -220,14 +229,14 @@ const StakingScreen = () => {
                                                     value={depositAmount} 
                                                     onChange={handleDepositAmountChange} 
                                                 />
-                                                <Button primary disabled={!hasAllowance} onPress={() => handleApprove()}>Approve</Button>
+                                                <Button primary disabled={hasAllowance} onPress={() => handleApprove()}>Approve</Button>
                                                 <Button primary disabled={!hasAllowance} onPress={() => deposit()}>Deposit</Button>
-                                            </div>) : (<p></p>)}
+                                            </div>) : (<div></div>)}
                                             {stakingTokenBalance ? (<p>{stakingTokenBalance} Total LP tokens</p>) : (<p></p>)}
                                             {stakingAmount ? (<p>{stakingAmount} Staked LP tokens</p>) : (<p></p>)}
-                                            {Number(stakingAmount) > 0 ? (<p><Button primary onPress={() => withdraw()}>Withdraw stake</Button></p>) : (<p></p>)}
+                                            {Number(stakingAmount) > 0 ? (<div><Button primary onPress={() => withdraw()}>Withdraw stake</Button></div>) : (<p></p>)}
                                             {pendingRewards ? (<p>{pendingRewards} Claimable GEN</p>) : (<p></p>)}
-                                            {Number(pendingRewards) > 0 ? (<p><Button primary onPress={() => claimRewards()}>Claim rewards</Button></p>) : (<p></p>)}
+                                            {Number(pendingRewards) > 0 ? (<div><Button primary onPress={() => claimRewards()}>Claim rewards</Button></div>) : (<p></p>)}
                                             {/* <TextInput 
                                                 value={depositAmount} 
                                                 onChange={handleDepositAmountChange} 

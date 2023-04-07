@@ -24,20 +24,21 @@ import freeSpinNFTABI from './assets/contracts/freeSpinNFTABI.json';
 import slotContractABI from './assets/contracts/slotsABI.json';
 import ADDRESSES from './constants/addresses';
 import ConnectMetamask from './components/ConnectMetamask';
+import { DEFAULT_CHAIN_ID } from './constants/chains';
 
 const NFTScreen = () => {
     // Web3 implementation
     const web3 = new Web3(Web3.givenProvider);
     const { active, account, chainId } = useWeb3React();
 
-    const tokenContractAddress = ADDRESSES['97'].genericToken;
+    const tokenContractAddress = ADDRESSES[DEFAULT_CHAIN_ID].genericToken;
     const tokenContract = new web3.eth.Contract(tokenABI, tokenContractAddress);
 
     // LP Staking contract
-    const nftContractAddress = ADDRESSES['97'].freeSpinNft;
+    const nftContractAddress = ADDRESSES[DEFAULT_CHAIN_ID].freeSpinNft;
     const nftContract = new web3.eth.Contract(freeSpinNFTABI, nftContractAddress);
 
-    const slotContractAddress = ADDRESSES['97'].slots;
+    const slotContractAddress = ADDRESSES[DEFAULT_CHAIN_ID].slots;
     const slotContract = new web3.eth.Contract(slotContractABI, slotContractAddress);
 
     // React states for the dApp
@@ -215,7 +216,7 @@ const NFTScreen = () => {
             <ConnectMetamask />
             {active ? (
                 <div>
-                    {tokenBalance ? (<p>Your GENv3 Balance: {tokenBalance} GEN</p>) : (<p></p>)}
+                    {tokenBalance ? (<p>Your GEN Balance: {tokenBalance} GEN</p>) : (<p></p>)}
                     <p>Max supply: {maxSupply}</p>
                     <p>Mint price: {displayCost} BNB</p>
                     {statusMessage ? (<p>{statusMessage}</p>) : (<p></p>)}
