@@ -102,6 +102,7 @@ const AppScreen = () => {
         let roundsplayed = await slotContract.methods
           .getRoundsPlayed(account)
           .call();
+        console.warn('roundsplayed', roundsplayed)
         if (roundsplayed.length > 10) {
           roundsplayed = roundsplayed.slice(-10); 
         }
@@ -112,8 +113,8 @@ const AppScreen = () => {
           historyArray.push({roundInfo});
         }
 
-        setSpinHistory(historyArray);
-        console.warn('spinHistory', historyArray);
+        setSpinHistory(historyArray.reverse());
+        // console.warn('spinHistory', historyArray);
         
           
         const priceEth = await slotContract.methods.ethSpinPrice().call();
@@ -561,13 +562,25 @@ const AppScreen = () => {
                       </div>
                       
                       {active ? (
-                        <div style={{textAlign: 'center'}}>
-                          History:                          
-                          <ul>
+                        <div style={{
+                              textAlign: 'left',
+                              margin: '1rem auto 0',
+                              maxWidth: '10rem',
+                            }}>
                             {spinHistory.map(item => {
-                              return <li key={item.roundInfo.round}>{item.roundInfo.symbols[0]} | {item.roundInfo.symbols[1]} | {item.roundInfo.symbols[2]}</li>;
+                              return <div 
+                                        style={{
+                                          border: '2px solid rgb(132, 133, 132)',
+                                          padding: '0.1rem 0.2rem 0',
+                                          margin: '0.4rem 0.3rem',
+                                          whiteSpace: 'nowrap',
+                                          position: 'relative',
+                                          width: 'auto',
+                                          textAlign: 'center'
+                                        }}
+                                        key={item.roundInfo.round}>{item.roundInfo.round}: &nbsp; {item.roundInfo.symbols[0]} | {item.roundInfo.symbols[1]} | {item.roundInfo.symbols[2]}
+                                     </div>;
                             })}
-                          </ul>
                         </div>
                       ) : (
                         <></>
@@ -641,6 +654,11 @@ const AppScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  historyItem: {
+    border: '2px solid rgb(132, 133, 132)',
+    padding: '0.1rem 0.2rem 0',
+    margin: '0.3rem'
+  },
   textCenter: {
     textAlign: 'center',
   },
