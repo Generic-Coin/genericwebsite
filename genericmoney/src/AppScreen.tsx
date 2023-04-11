@@ -104,7 +104,7 @@ const AppScreen = () => {
           .call();
         console.warn('roundsplayed', roundsplayed)
         if (roundsplayed.length > 10) {
-          roundsplayed = roundsplayed.slice(-10); 
+          roundsplayed = roundsplayed.slice(-30); 
         }
 
         let roundInfo;
@@ -247,39 +247,39 @@ const AppScreen = () => {
   //   }
   // };
 
-//   const rollToken = async () => {
-//     setIsRoundFetch(false);
-//     if (!!slotContract) {
-//       try {
-//         // Obtain the roll price directly from the contract and update it in the case it gets modified at some point.
-//         const price = await slotContract.methods.tokenSpinPrice().call();
-//         setPriceGEN(web3.utils.fromWei(price) + ' GENv3');
-//         // Roll the slot machine
-//         await slotContract.methods.tokenSpin().send({ from: account });
-//         // Rolling state for the UI
-//         setIsSlotRolling(true);
-//         // Obtain the array of round IDs played by the connected wallet (so that we may acquire the latest)
-//         const roundsplayed = await slotContract.methods
-//           .getRoundsPlayed(account)
-//           .call();
-//         let resp = await slotContract.methods
-//           .roundInfo(roundsplayed[roundsplayed.length - 1])
-//           .call();
-//         // While Chainlink is processing the VRF, send a request every three seconds until it's fulfilled.
-//         while (resp[5] === false) {
-//           await timer(3000);
-//           resp = await slotContract.methods
-//             .roundInfo(roundsplayed[roundsplayed.length - 1])
-//             .call();
-//         }
-// 
-//         // Finish the rolling state and display the results
-//         setRoundInfo(resp);
-//         setIsRoundFetch(true);
-//         setIsSlotRolling(false);
-//       } catch (ex) { }
-//     }
-//   };
+  const rollToken = async () => {
+    setIsRoundFetch(false);
+    if (!!slotContract) {
+      try {
+        // Obtain the roll price directly from the contract and update it in the case it gets modified at some point.
+        const price = await slotContract.methods.tokenSpinPrice().call();
+        setPriceGEN(web3.utils.fromWei(price) + ' GENv3');
+        // Roll the slot machine
+        await slotContract.methods.tokenSpin().send({ from: account });
+        // Rolling state for the UI
+        setIsSlotRolling(true);
+        // Obtain the array of round IDs played by the connected wallet (so that we may acquire the latest)
+        const roundsplayed = await slotContract.methods
+          .getRoundsPlayed(account)
+          .call();
+        let resp = await slotContract.methods
+          .roundInfo(roundsplayed[roundsplayed.length - 1])
+          .call();
+        // While Chainlink is processing the VRF, send a request every three seconds until it's fulfilled.
+        while (resp[5] === false) {
+          await timer(3000);
+          resp = await slotContract.methods
+            .roundInfo(roundsplayed[roundsplayed.length - 1])
+            .call();
+        }
+
+        // Finish the rolling state and display the results
+        setRoundInfo(resp);
+        setIsRoundFetch(true);
+        setIsSlotRolling(false);
+      } catch (ex) { }
+    }
+  };
 
   const openLink = (url: string) => {
     Linking.openURL(url).catch(err => console.warn("Couldn't load page", err));
@@ -485,14 +485,14 @@ const AppScreen = () => {
                 </div>
                 <ConnectMetamask />
                 
-                <div style={{width: '100%', display: 'flex', marginTop: '1rem'}}>
-                  <div style={{width: '100%'}}>
-                    {/* <p><b>Spin with BNB:</b></p>
-                    <Button primary disabled={isSlotRolling || !active} onPress={() => rollEth()}>Spin</Button> */}
-                    <Button primary disabled={isSlotRolling || !active} onPress={() => rollEth()}>Spin</Button>
+                <div style={{ display: 'flex', marginTop: '1rem', flexWrap: 'wrap'}}>
+                    <div style={{ margin: '0 0.25rem'}}>
+                      <Button primary disabled={isSlotRolling || !active} onPress={() => rollToken()}>Spin with GEN</Button>
+                    </div>
+                    <div style={{ margin: '0 0.25rem'}}>
+                      <Button primary disabled={isSlotRolling || !active} onPress={() => rollEth()}>Spin with ETH</Button>
+                    </div>
                     {priceETH ? (<p></p>) : (<p>Price: {priceETH}</p>)}
-                    {BNBBalance ? (<p></p>) : (<p>Your BNB Balance: {BNBBalance}</p>)}
-                  </div>
                   {/* <div style={{paddingRight: '2%', float: 'left'}}>
                     <p><b>Spin with GENv3:</b></p>
                     {hasAllowance ? (
@@ -509,7 +509,7 @@ const AppScreen = () => {
                   <div>
                     
                     {active ? (
-                      <div style={{textAlign: 'center'}}>
+                      <div style={{textAlign: 'left', margin: '0 0.5rem'}}>
                         <p><b>Pot: </b> {prizePool}</p>
                       </div>
                     ) : (
@@ -519,10 +519,11 @@ const AppScreen = () => {
                     
 
 
-                    <div style={{width: '100%', textAlign: 'center'}}>
+                    <div style={{width: '100%', textAlign: 'left', margin: '0 0.5rem'}}>
                       {priceGEN ? (<p></p>) : (<p>Price: {priceGEN}</p>)}
                       
-                      {tokenBalance ? (<p></p>) : (<p>Your GEN Balance: {tokenBalance}</p>)}
+                      {(active && tokenBalance) ? (<p>Your GEN Balance: { Math.round(Number(tokenBalance)).toLocaleString() }</p>) : (<p></p>)}
+                      {(active && BNBBalance) ? (<p>Your ETH Balance: { Math.round(Number(BNBBalance)).toLocaleString() }</p>) : (<p></p>)}
                       
                       {/* <div style={{ display: 'flex', justifyContent: 'center' }}>
                         {dot1 ? (<p></p>) : (<p>.</p>)} 
@@ -563,9 +564,9 @@ const AppScreen = () => {
                       
                       {active ? (
                         <div style={{
-                              textAlign: 'left',
                               margin: '1rem auto 0',
-                              maxWidth: '10rem',
+                              display: 'flex',
+                              flexWrap: 'wrap'
                             }}>
                             {spinHistory.map(item => {
                               return <div 
@@ -573,10 +574,7 @@ const AppScreen = () => {
                                           border: '2px solid rgb(132, 133, 132)',
                                           padding: '0.1rem 0.2rem 0',
                                           margin: '0.4rem 0.3rem',
-                                          whiteSpace: 'nowrap',
-                                          position: 'relative',
-                                          width: 'auto',
-                                          textAlign: 'center'
+                                          textAlign: 'left'
                                         }}
                                         key={item.roundInfo.round}>{item.roundInfo.round}: &nbsp; {item.roundInfo.symbols[0]} | {item.roundInfo.symbols[1]} | {item.roundInfo.symbols[2]}
                                      </div>;

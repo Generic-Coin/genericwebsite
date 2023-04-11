@@ -58,14 +58,14 @@ const ConnectMetamask = () => {
     return (
         <div>
         {active ? (
-                <div style={{ width: '100%', display: 'flex' }}>
-                    <div style={{ width: '100%' }}>
+                <div style={{ width: '100%', display: 'flex', justifyContent: 'end' }}>
+                    <div>
                         <Button primary onPress={() => disconnect()}>{formatAddress(account, 4)}</Button>
                     </div>
                 </div>
             ) : (
-                <div style={{ width: '100%', display: 'flex' }}>
-                    <div style={{ width: '100%' }}>
+                <div style={{ width: '100%', display: 'flex', justifyContent: 'end' }}>
+                    <div>
                         <Button primary onPress={() => connect()}>Use MetaMask</Button>
                         {isWrongNetwork ? (
                             <p>Wrong Network! Please switch to Binance Smart Chain.</p>
