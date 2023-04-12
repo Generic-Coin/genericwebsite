@@ -45,6 +45,25 @@ import ConnectMetamask from './components/ConnectMetamask';
 import { DEFAULT_CHAIN_ID } from './constants/chains';
 
 const AppScreen = () => {
+  
+  useEffect(() => {
+    getPrices();
+  }, []);
+  const [showGenericPrice, setShowGenericPrice] = useState(0);
+  const getPrices = async () => {
+    try {
+      const response = await fetch(
+        'https://api.coinpaprika.com/v1/tickers/genv3-generic-coin',
+      );
+      const responseJson = await response.json();
+      const digestedResponse =
+        Math.round(responseJson.quotes.USD.price * 1000000 * 100) / 100;
+      setShowGenericPrice(digestedResponse);
+    } catch (error) {
+      // console.error(error);
+    }
+  };
+  
   const visibility = false;
   // Web3 implementation
   const web3 = new Web3(Web3.givenProvider);
@@ -318,6 +337,24 @@ const AppScreen = () => {
     <View style={styles.background}>
       <View style={styles.container}>
         <AppBar style={styles.header}>
+          <View style={styles.price}>
+            {showGenericPrice ? (
+              <Text style={styles.priceText}>
+                <sup>$</sup>
+                <strong>{showGenericPrice}</strong>
+                <br />
+                <sup>
+                  <i>per 1M</i>
+                </sup>
+              </Text>
+            ) : (
+              <Text style={styles.priceText}>
+                price
+                <br />
+                loading...
+              </Text>
+            )}{' '}
+          </View>
           <View style={styles.logo}>
             <Image style={styles.logoImage} source={GenericLogo} />
             <Text style={styles.heading} bold disabled>
@@ -652,6 +689,14 @@ const AppScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  price: {
+    position: 'absolute',
+    top: '1rem',
+    left: '1rem',
+  },
+  priceText: {
+    fontSize: '.75rem',
+  },
   historyItem: {
     border: '2px solid rgb(132, 133, 132)',
     padding: '0.1rem 0.2rem 0',

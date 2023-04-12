@@ -27,6 +27,25 @@ import ConnectMetamask from './components/ConnectMetamask';
 import { DEFAULT_CHAIN_ID } from './constants/chains';
 
 const NFTScreen = () => {
+    
+    useEffect(() => {
+        getPrices();
+      }, []);
+    const [showGenericPrice, setShowGenericPrice] = useState(0);
+    const getPrices = async () => {
+        try {
+          const response = await fetch(
+            'https://api.coinpaprika.com/v1/tickers/genv3-generic-coin',
+          );
+          const responseJson = await response.json();
+          const digestedResponse =
+            Math.round(responseJson.quotes.USD.price * 1000000 * 100) / 100;
+          setShowGenericPrice(digestedResponse);
+        } catch (error) {
+          // console.error(error);
+        }
+      };
+      
     // Web3 implementation
     const web3 = new Web3(Web3.givenProvider);
     const { active, account, chainId } = useWeb3React();
@@ -240,5 +259,136 @@ const NFTScreen = () => {
         </div>
     );
 };
+
+const styles = StyleSheet.create({
+    price: {
+        position: 'absolute',
+        top: '1rem',
+        left: '1rem',
+    },
+    priceText: {
+        fontSize: '.75rem',
+    },
+    textInputArea: { 
+        textAlign: 'center',
+    },
+    textInput: {
+        border: '3px solid #848584',
+        fontFamily: 'MS Sans Serif',
+        fontSize: '1rem',
+        padding: '0.43rem' 
+    },
+    textCenter: {
+        textAlign: 'center',
+    },
+    infoView: {
+        maxWidth: '40rem',
+        width: '100%',
+        margin: 'auto',
+    },
+    background: {
+        flex: 1,
+        backgroundColor: '#008080',
+    },
+    container: {
+        flex: 1,
+        maxWidth: '60rem',
+        minWidth: '20rem',
+        width: '100%',
+        margin: 'auto',
+    },
+    textIndent: {
+        paddingLeft: 16,
+    },
+    listItem: {
+        height: 40,
+        paddingHorizontal: 18,
+    },
+    panel: {
+        flex: 1,
+        padding: 8,
+        marginTop: -4,
+        paddingTop: 12,
+    },
+    zpanel: {
+        flex: 1,
+        padding: 8,
+        marginTop: -4,
+        paddingTop: 12,
+        paddingBottom: 100,
+        marginBottom: 18,
+    },
+    slotpanel: {
+        flex: 1,
+        padding: 8,
+        marginTop: -4,
+        paddingTop: 12,
+        paddingBottom: 100,
+        marginBottom: 18,
+        minHeight: '76.6vw',
+    },
+    cutout: {
+        flexGrow: 1,
+        marginTop: 8,
+    },
+    content: {
+        padding: 16,
+    },
+    scrollView: {
+        flex: 1,
+    },
+    section: {
+        marginBottom: 16,
+    },
+    statusBar: {
+        display: 'flex',
+        flexDirection: 'row',
+        width: '100%',
+
+        marginTop: 4,
+    },
+    statusBarItem: {
+        paddingHorizontal: 6,
+        height: 32,
+        justifyContent: 'center',
+    },
+    header: {
+        justifyContent: 'center',
+        marginBottom: -4,
+        zIndex: 10,
+    },
+    logo: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        top: 2,
+    },
+    logoImage: {
+        position: 'absolute',
+        left: -38,
+        top: -4,
+        height: 32,
+        width: 32,
+        resizeMode: 'cover',
+    },
+    heading: {
+        fontSize: 24,
+        fontStyle: 'italic',
+    },
+    aboutButton: {
+        position: 'absolute',
+        right: 8,
+        height: 40,
+        width: 40,
+    },
+    questionMark: {
+        width: 26,
+        height: 26,
+    },
+    scrollPanel: {
+        zIndex: -1,
+    },
+});
+
 
 export default NFTScreen;
