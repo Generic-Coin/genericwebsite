@@ -560,7 +560,7 @@ const AppScreen = () => {
                       {priceGEN ? (<p></p>) : (<p>Price: {priceGEN}</p>)}
                       
                       {(active && tokenBalance) ? (<p>Your GEN Balance: { Math.round(Number(tokenBalance)).toLocaleString() }</p>) : (<p></p>)}
-                      {(active && BNBBalance) ? (<p>Your ETH Balance: { Math.round(Number(BNBBalance)).toLocaleString() }</p>) : (<p></p>)}
+                      {(active && BNBBalance) ? (<p>Your ETH Balance: { Number(BNBBalance).toFixed(4).toLocaleString() }</p>) : (<p></p>)}
                       
                       {/* <div style={{ display: 'flex', justifyContent: 'center' }}>
                         {dot1 ? (<p></p>) : (<p>.</p>)} 

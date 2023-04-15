@@ -250,7 +250,7 @@
         "name": "stakeToken",
         "outputs": [
             {
-                "internalType": "contract ICamelotPair",
+                "internalType": "contract IPancakePair",
                 "name": "",
                 "type": "address"
             }
