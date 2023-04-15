@@ -13,7 +13,7 @@ import {
   Panel,
   AppBar,
   Button,
-  // List,
+  List,
   Text,
   ScrollView,
   // Anchor,
@@ -358,7 +358,7 @@ const AppScreen = () => {
           <View style={styles.logo}>
             <Image style={styles.logoImage} source={GenericLogo} />
             <Text style={styles.heading} bold disabled>
-              Generic Coin App
+              Generic Coin Slots Beta 0.8
             </Text>
           </View>
           <Button
@@ -506,20 +506,6 @@ const AppScreen = () => {
 
 
               <Panel variant='raised' style={[styles.zpanel]}>
-                <div style={{width: '100%', display: 'flex'}}>
-                  <div style={{float: 'left', margin: '.75rem 0'}}>
-                    <Text
-                      bold
-                      style={{
-                        fontSize: 22,
-                        margin: 12,
-                        marginBottom: 24,
-                      }}
-                    >
-                      Generic Slots Beta 0.8
-                    </Text>
-                  </div>
-                </div>
                 <ConnectMetamask />
                 
                 <div style={{ display: 'flex', marginTop: '1rem', flexWrap: 'wrap'}}>
@@ -599,30 +585,6 @@ const AppScreen = () => {
                         {/* {prizePool ? (<p></p>) : (<p><b>Prize Pool: </b> {prizePool}</p>)} */}
                       </div>
                       
-                      {active ? (
-                        <div style={{
-                              margin: '1rem auto 0',
-                              display: 'flex',
-                              flexWrap: 'wrap'
-                            }}>
-                            {spinHistory.map(item => {
-                              return <div 
-                                        style={{
-                                          border: '2px solid rgb(132, 133, 132)',
-                                          padding: '0.1rem 0.2rem 0',
-                                          margin: '0.4rem 0.3rem',
-                                          textAlign: 'left'
-                                        }}
-                                        key={item.roundInfo.round}>{item.roundInfo.round}: &nbsp; {item.roundInfo.symbols[0]} | {item.roundInfo.symbols[1]} | {item.roundInfo.symbols[2]}
-                                     </div>;
-                            })}
-                        </div>
-                      ) : (
-                        <></>
-                      )}
-                      
-
-
                     </div>
 
                   {/*displayWC()*/}
@@ -661,6 +623,36 @@ const AppScreen = () => {
                 </div>
                 )} */}
               </Panel>
+              
+              {active && spinHistory ? (
+                <List.Accordion
+                title='Recent Spins'
+                >
+                <div style={{
+                      margin: '1rem auto 0',
+                      display: 'flex',
+                      flexWrap: 'wrap'
+                    }}>
+                    {spinHistory.map(item => {
+                      return <div 
+                                style={{
+                                  padding: '0.1rem 0.2rem 0',
+                                  margin: '0.4rem 0.3rem',
+                                  textAlign: 'left',
+                                  fontSize: '1rem',
+                                  fontFamily: 'MS Sans Serif',
+                                  whiteSpace: 'nowrap',
+                                }}
+                                key={item.roundInfo.round}>
+                                  <Button disabled>Spin ID {item.roundInfo.round}: &nbsp; 
+                                  {item.roundInfo.symbols[0]} | {item.roundInfo.symbols[1]} | {item.roundInfo.symbols[2]}</Button>
+                             </div>;
+                    })}
+                </div>
+                </List.Accordion>
+              ) : (
+                <></>
+              )}
 
 
             </ScrollView>

@@ -210,7 +210,7 @@ const StakingScreen = () => {
                     <View style={styles.logo}>
                         <Image style={styles.logoImage} source={GenericLogo} />
                         <Text style={styles.heading} bold disabled>
-                            Generic Coin App
+                            Generic Coin Staking
                         </Text>
                     </View>
                     <Button
@@ -241,20 +241,6 @@ const StakingScreen = () => {
                         >
 
                             <div>
-                                <div style={{ width: '100%', display: 'flex' }}>
-                                    <div style={{ float: 'left', margin: '.75rem 0' }}>
-                                        <Text
-                                            bold
-                                            style={{
-                                                fontSize: 22,
-                                                margin: 12,
-                                                marginBottom: 24,
-                                            }}
-                                        >
-                                            Generic Staking
-                                        </Text>
-                                    </div>
-                                </div>
                                 <ConnectMetamask />
                                 {active ? (
                                         <Text style={styles.textInputArea}>
