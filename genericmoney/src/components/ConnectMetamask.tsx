@@ -7,6 +7,8 @@ import {
     Button,
 } from 'react95-native';
 import { formatAddress } from "../utils";
+import { DEFAULT_CHAIN_ID } from '../constants/chains';
+import { CHAIN_INFO } from '../constants/chainInfo'
 
 const ConnectMetamask = () => {
     const web3 = new Web3(Web3.givenProvider);
@@ -17,31 +19,31 @@ const ConnectMetamask = () => {
       await activate(injected);
         if (web3.givenProvider !== null) {
             web3.eth.net.getId().then(async function (result) {
-                if (result === 97) {
+                if (result === DEFAULT_CHAIN_ID) {
                     //fetchContractData();
                 } else {
                     setIsWrongNetwork(true);
-                    addBSCNetwork();
+                    addNetwork();
                 }
             });
         }
     }
 
-    const addBSCNetwork = async () => {
+    const addNetwork = async () => {
         window.ethereum
             .request({
                 method: 'wallet_addEthereumChain',
                 params: [
                     {
-                        chainId: '0x61',
-                        chainName: 'Smart Chain - Testnet',
+                        chainId: DEFAULT_CHAIN_ID,
+                        chainName: CHAIN_INFO[DEFAULT_CHAIN_ID].label,
                         nativeCurrency: {
-                            name: 'Binance Coin',
-                            symbol: 'BNB',
-                            decimals: 18,
+                            name: CHAIN_INFO[DEFAULT_CHAIN_ID].nativeCurrency.name,
+                            symbol: CHAIN_INFO[DEFAULT_CHAIN_ID].nativeCurrency.symbol,
+                            decimals: CHAIN_INFO[DEFAULT_CHAIN_ID].nativeCurrency.decimals,
                         },
-                        rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
-                        blockExplorerUrls: ['https://testnet.bscscan.com'],
+                        rpcUrls: [CHAIN_INFO[DEFAULT_CHAIN_ID].rpcUrl],
+                        blockExplorerUrls: [CHAIN_INFO[DEFAULT_CHAIN_ID].explorer],
                     },
                 ],
             })
@@ -68,7 +70,7 @@ const ConnectMetamask = () => {
                     <div>
                         <Button primary onPress={() => connect()}>Use MetaMask</Button>
                         {isWrongNetwork ? (
-                            <p>Wrong Network! Please switch to Binance Smart Chain.</p>
+                            <p>Wrong Network! Please switch to {CHAIN_INFO[DEFAULT_CHAIN_ID].label}.</p>
                         ) : (<></>)}
                     </div>
                 </div>

@@ -26,7 +26,7 @@ import { useWeb3React } from '@web3-react/core';
 import Web3 from 'web3';
 import tokenABI from './assets/contracts/tokenABI.json';
 import stakingABI from './assets/contracts/stakingABI.json';
-import stakingTokenABI from './assets/contracts/stakingTokenABI.json';
+import CamelotPairABI from './assets/contracts/CamelotPairABI.json';
 import ADDRESSES from './constants/addresses';
 import ConnectMetamask from './components/ConnectMetamask';
 import type { Contract } from 'web3-eth-contract';
@@ -65,7 +65,7 @@ const StakingScreen = () => {
 
     // The LP token
     var stakingTokenContractAddress = ADDRESSES[DEFAULT_CHAIN_ID].stakingToken;
-    var stakingTokenContract = new web3.eth.Contract(stakingTokenABI, stakingTokenContractAddress);
+    var stakingTokenContract = new web3.eth.Contract(CamelotPairABI, stakingTokenContractAddress);
 
     //var selectedAccount = '';
 
