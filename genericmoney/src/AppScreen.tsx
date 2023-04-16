@@ -16,6 +16,7 @@ import {
   List,
   Text,
   ScrollView,
+  Menu,
   // Anchor,
   // Select,
   // Fieldset,
@@ -94,6 +95,7 @@ const AppScreen = () => {
   const [isSlotRolling, setIsSlotRolling] = useState(false);
   const [isFreeSpin, setIsFreeSpin] = useState(false);
   const [spinHistory, setSpinHistory] = useState([]);
+  const [verticalMenuOpen, setVerticalMenuOpen] = React.useState(false);
   
   let currentBlockNumber: number;
 
@@ -361,7 +363,7 @@ const AppScreen = () => {
               Generic Coin Slots Beta 0.8
             </Text>
           </View>
-          <Button
+          {/* <Button
             square
             variant='raised'
             size='lg'
@@ -375,7 +377,7 @@ const AppScreen = () => {
                   'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAFVBMVEUAAACAgID///8AAADAwMCAAAD/AADqeraFAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAHdElNRQflAQwXHQ1lXxPNAAAAqElEQVQoz5WOMQ6DMAxFLUXda3yCGLrTwAmC2CtV5QJVuf8RmmCCTaQOtX6Wp+cfA5aBfRpuJQdAkhyASPLToGGQ/FuKVWnTVaWB/R3xakoDUxcmU0rsw9T15lJV9m9VKZc2zLyBXNr6wAqyHwkV5NLRp1OMgRSZC5DSUYGMixUAUeaHKhuZ36q4IW0tH7OUtm7r+jTAxWU9GfA6CwC1AJdKSDt9BVx6XzBwJ8Kxeb3/AAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIxLTAxLTEyVDIzOjI5OjEzKzAwOjAwyc9MIQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMS0wMS0xMlQyMzoyOToxMyswMDowMLiS9J0AAAAASUVORK5CYII=',
               }}
             />
-          </Button>
+          </Button> */}
         </AppBar>
 
         <Panel variant='raised' style={styles.panel}>
@@ -676,6 +678,66 @@ const AppScreen = () => {
           </View>
         </Panel>
       </View>
+      <View style={styles.startMenu}>
+        <AppBar style={styles.startHeader}>
+          <View>
+            <Menu
+              style={{bottom: '2.9rem', left: '-0.5rem', minWidth: '10rem'}}
+              open={verticalMenuOpen}
+              anchor={
+                <Button
+                  active={verticalMenuOpen}
+                  onPress={() => setVerticalMenuOpen(state => !state)}
+                >
+                  <div style={{flexDirection: 'row'}}>
+                    <div style={{float: 'left', fontFamily: 'MS Sans Serif'}}>
+                      <Image style={styles.startLogoImage} source={GenericLogo} />
+                    </div> 
+                    <div style={{float: 'left', fontFamily: 'MS Sans Serif', margin: '0.25rem 0 0 0.4rem'}}>
+                       Navigate
+                    </div>
+                  </div>
+                </Button>
+              }
+            >
+              <Menu.Item
+                size='lg'
+                onPress={() => openLink('/')}
+                title='Home'
+              />
+              <Menu.Item
+                size='lg'
+                // disabled
+                onPress={() => openLink('/app')}
+                title='Slots'
+              />
+              <Menu.Item
+                size='lg'
+                // disabled
+                onPress={() => openLink('/staking')}
+                title='Staking'
+              />
+              <Menu.Item
+                size='lg'
+                disabled
+                onPress={() => openLink('/nft')}
+                title='NFTs'
+              />
+              {/* <Title>Letters</Title> */}
+              {/* <Menu.Item size='lg' onPress={() => notify('A')} title='A' /> */}
+              {/* <Divider size='auto' /> */}
+              {/* <Menu.Item
+                size='lg'
+                disabled
+                onPress={() => notify('Disabled Item')}
+                title='Disabled Item'
+              /> */}
+            </Menu>
+          </View>
+      
+        </AppBar>
+      </View>
+
     </View>
   );
 };
@@ -755,6 +817,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    maxHeight: '90vh',
     maxWidth: '60rem',
     minWidth: '20rem',
     width: '100%',
@@ -850,6 +913,27 @@ const styles = StyleSheet.create({
   },
   scrollPanel: {
     zIndex: -1,
+  },
+  startMenu: {
+    position: 'fixed',
+    bottom: 0,
+    width: '100%',
+    textAlign: 'left',
+  },
+  startHeader: {
+    justifyContent: 'left',
+    marginBottom: -4,
+    zIndex: 10,
+  },
+  startText: {
+    fontFamily: 'MS Sans Serif',
+    float: 'left',
+  },
+  startLogoImage: {
+    float: 'left',
+    position: 'relative',
+    height: 24,
+    width: 24,
   },
 });
 

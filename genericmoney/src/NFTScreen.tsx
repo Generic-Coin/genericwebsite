@@ -14,6 +14,7 @@ import {
     ScrollView,
     TextInput,
     NumberInput,
+    Menu,
 } from 'react95-native';
 import 'react-native-get-random-values';
 import '@ethersproject/shims';
@@ -77,6 +78,8 @@ const NFTScreen = () => {
     const [statusMessage, setStatusMessage] = useState('Buy your Generic Spin NFT');
     const [currentTimestamp, setCurrentTimestamp] = useState('Loading...');
     const [freeSpinTimeout, setFreeSpinTimeout] = useState('Loading...');
+    const [verticalMenuOpen, setVerticalMenuOpen] = React.useState(false);
+
     var nftUrlArray;
 
     useEffect(() => {
@@ -315,6 +318,8 @@ const NFTScreen = () => {
                 </div>
             ) : (<></>)}
         </div>
+
+
     );
 };
 
@@ -350,6 +355,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
+        maxHeight: '90vh',
         maxWidth: '60rem',
         minWidth: '20rem',
         width: '100%',
@@ -446,6 +452,27 @@ const styles = StyleSheet.create({
     scrollPanel: {
         zIndex: -1,
     },
+    startMenu: {
+        position: 'fixed',
+        bottom: 0,
+        width: '100%',
+        textAlign: 'left',
+      },
+      startHeader: {
+        justifyContent: 'left',
+        marginBottom: -4,
+        zIndex: 10,
+      },
+      startText: {
+        fontFamily: 'MS Sans Serif',
+        float: 'left',
+      },
+      startLogoImage: {
+        float: 'left',
+        position: 'relative',
+        height: 24,
+        width: 24,
+      },
 });
 
 

@@ -13,6 +13,7 @@ import {
     Text,
     ScrollView,
     TextInput,
+    Menu,
 } from 'react95-native';
 import 'react-native-get-random-values';
 import '@ethersproject/shims';
@@ -77,6 +78,7 @@ const StakingScreen = () => {
     const [depositAmount, setDepositAmount] = React.useState('');
     const [allowance, setAllowance] = useState('0');
     const [hasAllowance, setHasAllowance] = useState(false);
+    const [verticalMenuOpen, setVerticalMenuOpen] = React.useState(false);
 
     useEffect(() => {
         /*ethereum.on('accountsChanged', function (accounts) {
@@ -270,6 +272,66 @@ const StakingScreen = () => {
                     </Panel>
                 </Panel>
             </View>
+            <View style={styles.startMenu}>
+                <AppBar style={styles.startHeader}>
+                  <View>
+                    <Menu
+                      style={{bottom: '2.9rem', left: '-0.5rem', minWidth: '10rem'}}
+                      open={verticalMenuOpen}
+                      anchor={
+                        <Button
+                          active={verticalMenuOpen}
+                          onPress={() => setVerticalMenuOpen(state => !state)}
+                        >
+                          <div style={{flexDirection: 'row'}}>
+                            <div style={{float: 'left', fontFamily: 'MS Sans Serif'}}>
+                              <Image style={styles.startLogoImage} source={GenericLogo} />
+                            </div> 
+                            <div style={{float: 'left', fontFamily: 'MS Sans Serif', margin: '0.25rem 0 0 0.4rem'}}>
+                               Navigate
+                            </div>
+                          </div>
+                        </Button>
+                      }
+                    >
+                      <Menu.Item
+                        size='lg'
+                        onPress={() => openLink('/')}
+                        title='Home'
+                      />
+                      <Menu.Item
+                        size='lg'
+                        // disabled
+                        onPress={() => openLink('/app')}
+                        title='Slots'
+                      />
+                      <Menu.Item
+                        size='lg'
+                        // disabled
+                        onPress={() => openLink('/staking')}
+                        title='Staking'
+                      />
+                      <Menu.Item
+                        size='lg'
+                        disabled
+                        onPress={() => openLink('/nft')}
+                        title='NFTs'
+                      />
+                      {/* <Title>Letters</Title> */}
+                      {/* <Menu.Item size='lg' onPress={() => notify('A')} title='A' /> */}
+                      {/* <Divider size='auto' /> */}
+                      {/* <Menu.Item
+                        size='lg'
+                        disabled
+                        onPress={() => notify('Disabled Item')}
+                        title='Disabled Item'
+                      /> */}
+                    </Menu>
+                  </View>
+            
+                </AppBar>
+              </View>
+
         </View>
     );
 };
@@ -306,6 +368,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
+        maxHeight: '90vh',
         maxWidth: '60rem',
         minWidth: '20rem',
         width: '100%',
@@ -402,6 +465,27 @@ const styles = StyleSheet.create({
     scrollPanel: {
         zIndex: -1,
     },
+    startMenu: {
+        position: 'fixed',
+        bottom: 0,
+        width: '100%',
+        textAlign: 'left',
+      },
+      startHeader: {
+        justifyContent: 'left',
+        marginBottom: -4,
+        zIndex: 10,
+      },
+      startText: {
+        fontFamily: 'MS Sans Serif',
+        float: 'left',
+      },
+      startLogoImage: {
+        float: 'left',
+        position: 'relative',
+        height: 24,
+        width: 24,
+      },
 });
 
 export default StakingScreen;

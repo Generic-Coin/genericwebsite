@@ -19,6 +19,8 @@ import {
   Anchor,
   Select,
   Fieldset,
+  Menu,
+  Title,
 } from 'react95-native';
 import GenericLogo from './assets/images/gcp.png';
 import GenericSizzle from './assets/genericday.mp4';
@@ -44,10 +46,14 @@ import ApeSwapIcon from './assets/images/as.png';
 import PancakeSwapIcon from './assets/images/ps.png';
 import CoinCheckupIcon from './assets/images/cc.png';
 
+import { notificationService } from './util/notifications';
+
 const GenericScreen = () => {
   useEffect(() => {
     getPrices();
   }, []);
+
+  const [verticalMenuOpen, setVerticalMenuOpen] = React.useState(false);
 
   const [showGenericPrice, setShowGenericPrice] = useState(0);
   const getPrices = async () => {
@@ -145,6 +151,7 @@ const GenericScreen = () => {
       setMemberUrl('https://www.linkedin.com/in/larry-smitt-957052238/');
     }
   };
+  
 
   return (
     <View style={styles.background}>
@@ -821,6 +828,65 @@ const GenericScreen = () => {
           </>
         )}
       </View>
+      <View style={styles.startMenu}>
+        <AppBar style={styles.startHeader}>
+          <View>
+            <Menu
+              style={{bottom: '2.9rem', left: '-0.5rem', minWidth: '10rem'}}
+              open={verticalMenuOpen}
+              anchor={
+                <Button
+                  active={verticalMenuOpen}
+                  onPress={() => setVerticalMenuOpen(state => !state)}
+                >
+                  <div style={{flexDirection: 'row'}}>
+                    <div style={{float: 'left', fontFamily: 'MS Sans Serif'}}>
+                      <Image style={styles.startLogoImage} source={GenericLogo} />
+                    </div> 
+                    <div style={{float: 'left', fontFamily: 'MS Sans Serif', margin: '0.25rem 0 0 0.4rem'}}>
+                       Navigate
+                    </div>
+                  </div>
+                </Button>
+              }
+            >
+              <Menu.Item
+                size='lg'
+                onPress={() => openLink('/')}
+                title='Home'
+              />
+              <Menu.Item
+                size='lg'
+                // disabled
+                onPress={() => openLink('/app')}
+                title='Slots'
+              />
+              <Menu.Item
+                size='lg'
+                // disabled
+                onPress={() => openLink('/staking')}
+                title='Staking'
+              />
+              <Menu.Item
+                size='lg'
+                disabled
+                onPress={() => openLink('/nft')}
+                title='NFTs'
+              />
+              {/* <Title>Letters</Title> */}
+              {/* <Menu.Item size='lg' onPress={() => notify('A')} title='A' /> */}
+              {/* <Divider size='auto' /> */}
+              {/* <Menu.Item
+                size='lg'
+                disabled
+                onPress={() => notify('Disabled Item')}
+                title='Disabled Item'
+              /> */}
+            </Menu>
+          </View>
+
+        </AppBar>
+      </View>
     </View>
   );
 };
@@ -874,8 +940,30 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#008080',
   },
+  startMenu: {
+    position: 'fixed',
+    bottom: 0,
+    width: '100%',
+    textAlign: 'left',
+  },
+  startHeader: {
+    justifyContent: 'left',
+    marginBottom: -4,
+    zIndex: 10,
+  },
+  startText: {
+    fontFamily: 'MS Sans Serif',
+    float: 'left',
+  },
+  startLogoImage: {
+    float: 'left',
+    position: 'relative',
+    height: 24,
+    width: 24,
+  },
   container: {
     flex: 1,
+    // maxHeight: '80vh',
     maxWidth: '60rem',
     minWidth: '20rem',
     width: '100%',
