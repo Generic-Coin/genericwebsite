@@ -962,8 +962,9 @@ const styles = StyleSheet.create({
     width: 24,
   },
   container: {
+    paddingTop: '3vh',
+    paddingBottom: '10vh',
     flex: 1,
-    // maxHeight: '80vh',
     maxWidth: '60rem',
     minWidth: '20rem',
     width: '100%',

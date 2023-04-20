@@ -816,8 +816,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#008080',
   },
   container: {
+    paddingTop: '3vh',
+    paddingBottom: '10vh',
     flex: 1,
-    maxHeight: '90vh',
     maxWidth: '60rem',
     minWidth: '20rem',
     width: '100%',
