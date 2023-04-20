@@ -23,7 +23,7 @@ const App = () => {
     config: {
       screens: {
         home: '',
-        app: 'app',
+        slots: 'slots',
         staking: 'staking',
         nft: 'nft',
       },

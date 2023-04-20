@@ -276,7 +276,7 @@ const StakingScreen = () => {
                 <AppBar style={styles.startHeader}>
                   <View>
                     <Menu
-                      style={{bottom: '2.9rem', left: '-0.5rem', minWidth: '10rem'}}
+                      style={{bottom: '2.9rem', left: '-0.45rem', minWidth: '10rem'}}
                       open={verticalMenuOpen}
                       anchor={
                         <Button
@@ -302,7 +302,7 @@ const StakingScreen = () => {
                       <Menu.Item
                         size='lg'
                         // disabled
-                        onPress={() => openLink('/app')}
+                        onPress={() => openLink('/slots')}
                         title='Slots'
                       />
                       <Menu.Item

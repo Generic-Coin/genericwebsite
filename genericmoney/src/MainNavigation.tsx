@@ -34,7 +34,7 @@ const MainNavigation = (props: Props) => {
         <Stack.Screen name='home' options={{ title: 'Generic Coin' }}>
           {() => <GenericScreen {...props} />}
         </Stack.Screen>
-        <Stack.Screen name='app' options={{ title: 'Generic App' }}>
+        <Stack.Screen name='slots' options={{ title: 'Generic Slots' }}>
           {() => <AppScreen {...props} />}
         </Stack.Screen>
         <Stack.Screen name='staking' options={{ title: 'Generic Staking' }}>
