@@ -6,6 +6,7 @@ import GenericScreen from './GenericScreen';
 import AppScreen from './AppScreen';
 import StakingScreen from './StakingScreen';
 import NFTScreen from './NFTScreen';
+import AdminScreen from './AdminScreen';
 
 const Stack = createStackNavigator();
 
@@ -42,6 +43,9 @@ const MainNavigation = (props: Props) => {
         </Stack.Screen>
         <Stack.Screen name='nft' options={{ title: 'Generic NFT' }}>
           {() => <NFTScreen {...props} />}
+        </Stack.Screen>
+        <Stack.Screen name='admin' options={{ title: 'Generic NFT' }}>
+          {() => <AdminScreen {...props} />}
         </Stack.Screen>
       </Stack.Navigator>
     </>

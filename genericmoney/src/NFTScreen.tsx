@@ -296,7 +296,7 @@ const NFTScreen = () => {
                     {tokenBalance ? (<p>Your GEN Balance: {tokenBalance} GEN</p>) : (<p></p>)}
                     <p>Current supply: {totalSupply}</p>
                     <p>Max supply: {maxSupply}</p>
-                    <p>Mint price tier 1 (0-200): {displayCostTier1} ETH</p>
+                    <p>Mint price tier 1 (1-200): {displayCostTier1} ETH</p>
                     <p>Mint price tier 2 (201-250): {displayCostTier2} ETH</p>
                     <p>Mint price tier 3 (251-275): {displayCostTier3} ETH</p>
                     {statusMessage ? (<p>{statusMessage}</p>) : (<p></p>)}
