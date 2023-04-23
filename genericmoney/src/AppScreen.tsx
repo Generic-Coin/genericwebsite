@@ -397,15 +397,16 @@ const AppScreen = () => {
                   position: 'absolute',
                   width: '98%',
                   textAlign: 'center',
-                  paddingTop: '36.8%',
-                  marginTop: '2.3rem',
+                  paddingTop: '36.4%',
+                  marginTop: '2.7rem',
+                  left: '1.3%',
                   zIndex: -1,
                 }}>
                   {isRoundFetch === true ? (
                       <Text>
                         <p style={{
                           fontWeight: 'bold',
-                          fontSize: 'clamp(1rem, 7rem, 11.5vw)',
+                          fontSize: 'clamp(1rem, 6.4rem, 9.3vw)',
                           padding: '0 2%',
                           margin: 0,
                         }}>
@@ -596,12 +597,12 @@ const AppScreen = () => {
                 }}>
                     <div style={{ margin: '0 0.25rem'}}>
                       <Button primary disabled={isSlotRolling || !active} onPress={() => rollToken()}>
-                        <span style={{fontFamily: 'MS Sans Serif'}}>Spin with GEN {active ? (<span>- {priceGEN}</span>) : (<span></span>)}</span>
+                        <span style={{fontFamily: 'MS Sans Serif'}}>Spin with GEN {active ? (<span> {priceGEN}</span>) : (<span></span>)}</span>
                       </Button> 
                     </div>
                     <div style={{ margin: '0 0.25rem'}}>
                       <Button primary disabled={isSlotRolling || !active} onPress={() => rollEth()}>
-                        <span style={{fontFamily: 'MS Sans Serif'}}>Spin with ETH {active ? (<span>- {priceETH}</span>) : (<span></span>)}</span>
+                        <span style={{fontFamily: 'MS Sans Serif'}}>Spin with ETH {active ? (<span> {priceETH}</span>) : (<span></span>)}</span>
                       </Button>
                     </div>
                   {/* <div style={{paddingRight: '2%', float: 'left'}}>
