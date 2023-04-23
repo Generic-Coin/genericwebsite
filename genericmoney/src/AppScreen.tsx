@@ -65,7 +65,6 @@ const AppScreen = () => {
     }
   };
   
-  const visibility = false;
   // Web3 implementation
   const web3 = new Web3(Web3.givenProvider);
   const { active, account, activate } = useWeb3React();
@@ -183,7 +182,7 @@ const AppScreen = () => {
       try {
         // Obtain the roll price directly from the contract and update it in the case it gets modified at some point.
         const price = await slotContract.methods.ethSpinPrice().call();
-        setPriceETH(web3.utils.fromWei(price) + ' BNB');
+        setPriceETH(web3.utils.fromWei(price));
         // Roll the slot machine
         await slotContract.methods
           .ethSpin()
@@ -274,7 +273,7 @@ const AppScreen = () => {
       try {
         // Obtain the roll price directly from the contract and update it in the case it gets modified at some point.
         const price = await slotContract.methods.tokenSpinPrice().call();
-        setPriceGEN(web3.utils.fromWei(price) + ' GENv3');
+        setPriceGEN(web3.utils.fromWei(price));
         // Roll the slot machine
         await slotContract.methods.tokenSpin().send({ from: account });
         // Rolling state for the UI
@@ -390,10 +389,97 @@ const AppScreen = () => {
               alwaysShowScrollbars
             >
 
-              {visibility ? (
-                <Panel variant='raised' style={[styles.slotpanel]}>
-                  <Image style={styles.slotmachine} source={SlotMachine} />
-                  {/* <svg viewbox="0 0 400 400">
+              <Panel variant='raised' style={[styles.zpanel]}>
+                <ConnectMetamask />
+                
+                <img style={{marginTop: '1rem'}} src={SlotMachine} />
+                <div style={{
+                  position: 'absolute',
+                  width: '98%',
+                  textAlign: 'center',
+                  paddingTop: '36.8%',
+                  marginTop: '2.3rem',
+                  zIndex: -1,
+                }}>
+                  {isRoundFetch === true ? (
+                      <Text>
+                        <p style={{
+                          fontWeight: 'bold',
+                          fontSize: 'clamp(1rem, 7rem, 11.5vw)',
+                          padding: '0 2%',
+                          margin: 0,
+                        }}>
+                          {roundInfo.['symbols'][0]} &nbsp; {roundInfo['symbols'][1]} &nbsp; {roundInfo['symbols'][2]}
+                        </p>
+                      </Text>
+                  ) : (
+                      <>
+                        {isSlotRolling ? (
+                          <div style={{textAlign: 'center'}}>...</div>
+                        ) : (
+                            <p></p>
+                          )}
+                      </>
+                    )}
+                </div>
+                
+                <div style={{
+                  position: 'absolute',
+                  width: '100%',
+                  top: '3.1rem',
+                  paddingTop: '15.2%',
+                  left: '21.5%',
+                }}>
+                  <Text>
+                  {active ? (
+                    <div style={{
+                      textAlign: 'left', 
+                      margin: '0 0.5rem',
+                      color: '#ffffff',
+                      fontSize: 'clamp(0.3rem, 1.23rem, 2vw)',
+                    }}>
+                      <span><b>Pot: </b> {prizePool}</span><br/>
+                      {(active && tokenBalance) ? (<span>Your GEN Balance: { Math.round(Number(tokenBalance)).toLocaleString() }</span>) : (<></>)}<br/>
+                      {(active && BNBBalance) ? (<span>Your ETH Balance: { Number(BNBBalance).toFixed(4).toLocaleString() }</span>) : (<></>)}  
+                    </div>
+                  ) : (
+                    <></>
+                  )}
+                  </Text>
+                </div>
+                
+                <div style={{
+                  position: 'absolute',
+                  width: '98%',
+                  top: '2.9rem',
+                  paddingTop: '74.6%',
+                }}>
+                  <Text>
+                      {isRoundFetch === true ? (
+                        <Text style={{
+                          color: '#fff',
+                          fontSize: 'clamp(0.3rem, 1.23rem, 2.2vw)',
+                        }}>
+                          <div style={{textAlign: 'center'}}><b>Payout: {Math.round(web3.utils.fromWei(roundInfo['payout'])).toLocaleString()}</b></div>
+                        </Text>
+                      ) : (
+                      <>
+                        {isSlotRolling ? (
+                          <Text style={{
+                            color: '#fff',
+                          }}>
+                            <div style={{textAlign: 'center'}}>Slot Machine Spinning...</div>
+                          </Text>
+                        ) : (
+                            <p></p>
+                          )}
+                      </>
+                    )}
+                  </Text>
+                </div>
+
+                
+                {/* <svg viewbox="0 0 400 400"> 
                   <defs>
                     <clipPath id="counter-clippath">
                       <rect x="50" y="0" width="320" height="72" />
@@ -499,25 +585,25 @@ const AppScreen = () => {
                       </text>
                     </g>
                   </g>
-                </svg> */}
-                </Panel>
-              ) : (
-                <p></p>
-              )}
+                </svg>*/}
 
 
-
-              <Panel variant='raised' style={[styles.zpanel]}>
-                <ConnectMetamask />
-                
-                <div style={{ display: 'flex', marginTop: '1rem', flexWrap: 'wrap'}}>
+                <div style={{
+                      display: 'flex',
+                      marginTop: '1rem',
+                      flexWrap: 'wrap',
+                      justifyContent: 'center',
+                }}>
                     <div style={{ margin: '0 0.25rem'}}>
-                      <Button primary disabled={isSlotRolling || !active} onPress={() => rollToken()}>Spin with GEN</Button>
+                      <Button primary disabled={isSlotRolling || !active} onPress={() => rollToken()}>
+                        <span style={{fontFamily: 'MS Sans Serif'}}>Spin with GEN {active ? (<span>- {priceGEN}</span>) : (<span></span>)}</span>
+                      </Button> 
                     </div>
                     <div style={{ margin: '0 0.25rem'}}>
-                      <Button primary disabled={isSlotRolling || !active} onPress={() => rollEth()}>Spin with ETH</Button>
+                      <Button primary disabled={isSlotRolling || !active} onPress={() => rollEth()}>
+                        <span style={{fontFamily: 'MS Sans Serif'}}>Spin with ETH {active ? (<span>- {priceETH}</span>) : (<span></span>)}</span>
+                      </Button>
                     </div>
-                    {priceETH ? (<p></p>) : (<p>Price: {priceETH}</p>)}
                   {/* <div style={{paddingRight: '2%', float: 'left'}}>
                     <p><b>Spin with GENv3:</b></p>
                     {hasAllowance ? (
@@ -530,100 +616,7 @@ const AppScreen = () => {
                   </div> */}
                 </div>
                 
-                <Text>
-                  <div>
-                    
-                    {active ? (
-                      <div style={{textAlign: 'left', margin: '0 0.5rem'}}>
-                        <p><b>Pot: </b> {prizePool}</p>
-                      </div>
-                    ) : (
-                      <></>
-                    )}
-                    
-                    
-
-
-                    <div style={{width: '100%', textAlign: 'left', margin: '0 0.5rem'}}>
-                      {priceGEN ? (<p></p>) : (<p>Price: {priceGEN}</p>)}
-                      
-                      {(active && tokenBalance) ? (<p>Your GEN Balance: { Math.round(Number(tokenBalance)).toLocaleString() }</p>) : (<p></p>)}
-                      {(active && BNBBalance) ? (<p>Your ETH Balance: { Number(BNBBalance).toFixed(4).toLocaleString() }</p>) : (<p></p>)}
-                      
-                      {/* <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        {dot1 ? (<p></p>) : (<p>.</p>)} 
-                        {dot2 ? (<p></p>) : (<p>.</p>)} 
-                        {dot3 ? (<p></p>) : (<p>.</p>)} 
-                      </div>
-                      
-                      <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        <div style={{marginTop: animation1 * 3 - 1}}>.</div>
-                        <div style={{marginTop: animation2 * 3 - 1}}>.</div>
-                        <div style={{marginTop: animation3 * 3 - 1}}>.</div>
-                      </div>
-                      
-                      <div>isRoundFetch: {isRoundFetch}</div> */}
-                      
-                      {isRoundFetch === true ? (
-                          <Text>
-                            <b>Spin result:</b>
-                            <p bold="true" style={{fontSize: 26}}>
-                              {roundInfo.['symbols'][0]} | {roundInfo['symbols'][1]} | {roundInfo['symbols'][2]}
-                            </p>
-                            <p>
-                              <b>Payout: {Math.round(web3.utils.fromWei(roundInfo['payout'])).toLocaleString()}</b>
-                            </p>
-                          </Text>
-                      ) : (
-                          <>
-                            {isSlotRolling ? (
-                              <div style={{textAlign: 'center'}}>Slot Machine Spinning...</div>
-                            ) : (
-                                <p></p>
-                              )}
-                          </>
-                        )}
-                      <div>
-                        {/* {prizePool ? (<p></p>) : (<p><b>Prize Pool: </b> {prizePool}</p>)} */}
-                      </div>
-                      
-                    </div>
-
-                  {/*displayWC()*/}
-
-                  {/* {ViewClaimable()} */}
-                  {/* {ViewLockDuration()}
-                  {ViewClaimTime()}
-                  {ViewUserStaked()}
-                  {ViewTokensToLock}
-                  {ViewHoldersLength}
-                  {ViewTokenBalance}
-                  {ViewUserTimeLeft}
-                  {CheckHolderAddress(uint256 i)}
-                  {SetLockDuration(uint256 secs)}
-                  {WithdrawTokens(uint256 amount)}
-                  {UserStakeTokens}
-                  {UserClaimTokens} */}
-                  </div>
-                </Text>
-                {/* <div style={{height: '3rem'}}></div>
-                {active && ( Number(pendingPrize) > 0 || Number(roundInfo['payout']) > 0) ? (
-                  <div style={{width: '100%', display: 'flex'}}>
-                    <div style={{width: '100%'}}>
-                      <Button primary onPress={() => handleClaim()}>Claim Winnings</Button>
-                    </div>
-                  </div>
-                ) : (
-                  <div style={{width: '100%', display: 'flex'}}>
-                  <div style={{width: '100%'}}>
-                    {active ? (
-                      <Button primary disabled>No Unclaimed Winnings</Button>
-                    ) : (
-                      <Button primary disabled>Connect to Check for Winnings</Button>
-                    )}
-                  </div>
-                </div>
-                )} */}
+ 
               </Panel>
               
               {active && spinHistory ? (
@@ -760,25 +753,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   slotmachine: {
-    flex: 1,
-    padding: 8,
-    marginTop: -4,
-    paddingTop: 12,
-    paddingBottom: 100,
-    marginBottom: 18,
-    minHeight: '76.6vw',
-    // width: '100%',
-    height: '34rem',
-    maxHeight: '76vw',
-    position: 'absolute',
-    // padding: 0,
-    maxWidth: '97%',
-    margin: 'auto',
-    left: 0,
-    right: 0,
-    // top: '1.2vw',
-    pointerEvents: 'none',
-    overflow: 'hidden',
+
   },
   machine: {
     flexbox: 'inline-flex',
@@ -787,15 +762,7 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   reel: {
-    zIndex: -1,
-    position: 'relative',
-    top: '-24.5vw',
-    margin: 'auto',
-    bottom: 0,
-    left: '-.6vw',
-    right: 0,
-    padding: '32wv',
-    overflow: 'hidden',
+
   },
   reelitem: {
     width: '8.5vw',

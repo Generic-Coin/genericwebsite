@@ -68,10 +68,13 @@ const ConnectMetamask = () => {
             ) : (
                 <div style={{ width: '100%', display: 'flex', justifyContent: 'end' }}>
                     <div>
-                        <Button primary onPress={() => connect()}>Use MetaMask</Button>
-                        {isWrongNetwork ? (
-                            <p>Wrong Network! Please switch to {CHAIN_INFO[DEFAULT_CHAIN_ID].label}.</p>
-                        ) : (<></>)}
+                        <Button primary onPress={() => connect()}>
+                          {!isWrongNetwork ? (
+                            <p style={{fontFamily: 'MS Sans Serif'}}>Use MetaMask</p>
+                          ) : (
+                            <p style={{fontFamily: 'MS Sans Serif'}}>Wrong Network! Please switch to {CHAIN_INFO[DEFAULT_CHAIN_ID].label}.</p>
+                          )}
+                        </Button>
                     </div>
                 </div>
             )}
