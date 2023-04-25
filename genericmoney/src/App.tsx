@@ -26,6 +26,7 @@ const App = () => {
         slots: 'slots',
         staking: 'staking',
         nft: 'nft',
+        admin: 'admin',
       },
     },
   };
