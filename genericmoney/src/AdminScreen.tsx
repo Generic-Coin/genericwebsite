@@ -92,13 +92,13 @@ const AdminScreen = () => {
         if (web3.givenProvider !== null) {
             fetchContractData();
         }
-    }, [active]);
+    }, [active, account]);
 
 
     const fetchContractData = async () => {
         try {
-            //const owner = await slotsContract.methods.owner().call();
-            //setIsOwner(owner === account)
+            const owner = await slotsContract.methods.owner().call();
+            setIsOwner(owner === account)
             const currentBlockNumber = await web3.eth.getBlockNumber();
             const currentTimestamp = (await web3.eth.getBlock(currentBlockNumber)).timestamp;
 
