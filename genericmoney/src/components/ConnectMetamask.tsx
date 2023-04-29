@@ -15,6 +15,15 @@ const ConnectMetamask = () => {
     const { chainId, account, activate, deactivate, setError, active, library , connector} = useWeb3React();
     const [isWrongNetwork, setIsWrongNetwork] = useState(false);
 
+    // Automatically connect to metamask on load
+    useEffect(() => {
+        injected.isAuthorized().then((isAuthorized) => {
+          if (isAuthorized) {
+            activate(injected);
+          }
+        });
+      }, [activate]); 
+
     const connect = async () => {
       await activate(injected);
         if (web3.givenProvider !== null) {

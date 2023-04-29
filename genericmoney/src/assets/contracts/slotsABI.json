@@ -944,6 +944,19 @@
         "inputs": [
             {
                 "internalType": "uint256",
+                "name": "_relativeJackpotPayout",
+                "type": "uint256"
+            }
+        ],
+        "name": "setRelativeJackpotPayout",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
                 "name": "_sameSymbolOdds",
                 "type": "uint256"
             }

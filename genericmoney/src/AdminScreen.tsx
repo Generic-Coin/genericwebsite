@@ -60,11 +60,25 @@ const AdminScreen = () => {
     const [prizePool, setPrizePool] = useState();
     const [potFee, setPotFee] = useState();
     const [teamFee, setTeamFee] = useState();
+    const [stakingAddressesCount, setStakingAddressesCount] = useState();
+    const [stakingAddresses, setStakingAddresses] = useState([]);
+    const [stakingFees, setStakingFees] = useState([]);
     const [sameSymbolOdds, setSameSymbolOdds] = useState();
+    const [symbolOdds, setSymbolOdds] = useState([]);
+    const [maxRelativePayout, setMaxRelativePayout] = useState();
+    const [relativeJackpotPayout, setRelativeJackpotPayout] = useState();
+    const [symbolsCount, setSymbolsCount] = useState(); // Amount of symbols on the wheels
+    const [payouts, setPayouts] = useState([]);
 
     const [newEthSpinPrice, setNewEthSpinPrice] = useState('');
     const [newTokenSpinPrice, setNewTokenSpinPrice] = useState('');
+    const [newPotFee, setNewPotFee] = useState('');
+    const [newTeamFee, setNewTeamFee] = useState('');
+    const [newStakingFees, setNewStakingFees] = useState([]);
     const [newSameSymbolOdds, setNewSameSymbolOdds] = useState('');
+    const [newSymbolOdds, setNewSymbolOdds] = useState([]);
+    const [newMaxRelativePayout, setNewMaxRelativePayout] = useState('');
+    const [newRelativeJackpotPayout, setNewRelativeJackpotPayout] = useState('');
     const [newPayouts, setNewPayouts] = useState([]);
 
 
@@ -110,12 +124,39 @@ const AdminScreen = () => {
             const prizePool = await slotsContract.methods.prizePool().call();
             const potFee = await slotsContract.methods.potFee().call();
             const teamFee = await slotsContract.methods.teamFee().call();
+            const stakingAddressesCount = await slotsContract.methods.getStakingAddressesCount().call();
+
             const sameSymbolOdds = await slotsContract.methods.sameSymbolOdds().call();
+            const maxRelativePayout = await slotsContract.methods.maxRelativePayout().call();
+            const relativeJackpotPayout = await slotsContract.methods.relativeJackpotPayout().call();
+            const symbolsCount = await slotsContract.methods.getSymbolsCount().call();
 
 
-            const maxSupply = await nftContract.methods
-                .maxSupply()
-                .call();
+            let address, fee;
+            let stakingAddresses = [];
+            let stakingFees = [];
+            for(let i = 0; i < stakingAddressesCount; i++){
+                address = await slotsContract.methods.s_stakingAddresses(i).call();
+                stakingAddresses.push(address);
+                fee = await slotsContract.methods.s_stakingFees(i).call();
+                stakingFees.push({address: address, fee: fee});
+            }
+
+            let odd;
+            let symbolOdds = [];
+            for(let i = 0; i < symbolsCount; i++){
+                odd = await slotsContract.methods.s_symbolOdds(i).call();
+                symbolOdds.push(odd);
+            }
+
+            let payout;
+            let payouts = [];
+            for(let i = 0; i < symbolsCount; i++){
+                payout = await slotsContract.methods.s_payouts(i).call();
+                payouts.push(payout);
+            }
+
+            const maxSupply = await nftContract.methods.maxSupply().call();
             setMaxSupply(maxSupply);
             const costTier1 = await nftContract.methods.costTier1().call();
             const costTier2 = await nftContract.methods.costTier2().call();
@@ -138,8 +179,21 @@ const AdminScreen = () => {
             setIdsFulfilled(idsFulfilled);
             setPrizePool(prizePool);
             setPotFee(potFee);
+            setNewPotFee(potFee);
             setTeamFee(teamFee);
+            setNewTeamFee(teamFee);
+            setStakingAddressesCount(stakingAddressesCount);
+            setStakingAddresses(stakingAddresses);
+            setStakingFees(stakingFees);
+            setNewStakingFees(stakingFees.map(obj => ({...obj}))); // Use map to prevent reference problems
             setSameSymbolOdds(sameSymbolOdds);
+            setSymbolOdds(symbolOdds);
+            setNewSymbolOdds(symbolOdds);
+            setMaxRelativePayout(maxRelativePayout);
+            setRelativeJackpotPayout(relativeJackpotPayout);
+            setSymbolsCount(symbolsCount);
+            setPayouts(payouts);
+            setNewPayouts(payouts);
 
 
             setDisplayCostTier1(web3.utils.fromWei(costTier1).toLocaleString());
@@ -198,6 +252,66 @@ const AdminScreen = () => {
         }
     };
 
+    function updateNewFeesAddress(index, newValue) {
+        //copy the array first
+       let updatedStakingFees = [...newStakingFees];
+       updatedStakingFees[index].address = newValue;
+       setNewStakingFees(updatedStakingFees);
+    }
+
+    function updateNewFees(index, newValue) {
+        //copy the array first
+       let updatedStakingFees = [...newStakingFees];
+       updatedStakingFees[index].fee = newValue;
+       setNewStakingFees(updatedStakingFees);
+    }
+
+    const handleSetAllFeesClicked = async () => {
+        try {
+            if(newTeamFee.trim() === ''){
+                alert("Team fee should be at least 0.");
+                return;
+            }
+
+            if(newPotFee.trim() === ''){
+                alert("Pot fee should be at least 0.");
+                return;
+            }
+
+            let stakingFeesNumbers = newStakingFees.map(a => Number(a.fee));
+            let feesSum = stakingFeesNumbers.reduce((a, b) => Number(a) + Number(b), 0);
+            feesSum += Number(newPotFee) + Number(newTeamFee);
+
+            if(feesSum != 10000){
+                alert("Sum of the fees should equal 10000");
+                return;
+            }
+
+            let addresses = newStakingFees.map(a => a.address);
+            for(let i = 0; i < addresses.length; i++){
+                if(!web3.utils.isAddress(addresses[i])){
+                    alert("Invalid address: " + addresses[i]);
+                    return;
+                }
+            }
+            
+            await slotsContract.methods
+                .setAllFees(newPotFee, newTeamFee, addresses, stakingFeesNumbers)
+                .send({ from: account })
+                .once("transactionHash", () => {
+                    setIsInitialized(false);
+                    setNewPotFee('');
+                    setNewTeamFee('');
+                })
+                .then(() => {
+                    fetchContractData();
+                });
+
+        } catch (ex) {
+            return;
+        }
+    };
+
     const handleSetNewSameSymbolOddsClicked = async () => {
         try {
             await slotsContract.methods
@@ -206,6 +320,100 @@ const AdminScreen = () => {
                 .once("transactionHash", () => {
                     setIsInitialized(false);
                     setNewSameSymbolOdds('');
+                })
+                .then(() => {
+                    fetchContractData();
+                });
+
+        } catch (ex) {
+            return;
+        }
+    };
+
+    function updateNewSymbolOdds(index, newValue) {
+        //copy the array first
+       let updatedSymbolOdds = [...newSymbolOdds];
+       updatedSymbolOdds[index] = newValue;
+       setNewSymbolOdds(updatedSymbolOdds);
+    }
+
+    const handleSetNewSymbolOddsClicked = async () => {
+        try {
+            let oddsSum = newSymbolOdds.reduce((a, b) => Number(a) + Number(b), 0);
+            if(oddsSum != 10000){
+                alert("Sum of the odds should equal 10000");
+                return;
+            }
+
+            let oddsNumbers = newSymbolOdds.map(Number);
+            await slotsContract.methods
+                .setSymbolOdds(oddsNumbers)
+                .send({ from: account })
+                .once("transactionHash", () => {
+                    setIsInitialized(false);
+                    //setNewSymbolOdds([]);
+                })
+                .then(() => {
+                    fetchContractData();
+                });
+
+        } catch (ex) {
+            return;
+        }
+    };
+
+    const handleSetNewMaxRelativePayoutClicked = async () => {
+        try {
+            await slotsContract.methods
+                .setMaxRelativePayout(newMaxRelativePayout)
+                .send({ from: account })
+                .once("transactionHash", () => {
+                    setIsInitialized(false);
+                    setNewMaxRelativePayout('');
+                })
+                .then(() => {
+                    fetchContractData();
+                });
+
+        } catch (ex) {
+            return;
+        }
+    };
+
+    const handleSetNewRelativeJackpotPayoutClicked = async () => {
+        try {
+            await slotsContract.methods
+                .setRelativeJackpotPayout(newRelativeJackpotPayout)
+                .send({ from: account })
+                .once("transactionHash", () => {
+                    setIsInitialized(false);
+                    setNewRelativeJackpotPayout('');
+                })
+                .then(() => {
+                    fetchContractData();
+                });
+
+        } catch (ex) {
+            return;
+        }
+    };
+
+    function updateNewPayouts(index, newValue) {
+        //copy the array first
+       let updatedPayouts = [...newPayouts];
+       updatedPayouts[index] = newValue;
+       setNewPayouts(updatedPayouts);
+    }
+
+    const handleSetNewPayoutsClicked = async () => {
+        try {
+            let payoutsNumbers = newPayouts.map(Number);
+            await slotsContract.methods
+                .setPayouts(payoutsNumbers)
+                .send({ from: account })
+                .once("transactionHash", () => {
+                    setIsInitialized(false);
+                    //setNewPayouts([]);
                 })
                 .then(() => {
                     fetchContractData();
@@ -309,6 +517,10 @@ const AdminScreen = () => {
             {active && isOwner ? (
                 <div>
                     <h2>Slots</h2>
+                    <p>Prize pool: {isInitialized ? Math.floor(Number(web3.utils.fromWei(prizePool))).toLocaleString() + " GEN" : loadingMessage}</p>
+                    <p>Total rounds played: {isInitialized ? totalRoundsPlayed : loadingMessage}. (Total amount of started spins.)</p>
+                    <p>Total rounds fulfilled: {isInitialized ? idsFulfilled : loadingMessage}. (Total amount of spins fulfilled by VRF.)</p>
+
                     <p>GEN spin price: {isInitialized ? web3.utils.fromWei(tokenSpinPrice).toLocaleString() + " GEN" : loadingMessage}</p>
                     <span>Set GEN spin price: </span>
                     <input style={{ border: '3px solid #848584', fontFamily: 'MS Sans Serif', fontSize: '1rem', padding: '0.43rem' }}
@@ -326,24 +538,155 @@ const AdminScreen = () => {
                     />
                     <span> ETH</span>
                     <Button primary onPress={() => handleSetEthSpinPriceClicked()} style={{ width: 200 }}>Set ETH spin price</Button>
-
-
-                    <p>Total rounds played: {isInitialized ? totalRoundsPlayed : loadingMessage}</p>
-                    <p>Total rounds fulfilled: {isInitialized ? idsFulfilled : loadingMessage}</p>
-                    <p>Prize pool: {isInitialized ? Math.floor(Number(web3.utils.fromWei(prizePool))).toLocaleString() + " GEN" : loadingMessage}</p>
+                    
+                    <h3>Fees</h3>
                     <p>Pot fee: {isInitialized ? (Number(potFee) / 100).toFixed(2) + " %" : loadingMessage}</p>
                     <p>Team fee: {isInitialized ? (Number(teamFee) / 100).toFixed(2) + " %" : loadingMessage}</p>
-                    <p>Same symbols odds: {isInitialized ? (Number(sameSymbolOdds) / 100).toFixed(2) + " %" : loadingMessage}</p>
+                    <p>Staking fees: {isInitialized ? stakingAddressesCount == 0 ? "No staking fees added" : "" : loadingMessage}</p>
+                    {isInitialized && stakingAddressesCount == 0 ? "" : <div>
+                    {stakingFees.map((item) => {
+                      return <div
+                                style={{
+                                  margin: '0.4rem 0.3rem',
+                                  fontSize: '1rem',
+                                  display: 'inline',
+                                  float: 'left',
+                                }}
+                                key={item.address}>
+                                  {item.address}: {(Number(item.fee) / 100).toFixed(2)}%
+                             </div>;
+                    })}
+                        </div>}
+                        
+                    <br/>
+                    <br/>
+                    <span>Set pot fee: </span>
+                    <input style={{ border: '3px solid #848584', fontFamily: 'MS Sans Serif', fontSize: '1rem', padding: '0.43rem' }}
+                        value={newPotFee}
+                        onChange={e => setNewPotFee(e.target.value)}
+                        placeholder={potFee}
+                    />
+                    <span>Set team fee: </span>
+                    <input style={{ border: '3px solid #848584', fontFamily: 'MS Sans Serif', fontSize: '1rem', padding: '0.43rem' }}
+                        value={newTeamFee}
+                        onChange={e => setNewTeamFee(e.target.value)}
+                        placeholder={teamFee}
+                    />
+                    <p>Staking fees: {isInitialized ? "" : loadingMessage}</p>
+                    {newStakingFees.map((item, index) => {
+                      return <div key={index} style={{
+                        margin: '0.4rem 0.3rem',
+                        fontSize: '1rem',
+                        display: 'inline',
+                        float: 'left',
+                      }}><input
+                      style={{
+                        width: '350px',
+                      }} value={item.address} placeholder={stakingFees[index].address} 
+                      onChange={e => updateNewFeesAddress(index, e.target.value)}/>
+                      :<input
+                                style={{
+                                  width: '50px',
+                                }} value={item.fee} placeholder={stakingFees[index].fee} 
+                                onChange={e => updateNewFees(index, e.target.value)}/></div>;
+                    })}
+                    <Button primary onPress={() => handleSetAllFeesClicked()} style={{ width: 200 }}>Set all fees</Button> (1 = 0.01%. Total of the fees must be 1000 = 100%)
 
+                    <h3>Odds</h3>
+                    <p>Same symbols odds: {isInitialized ? (Number(sameSymbolOdds) / 100).toFixed(2) + " %" : loadingMessage}</p>
                     <span>Set same symbol odds: </span>
                     <input style={{ border: '3px solid #848584', fontFamily: 'MS Sans Serif', fontSize: '1rem', padding: '0.43rem' }}
                         value={newSameSymbolOdds}
                         onChange={e => setNewSameSymbolOdds(e.target.value)}
+                        placeholder={sameSymbolOdds}
                     />
                     <span> (1 = 0.01%. Default 6000 = 60%)</span>
                     <Button primary onPress={() => handleSetNewSameSymbolOddsClicked()} style={{ width: 200 }}>Set same symbol odds</Button>
 
-                    <br />
+                    <p>Symbol odds: {isInitialized ? "" : loadingMessage}</p>
+                    {!isInitialized ? "" : <div>
+                    {symbolOdds.map((item, index) => {
+                      return <div
+                                style={{
+                                  margin: '0.4rem 0.3rem',
+                                  fontSize: '1rem',
+                                  display: 'inline',
+                                  float: 'left',
+                                }}
+                                key={index}>
+                                  {index}: {(Number(item) / 100).toFixed(2)}%
+                             </div>;
+                    })}</div>}
+                    <br/>
+                    <p>Set symbols odds: {isInitialized ? " (1 = 0.01%. Total should be 10000 = 100%)" : loadingMessage}</p>
+                    {newSymbolOdds.map((item, index) => {
+                      return <div key={index} style={{
+                        margin: '0.4rem 0.3rem',
+                        fontSize: '1rem',
+                        display: 'inline',
+                        float: 'left',
+                      }}>{index}:<input
+                                style={{
+                                  width: '50px',
+                                }} value={item} placeholder={symbolOdds[index]} 
+                                onChange={e => updateNewSymbolOdds(index, e.target.value)}/></div>;
+                    })}
+                    <Button primary onPress={() => handleSetNewSymbolOddsClicked()} style={{ width: 200 }}>Set new symbol odds</Button>
+                    
+                    <h3>Payouts</h3>
+                    <p>Max relative payout: {isInitialized ? (Number(maxRelativePayout) / 100).toFixed(2) + " %" : loadingMessage}</p>
+
+                    <span>Set max relative payout: </span>
+                    <input style={{ border: '3px solid #848584', fontFamily: 'MS Sans Serif', fontSize: '1rem', padding: '0.43rem' }}
+                        value={newMaxRelativePayout}
+                        onChange={e => setNewMaxRelativePayout(e.target.value)}
+                        placeholder={maxRelativePayout}
+                    />
+                    <span> (1 = 0.01%. Default 1000 = 10%. Maximum payout relative to the pot that a user can receive.)</span>
+                    <Button primary onPress={() => handleSetNewMaxRelativePayoutClicked()} style={{ width: 200 }}>Set max relative payout</Button>
+                    
+                    <p>Jackpot relative payout: {isInitialized ? (Number(relativeJackpotPayout) / 100).toFixed(2) + " %" : loadingMessage}</p>
+
+                    <span>Set Jackpot relative payout: </span>
+                    <input style={{ border: '3px solid #848584', fontFamily: 'MS Sans Serif', fontSize: '1rem', padding: '0.43rem' }}
+                        value={newRelativeJackpotPayout}
+                        onChange={e => setNewRelativeJackpotPayout(e.target.value)}
+                        placeholder={relativeJackpotPayout}
+                    />
+                    <span> (1 = 0.01%. Default 1000 = 10%. Jackpot payout defined relative to the pot.)</span>
+                    <Button primary onPress={() => handleSetNewRelativeJackpotPayoutClicked()} style={{ width: 200 }}>Set jackpot relative payout</Button>
+                    
+                    <p>Payouts relative to the spin cost: {isInitialized ? "" : loadingMessage}</p>
+                    {!isInitialized ? "" : <div>
+                    {payouts.map((item, index) => {
+                      return <div
+                                style={{
+                                  margin: '0.4rem 0.3rem',
+                                  fontSize: '1rem',
+                                  display: 'inline',
+                                  float: 'left',
+                                }}
+                                key={index}>
+                                  {index}: {(Number(item) / 100).toFixed(2)}%
+                             </div>;
+                    })}</div>}
+
+                    <br/>
+                    <p>Set payouts: {isInitialized ? " (1 = 0.01%" : loadingMessage}</p>
+                    {newPayouts.map((item, index) => {
+                      return <div key={index} style={{
+                        margin: '0.4rem 0.3rem',
+                        fontSize: '1rem',
+                        display: 'inline',
+                        float: 'left',
+                      }}>{index}:<input
+                                style={{
+                                  width: '50px',
+                                }} value={item} placeholder={payouts[index]} 
+                                onChange={e => updateNewPayouts(index, e.target.value)}/></div>;
+                    })}
+                    <Button primary onPress={() => handleSetNewPayoutsClicked()} style={{ width: 200 }}>Set new payouts</Button>
+                    
                     <h2>Free spin NFT</h2>
                     <p>Current supply: {isInitialized ? totalSupply : loadingMessage}</p>
                     <p>Max supply: {isInitialized ? maxSupply : loadingMessage}</p>
