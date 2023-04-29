@@ -2,9 +2,9 @@
     {
         "inputs": [
             {
-                "internalType": "address",
-                "name": "_airnodeRrp",
-                "type": "address"
+                "internalType": "uint64",
+                "name": "subscriptionId",
+                "type": "uint64"
             },
             {
                 "internalType": "address",
@@ -21,36 +21,20 @@
         "type": "constructor"
     },
     {
-        "anonymous": false,
         "inputs": [
             {
-                "indexed": true,
-                "internalType": "bytes32",
-                "name": "requestId",
-                "type": "bytes32"
+                "internalType": "address",
+                "name": "have",
+                "type": "address"
             },
             {
-                "indexed": false,
-                "internalType": "uint256",
-                "name": "response",
-                "type": "uint256"
+                "internalType": "address",
+                "name": "want",
+                "type": "address"
             }
         ],
-        "name": "ReceivedUint256",
-        "type": "event"
-    },
-    {
-        "anonymous": false,
-        "inputs": [
-            {
-                "indexed": true,
-                "internalType": "bytes32",
-                "name": "requestId",
-                "type": "bytes32"
-            }
-        ],
-        "name": "RequestedUint256",
-        "type": "event"
+        "name": "OnlyCoordinatorCanFulfill",
+        "type": "error"
     },
     {
         "anonymous": false,
@@ -90,6 +74,19 @@
         "type": "event"
     },
     {
+        "inputs": [],
+        "name": "PRECISION",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [
             {
                 "internalType": "uint256",
@@ -100,32 +97,6 @@
         "name": "addTokensToPot",
         "outputs": [],
         "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "airnode",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "airnodeRrp",
-        "outputs": [
-            {
-                "internalType": "contract IAirnodeRrpV0",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -153,6 +124,19 @@
         "type": "function"
     },
     {
+        "inputs": [],
+        "name": "callbackGasLimit",
+        "outputs": [
+            {
+                "internalType": "uint32",
+                "name": "",
+                "type": "uint32"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [
             {
                 "internalType": "uint256",
@@ -163,19 +147,6 @@
         "name": "claimFreeSpinFromNFT",
         "outputs": [],
         "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "endpointIdUint256",
-        "outputs": [
-            {
-                "internalType": "bytes32",
-                "name": "",
-                "type": "bytes32"
-            }
-        ],
-        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -193,6 +164,19 @@
                 "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "ethSpinningEnabled",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
             }
         ],
         "stateMutability": "view",
@@ -285,24 +269,6 @@
     {
         "inputs": [
             {
-                "internalType": "bytes32",
-                "name": "requestId",
-                "type": "bytes32"
-            },
-            {
-                "internalType": "bytes",
-                "name": "data",
-                "type": "bytes"
-            }
-        ],
-        "name": "fulfillUint256",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
                 "internalType": "address",
                 "name": "player",
                 "type": "address"
@@ -314,6 +280,32 @@
                 "internalType": "uint256[]",
                 "name": "",
                 "type": "uint256[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getStakingAddressesCount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getSymbolsCount",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
             }
         ],
         "stateMutability": "view",
@@ -340,6 +332,19 @@
                 "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "keyHash",
+        "outputs": [
+            {
+                "internalType": "bytes32",
+                "name": "",
+                "type": "bytes32"
             }
         ],
         "stateMutability": "view",
@@ -437,6 +442,19 @@
     },
     {
         "inputs": [],
+        "name": "owner",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
         "name": "potFee",
         "outputs": [
             {
@@ -465,6 +483,50 @@
         "inputs": [
             {
                 "internalType": "uint256",
+                "name": "requestId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256[]",
+                "name": "randomWords",
+                "type": "uint256[]"
+            }
+        ],
+        "name": "rawFulfillRandomWords",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "relativeJackpotPayout",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "requestConfirmations",
+        "outputs": [
+            {
+                "internalType": "uint16",
+                "name": "",
+                "type": "uint16"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
             }
@@ -472,9 +534,9 @@
         "name": "rolls",
         "outputs": [
             {
-                "internalType": "bytes32",
+                "internalType": "uint256",
                 "name": "id",
-                "type": "bytes32"
+                "type": "uint256"
             },
             {
                 "internalType": "uint256",
@@ -528,9 +590,9 @@
             {
                 "components": [
                     {
-                        "internalType": "bytes32",
+                        "internalType": "uint256",
                         "name": "id",
-                        "type": "bytes32"
+                        "type": "uint256"
                     },
                     {
                         "internalType": "uint256",
@@ -589,6 +651,25 @@
                 "type": "uint256"
             }
         ],
+        "name": "s_payouts",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
         "name": "s_stakingAddresses",
         "outputs": [
             {
@@ -614,6 +695,49 @@
                 "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "s_symbolOdds",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "s_wheels",
+        "outputs": [
+            {
+                "internalType": "uint8",
+                "name": "",
+                "type": "uint8"
             }
         ],
         "stateMutability": "view",
@@ -663,12 +787,51 @@
     {
         "inputs": [
             {
+                "internalType": "uint32",
+                "name": "gas",
+                "type": "uint32"
+            }
+        ],
+        "name": "setCallbackGasLimit",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint16",
+                "name": "_callbackRequestConfirmations",
+                "type": "uint16"
+            }
+        ],
+        "name": "setCallbackRequestConfirmations",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "internalType": "uint256",
                 "name": "_ethSpinPrice",
                 "type": "uint256"
             }
         ],
         "name": "setEthSpinPrice",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bool",
+                "name": "_ethSpinningEnabled",
+                "type": "bool"
+            }
+        ],
+        "name": "setEthSpinningEnabled",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -780,22 +943,12 @@
     {
         "inputs": [
             {
-                "internalType": "address",
-                "name": "_airnode",
-                "type": "address"
-            },
-            {
-                "internalType": "bytes32",
-                "name": "_endpointIdUint256",
-                "type": "bytes32"
-            },
-            {
-                "internalType": "address",
-                "name": "_sponsorWallet",
-                "type": "address"
+                "internalType": "uint256",
+                "name": "_relativeJackpotPayout",
+                "type": "uint256"
             }
         ],
-        "name": "setRequestParameters",
+        "name": "setRelativeJackpotPayout",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -868,6 +1021,19 @@
     {
         "inputs": [
             {
+                "internalType": "bytes32",
+                "name": "_keyHash",
+                "type": "bytes32"
+            }
+        ],
+        "name": "setVrfKeyHash",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "internalType": "uint8[][]",
                 "name": "_wheels",
                 "type": "uint8[][]"
@@ -876,19 +1042,6 @@
         "name": "setWheels",
         "outputs": [],
         "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "sponsorWallet",
-        "outputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "stateMutability": "view",
         "type": "function"
     },
     {
