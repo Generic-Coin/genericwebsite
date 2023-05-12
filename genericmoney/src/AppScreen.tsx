@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import useAnimation from './use-animation';
 import {
   StyleSheet,
@@ -6,6 +6,7 @@ import {
   Image,
   Linking,
   Platform,
+  Animated,
   // Animated,
   // TouchableOpacity,
 } from 'react-native';
@@ -332,13 +333,28 @@ const AppScreen = () => {
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     await provider.send('eth_requestAccounts', []);
   };*/
-
+  
+  const translateY = useRef(new Animated.Value(0)).current;  
+  useEffect(() => {
+    const animation = Animated.loop(
+      Animated.timing(translateY, {
+        toValue: -200,
+        duration: 100,
+        useNativeDriver: false,
+      })
+    );
+    animation.start();
+  
+    return () => {
+      animation.stop();
+    };
+  }, []);
 
   return (
     <View style={styles.background}>
       <View style={styles.container}>
         <AppBar style={styles.header}>
-          <View style={styles.price}>
+          {/* <View style={styles.price}>
             {showGenericPrice ? (
               <Text style={styles.priceText}>
                 <sup>$</sup>
@@ -355,11 +371,11 @@ const AppScreen = () => {
                 loading...
               </Text>
             )}{' '}
-          </View>
+          </View> */}
           <View style={styles.logo}>
             <Image style={styles.logoImage} source={GenericLogo} />
             <Text style={styles.heading} bold disabled>
-              Generic Coin Slots Beta 0.8
+              Slots
             </Text>
           </View>
           {/* <Button
@@ -416,9 +432,63 @@ const AppScreen = () => {
                   ) : (
                       <>
                         {isSlotRolling ? (
-                          <div style={{textAlign: 'center'}}>...</div>
+                          <View
+                            style={{
+                              left: '1.3%',
+                              marginTop: '-21vw',
+                              paddingTop: '36.4%',
+                              textAlign: 'center',
+                              width: '98%',
+                              maxHeight: '40vw',
+                              overflow: 'hidden',
+                            }}
+                          >
+                            <Animated.Text
+                              style={{
+                                fontWeight: 'bold',
+                                padding: '0 2%',
+                                margin: 0,
+                                fontFamily: 'MS Sans Serif',
+                                fontSize: 'clamp(1rem, 6.4rem, 9.3vw)',
+                                transform: [{ translateY }],
+                              }}
+                            >
+                              1 &nbsp; 2 &nbsp; 3<br/>
+                              2 &nbsp; 3 &nbsp; 4<br/>
+                              3 &nbsp; 4 &nbsp; 5<br/>
+                              4 &nbsp; 5 &nbsp; 6<br/>
+                              5 &nbsp; 6 &nbsp; 7<br/>
+                              6 &nbsp; 7 &nbsp; 8<br/>
+                              7 &nbsp; 8 &nbsp; 9<br/>
+                              8 &nbsp; 9 &nbsp; 0<br/>
+                              9 &nbsp; 0 &nbsp; 1<br/>
+                              0 &nbsp; 1 &nbsp; 2
+                            </Animated.Text>
+                          </View>
                         ) : (
-                            <p></p>
+                          <View
+                            style={{
+                              left: '1.3%',
+                              marginTop: '-31vw',
+                              paddingTop: '36.4%',
+                              textAlign: 'center',
+                              width: '98%',
+                              maxHeight: '43vw',
+                              overflow: 'hidden',
+                            }}
+                          >
+                            <Animated.Text
+                              style={{
+                                fontWeight: 'bold',
+                                padding: '0 2%',
+                                margin: 0,
+                                fontFamily: 'MS Sans Serif',
+                                fontSize: 'clamp(1rem, 6.4rem, 9.3vw)',
+                              }}
+                            >
+                              # &nbsp; # &nbsp; #<br/>
+                            </Animated.Text>
+                          </View>
                           )}
                       </>
                     )}
@@ -737,6 +807,10 @@ const AppScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  '@keyframes scroll': {
+    '0%': { transform: [{ translateY: 0 }] },
+    '100%': { transform: [{ translateY: '-100%' }] },
+  },
   price: {
     position: 'absolute',
     top: '1rem',

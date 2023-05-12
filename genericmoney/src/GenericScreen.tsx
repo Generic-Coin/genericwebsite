@@ -224,7 +224,7 @@ const GenericScreen = () => {
         ) : (
           <>
             <AppBar style={styles.header}>
-              <View style={styles.price}>
+              {/* <View style={styles.price}>
                 {showGenericPrice ? (
                   <Text style={styles.priceText}>
                     <sup>$</sup>
@@ -241,7 +241,7 @@ const GenericScreen = () => {
                     loading...
                   </Text>
                 )}{' '}
-              </View>
+              </View> */}
               <View style={styles.logo}>
                 <Image style={styles.logoImage} source={GenericLogo} />
                 <Text style={styles.heading} bold disabled>
