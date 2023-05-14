@@ -422,7 +422,7 @@ const AppScreen = () => {
                       <Text>
                         <p style={{
                           fontWeight: 'bold',
-                          fontSize: 'clamp(1rem, 6.4rem, 9.3vw)',
+                          fontSize: 'clamp(0rem, 9.6vw, 6.2rem)',
                           padding: '0 2%',
                           margin: 0,
                         }}>
@@ -466,29 +466,16 @@ const AppScreen = () => {
                             </Animated.Text>
                           </View>
                         ) : (
-                          <View
-                            style={{
-                              left: '1.3%',
-                              marginTop: '-31vw',
-                              paddingTop: '36.4%',
-                              textAlign: 'center',
-                              width: '98%',
-                              maxHeight: '43vw',
-                              overflow: 'hidden',
-                            }}
-                          >
-                            <Animated.Text
-                              style={{
-                                fontWeight: 'bold',
-                                padding: '0 2%',
-                                margin: 0,
-                                fontFamily: 'MS Sans Serif',
-                                fontSize: 'clamp(1rem, 6.4rem, 9.3vw)',
-                              }}
-                            >
-                              # &nbsp; # &nbsp; #<br/>
-                            </Animated.Text>
-                          </View>
+                          <Text>
+                            <p style={{
+                              fontWeight: 'bold',
+                              fontSize: 'clamp(0rem, 9.6vw, 6.2rem)',
+                              padding: '0 2%',
+                              margin: 0,
+                            }}>
+                              # &nbsp; # &nbsp; #
+                            </p>
+                          </Text>
                           )}
                       </>
                     )}
@@ -497,7 +484,7 @@ const AppScreen = () => {
                 <div style={{
                   position: 'absolute',
                   width: '100%',
-                  top: '3.1rem',
+                  top: '3.7rem',
                   paddingTop: '15.2%',
                   left: '21.5%',
                 }}>
@@ -507,15 +494,28 @@ const AppScreen = () => {
                       textAlign: 'left', 
                       margin: '0 0.5rem',
                       color: '#ffffff',
-                      fontSize: 'clamp(0.3rem, 1.23rem, 2vw)',
+                      fontSize: 'clamp(0rem, 2.03vw, 1.3rem)',
                     }}>
-                      <span><b>Pot: </b> {prizePool}</span><br/>
-                      {(active && tokenBalance) ? (<span>Your GEN Balance: { Math.round(Number(tokenBalance)).toLocaleString() }</span>) : (<></>)}<br/>
-                      {(active && BNBBalance) ? (<span>Your ETH Balance: { Number(BNBBalance).toFixed(4).toLocaleString() }</span>) : (<></>)}  
+                      {(active && tokenBalance) ? (<span>GEN: { Math.round(Number(tokenBalance)).toLocaleString() }</span>) : (<></>)}<br/>
+                      {(active && BNBBalance) ? (<span>ETH: { Number(BNBBalance).toFixed(4).toLocaleString() }</span>) : (<></>)}  
                     </div>
                   ) : (
                     <></>
                   )}
+                  </Text>
+                </div>
+                
+                <div style={{
+                  position: 'absolute',
+                  width: '98%',
+                  top: '3.2rem',
+                  paddingTop: '60.1%',
+                }}>
+                  <Text style={{
+                    color: '#fff',
+                    fontSize: 'clamp(0.3rem, 1.23rem, 2.2vw)',
+                  }}>
+                    <div style={{textAlign: 'center'}}><b>Pot: </b> {prizePool}</div>
                   </Text>
                 </div>
                 
@@ -535,15 +535,7 @@ const AppScreen = () => {
                         </Text>
                       ) : (
                       <>
-                        {isSlotRolling ? (
-                          <Text style={{
-                            color: '#fff',
-                          }}>
-                            <div style={{textAlign: 'center'}}>Slot Machine Spinning...</div>
-                          </Text>
-                        ) : (
-                            <p></p>
-                          )}
+
                       </>
                     )}
                   </Text>
