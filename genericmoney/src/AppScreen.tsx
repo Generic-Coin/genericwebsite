@@ -344,11 +344,7 @@ const AppScreen = () => {
       })
     );
     animation.start();
-  
-    return () => {
-      animation.stop();
-    };
-  }, []);
+  });
 
   return (
     <View style={styles.background}>
