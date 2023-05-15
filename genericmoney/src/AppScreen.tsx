@@ -108,7 +108,7 @@ const AppScreen = () => {
     if (web3.givenProvider !== null) {
       const id = setInterval(() => {
         fetchContractData();
-      }, 5000);
+      }, 15000);
       fetchContractData();
       return () => clearInterval(id);
     } else {
@@ -422,7 +422,9 @@ const AppScreen = () => {
                           padding: '0 2%',
                           margin: 0,
                         }}>
-                          {roundInfo.['symbols'][0]} &nbsp; {roundInfo['symbols'][1]} &nbsp; {roundInfo['symbols'][2]}
+                          <span style={{position: 'absolute', left: '33.7%'}}>{roundInfo.['symbols'][0]}</span>
+                          <span>{roundInfo['symbols'][1]}</span>
+                          <span style={{position: 'absolute', right: '33.7%'}}>{roundInfo['symbols'][2]}</span>
                         </p>
                       </Text>
                   ) : (
@@ -449,16 +451,42 @@ const AppScreen = () => {
                                 transform: [{ translateY }],
                               }}
                             >
-                              1 &nbsp; 2 &nbsp; 3<br/>
-                              2 &nbsp; 3 &nbsp; 4<br/>
-                              3 &nbsp; 4 &nbsp; 5<br/>
-                              4 &nbsp; 5 &nbsp; 6<br/>
-                              5 &nbsp; 6 &nbsp; 7<br/>
-                              6 &nbsp; 7 &nbsp; 8<br/>
-                              7 &nbsp; 8 &nbsp; 9<br/>
-                              8 &nbsp; 9 &nbsp; 0<br/>
-                              9 &nbsp; 0 &nbsp; 1<br/>
-                              0 &nbsp; 1 &nbsp; 2
+                            <span style={{position: 'absolute', left: '33.7%'}}>
+                              1<br/>
+                              2<br/>
+                              3<br/>
+                              4<br/>
+                              5<br/>
+                              6<br/>
+                              7<br/>
+                              8<br/>
+                              9<br/>
+                              0
+                            </span>
+                            <span>
+                              2<br/>
+                              3<br/>
+                              4<br/>
+                              5<br/>
+                              6<br/>
+                              7<br/>
+                              8<br/>
+                              9<br/>
+                              0<br/>
+                              1
+                            </span>
+                            <span style={{position: 'absolute', right: '33.7%', top: 0}}>
+                              3<br/>
+                              4<br/>
+                              5<br/>
+                              6<br/>
+                              7<br/>
+                              8<br/>
+                              9<br/>
+                              0<br/>
+                              1<br/>
+                              2
+                            </span>
                             </Animated.Text>
                           </View>
                         ) : (
@@ -469,7 +497,9 @@ const AppScreen = () => {
                               padding: '0 2%',
                               margin: 0,
                             }}>
-                              # &nbsp; # &nbsp; #
+                              <span style={{position: 'absolute', left: '33.7%'}}>#</span>
+                              <span>#</span>
+                              <span style={{position: 'absolute', right: '33.7%'}}>#</span>
                             </p>
                           </Text>
                           )}
