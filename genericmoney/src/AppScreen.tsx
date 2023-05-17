@@ -119,24 +119,16 @@ const AppScreen = () => {
   const fetchContractData = async () => {
     // if (!!slotContract) {
       try {
-        let historyArray = [];
+        // Get the last rounds played by the player, maximum 30 round ID's will be returned
         let roundsplayed = await slotContract.methods
-          .getRoundsPlayed(account)
+          .getLastRoundsPlayed(account, 30)
           .call();
-        console.warn('roundsplayed', roundsplayed)
-        if (roundsplayed.length > 10) {
-          roundsplayed = roundsplayed.slice(-30); 
-        }
 
-        let roundInfo;
-        for(const round in roundsplayed){
-          roundInfo = await slotContract.methods.roundInfo(roundsplayed[round]).call();
-          historyArray.push({roundInfo});
-        }
+        let historyArray = await slotContract.methods.getMultipleRoundInfo(roundsplayed).call();
+        historyArray = [...historyArray].reverse();
 
-        setSpinHistory(historyArray.reverse());
-        // console.warn('spinHistory', historyArray);
-        
+        setSpinHistory(historyArray);
+        //console.warn('spinHistory', historyArray);
           
         const priceEth = await slotContract.methods.ethSpinPrice().call();
         const priceGEN = await slotContract.methods.tokenSpinPrice().call();
@@ -153,9 +145,10 @@ const AppScreen = () => {
         const balanceToken = await tokenContract.methods
           .balanceOf(account)
           .call();
-        if (allowance > 1000000000) {
-          setHasAllowance(true);
-        }
+
+        const hasAllowance = web3.utils.toBN(allowance).gte(web3.utils.toBN(priceGEN));
+        setHasAllowance(hasAllowance);
+
         // setPriceETH(web3.utils.fromWei(priceEth) + ' BNB');
         setPriceETH(web3.utils.fromWei(priceEth));
         // setPriceGEN(web3.utils.fromWei(priceGEN) + ' GENv3');
@@ -185,23 +178,19 @@ const AppScreen = () => {
         const price = await slotContract.methods.ethSpinPrice().call();
         setPriceETH(web3.utils.fromWei(price));
         // Roll the slot machine
-        await slotContract.methods
+        const spinId = await slotContract.methods
           .ethSpin()
           .send({ from: account, value: price });
         // Rolling state for the UI
         setIsSlotRolling(true);
-        // Obtain the array of round IDs played by the connected wallet (so that we may acquire the latest)
-        const roundsplayed = await slotContract.methods
-          .getRoundsPlayed(account)
-          .call();
         let resp = await slotContract.methods
-          .roundInfo(roundsplayed[roundsplayed.length - 1])
+          .roundInfo(spinId)
           .call();
         // While Chainlink is processing the VRF, send a request every three seconds until it's fulfilled.
         while (resp[5] === false && resp['payout'] === '0') {
           await timer(3000);
           resp = await slotContract.methods
-            .roundInfo(roundsplayed[roundsplayed.length - 1])
+            .roundInfo(spinId)
             .call();
           console.warn('ok', resp);
         }
@@ -239,21 +228,21 @@ const AppScreen = () => {
 
 
 
-  // const handleApprove = async () => {
-  //   if (!!tokenContract) {
-  //     try {
-  //       await tokenContract.methods
-  //         .approve(
-  //           slotContractAddy,
-  //           '115792089237316195423570985008687907853269984665640564039457584007913129639935',
-  //         )
-  //         .send({ from: account });
-  //       setHasAllowance(true);
-  //     } catch (ex) {
-  //       return;
-  //     }
-  //   }
-  // };
+  const handleApprove = async () => {
+    if (!!tokenContract) {
+      try {
+        await tokenContract.methods
+          .approve(
+            slotContractAddy,
+            '115792089237316195423570985008687907853269984665640564039457584007913129639935',
+          )
+          .send({ from: account });
+        setHasAllowance(true);
+      } catch (ex) {
+        return;
+      }
+    }
+  };
 
   // const handleClaim = async () => {
   //   if (!!slotContract) {
@@ -276,21 +265,17 @@ const AppScreen = () => {
         const price = await slotContract.methods.tokenSpinPrice().call();
         setPriceGEN(web3.utils.fromWei(price));
         // Roll the slot machine
-        await slotContract.methods.tokenSpin().send({ from: account });
+        const spinId = await slotContract.methods.tokenSpin().send({ from: account });
         // Rolling state for the UI
         setIsSlotRolling(true);
-        // Obtain the array of round IDs played by the connected wallet (so that we may acquire the latest)
-        const roundsplayed = await slotContract.methods
-          .getRoundsPlayed(account)
-          .call();
         let resp = await slotContract.methods
-          .roundInfo(roundsplayed[roundsplayed.length - 1])
+          .roundInfo(spinId)
           .call();
         // While Chainlink is processing the VRF, send a request every three seconds until it's fulfilled.
         while (resp[5] === false) {
           await timer(3000);
           resp = await slotContract.methods
-            .roundInfo(roundsplayed[roundsplayed.length - 1])
+            .roundInfo(spinId)
             .call();
         }
 
@@ -684,25 +669,27 @@ const AppScreen = () => {
                       justifyContent: 'center',
                 }}>
                     <div style={{ margin: '0 0.25rem'}}>
-                      <Button primary disabled={isSlotRolling || !active} onPress={() => rollToken()}>
+                      <Button primary disabled={isSlotRolling || !active || !hasAllowance} onPress={() => rollToken()}>
                         <span style={{fontFamily: 'MS Sans Serif'}}>Spin with GEN {active ? (<span> {priceGEN}</span>) : (<span></span>)}</span>
                       </Button> 
+                      <Button primary disabled={hasAllowance} onPress={() => handleApprove()}>Approve</Button>
+                      {/*hasAllowance ? (
+                      <Button primary disabled={isSlotRolling || !active} onPress={() => rollToken()}>Spin</Button>
+                      ) : (
+                        // <Button primary disabled={!hasAllowance} onPress={() => handleApprove()}>Approve</Button>
+                        <Button primary disabled={hasAllowance} onPress={() => handleApprove()}>Approve</Button>
+                      )
+                      */}
                     </div>
                     <div style={{ margin: '0 0.25rem'}}>
                       <Button primary disabled={isSlotRolling || !active} onPress={() => rollEth()}>
                         <span style={{fontFamily: 'MS Sans Serif'}}>Spin with ETH {active ? (<span> {priceETH}</span>) : (<span></span>)}</span>
                       </Button>
                     </div>
-                  {/* <div style={{paddingRight: '2%', float: 'left'}}>
+                  { /*<div style={{paddingRight: '2%', float: 'left'}}>
                     <p><b>Spin with GENv3:</b></p>
-                    {hasAllowance ? (
-                      <Button primary disabled={isSlotRolling || !active} onPress={() => rollToken()}>Spin</Button>
-                      ) : (
-                        // <Button primary disabled={!hasAllowance} onPress={() => handleApprove()}>Approve</Button>
-                        <Button primary disabled={!hasAllowance} onPress={() => handleApprove()}>Approve</Button>
-                      )
-                    }
-                  </div> */}
+                    
+              </div> */}
                 </div>
                 
  
@@ -727,9 +714,9 @@ const AppScreen = () => {
                                   fontFamily: 'MS Sans Serif',
                                   whiteSpace: 'nowrap',
                                 }}
-                                key={item.roundInfo.round}>
-                                  <Button disabled>Spin ID {item.roundInfo.round}: &nbsp; 
-                                  {item.roundInfo.symbols[0]} | {item.roundInfo.symbols[1]} | {item.roundInfo.symbols[2]}</Button>
+                                key={item.round}>
+                                  <Button disabled>Spin ID {item.round}: &nbsp; 
+                                  {item.symbols[0]} | {item.symbols[1]} | {item.symbols[2]}</Button>
                              </div>;
                     })}
                 </div>
