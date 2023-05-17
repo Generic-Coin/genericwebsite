@@ -132,29 +132,16 @@ const AdminScreen = () => {
             const symbolsCount = await slotsContract.methods.getSymbolsCount().call();
 
 
-            let address, fee;
-            let stakingAddresses = [];
             let stakingFees = [];
-            for(let i = 0; i < stakingAddressesCount; i++){
-                address = await slotsContract.methods.s_stakingAddresses(i).call();
-                stakingAddresses.push(address);
-                fee = await slotsContract.methods.s_stakingFees(i).call();
-                stakingFees.push({address: address, fee: fee});
+            let stakingAddresses = await slotsContract.methods.getStakingAddresses().call();
+            let getStakingFees = await slotsContract.methods.getStakingFees().call();
+
+            for(let i = 0; i < stakingAddresses.length; i++){
+                stakingFees.push({address: stakingAddresses[i], fee: getStakingFees[i]});
             }
 
-            let odd;
-            let symbolOdds = [];
-            for(let i = 0; i < symbolsCount; i++){
-                odd = await slotsContract.methods.s_symbolOdds(i).call();
-                symbolOdds.push(odd);
-            }
-
-            let payout;
-            let payouts = [];
-            for(let i = 0; i < symbolsCount; i++){
-                payout = await slotsContract.methods.s_payouts(i).call();
-                payouts.push(payout);
-            }
+            let symbolOdds = await slotsContract.methods.getSymbolOdds().call();
+            let payouts = await slotsContract.methods.getPayouts().call();
 
             const maxSupply = await nftContract.methods.maxSupply().call();
             setMaxSupply(maxSupply);

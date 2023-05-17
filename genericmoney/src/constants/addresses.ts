@@ -10,7 +10,7 @@ const ADDRESSES = {
     },
     [SupportedChainId.ARBITRUM_GOERLI]: {
         'genericToken': '0xDdE78b2e7F3236E873d3a8814D84d849F19cd036',
-        'slots': '0x92bF4042Afa8420F625DA4C3F154997e33c273e3',
+        'slots': '0x7ECFb75BC96Fc60f949c9111871c26C01BEf6143',
         'staking': '0x0057FB37d9e49DA014C6191C00F9B05F510e6480',
         'stakingToken': '0xe98F65b1C5430B8b6f2F9d6F4E9872CB9734b625',
         'freeSpinNft': '0x049ecCd0bfb21D3e028fdaA43C7bab6CdC696d89',
