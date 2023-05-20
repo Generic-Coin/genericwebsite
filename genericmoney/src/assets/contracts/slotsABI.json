@@ -152,13 +152,7 @@
     {
         "inputs": [],
         "name": "ethSpin",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "id",
-                "type": "uint256"
-            }
-        ],
+        "outputs": [],
         "stateMutability": "payable",
         "type": "function"
     },
@@ -1049,6 +1043,19 @@
     {
         "inputs": [
             {
+                "internalType": "uint64",
+                "name": "subscriptionId",
+                "type": "uint64"
+            }
+        ],
+        "name": "setSubscriptionId",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "internalType": "uint256[]",
                 "name": "_symbolOdds",
                 "type": "uint256[]"
@@ -1185,13 +1192,7 @@
     {
         "inputs": [],
         "name": "tokenSpin",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "id",
-                "type": "uint256"
-            }
-        ],
+        "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     },

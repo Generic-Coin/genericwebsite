@@ -178,19 +178,20 @@ const AppScreen = () => {
         const price = await slotContract.methods.ethSpinPrice().call();
         setPriceETH(web3.utils.fromWei(price));
         // Roll the slot machine
-        const spinId = await slotContract.methods
+        await slotContract.methods
           .ethSpin()
           .send({ from: account, value: price });
+        const roundIndex = (await slotContract.methods.getLastRoundsPlayed(account, 1).call())[0];
         // Rolling state for the UI
         setIsSlotRolling(true);
         let resp = await slotContract.methods
-          .roundInfo(spinId)
+          .roundInfo(roundIndex)
           .call();
         // While Chainlink is processing the VRF, send a request every three seconds until it's fulfilled.
-        while (resp[5] === false && resp['payout'] === '0') {
+        while (resp['finished'] === false) {
           await timer(3000);
           resp = await slotContract.methods
-            .roundInfo(spinId)
+            .roundInfo(roundIndex)
             .call();
           console.warn('ok', resp);
         }
@@ -265,17 +266,19 @@ const AppScreen = () => {
         const price = await slotContract.methods.tokenSpinPrice().call();
         setPriceGEN(web3.utils.fromWei(price));
         // Roll the slot machine
-        const spinId = await slotContract.methods.tokenSpin().send({ from: account });
+        await slotContract.methods.tokenSpin().send({ from: account });
+
+        const roundIndex = (await slotContract.methods.getLastRoundsPlayed(account, 1).call())[0];
         // Rolling state for the UI
         setIsSlotRolling(true);
         let resp = await slotContract.methods
-          .roundInfo(spinId)
+          .roundInfo(roundIndex)
           .call();
         // While Chainlink is processing the VRF, send a request every three seconds until it's fulfilled.
-        while (resp[5] === false) {
+        while (resp['finished'] === false) {
           await timer(3000);
           resp = await slotContract.methods
-            .roundInfo(spinId)
+            .roundInfo(roundIndex)
             .call();
         }
 
