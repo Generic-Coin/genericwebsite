@@ -100,30 +100,6 @@
         "type": "function"
     },
     {
-        "inputs": [
-            {
-                "internalType": "uint8",
-                "name": "_symbol",
-                "type": "uint8"
-            },
-            {
-                "internalType": "uint256",
-                "name": "amountPaid",
-                "type": "uint256"
-            }
-        ],
-        "name": "calculatePrize",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
         "inputs": [],
         "name": "callbackGasLimit",
         "outputs": [
@@ -158,19 +134,6 @@
     },
     {
         "inputs": [],
-        "name": "ethSpinPrice",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [],
         "name": "ethSpinningEnabled",
         "outputs": [
             {
@@ -183,22 +146,10 @@
         "type": "function"
     },
     {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "",
-                "type": "address"
-            }
-        ],
+        "inputs": [],
         "name": "freeSpin",
-        "outputs": [
-            {
-                "internalType": "bool",
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "stateMutability": "view",
+        "outputs": [],
+        "stateMutability": "payable",
         "type": "function"
     },
     {
@@ -261,6 +212,32 @@
                 "internalType": "uint256",
                 "name": "",
                 "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "freeSpinTokenPrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "freeSpinningEnabled",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
             }
         ],
         "stateMutability": "view",
@@ -499,6 +476,25 @@
         "type": "function"
     },
     {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "name": "hasFreeSpin",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "name": "idsFulfilled",
         "outputs": [
@@ -564,6 +560,19 @@
     },
     {
         "inputs": [],
+        "name": "maxEthSpinPrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
         "name": "maxRelativePayout",
         "outputs": [
             {
@@ -604,6 +613,45 @@
     {
         "inputs": [],
         "name": "maxSupplyFreeSpinTier3",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "maxTokenSpinPrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "minEthSpinPrice",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "minTokenSpinPrice",
         "outputs": [
             {
                 "internalType": "uint256",
@@ -887,19 +935,6 @@
     {
         "inputs": [
             {
-                "internalType": "uint256",
-                "name": "_ethSpinPrice",
-                "type": "uint256"
-            }
-        ],
-        "name": "setEthSpinPrice",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
                 "internalType": "bool",
                 "name": "_ethSpinningEnabled",
                 "type": "bool"
@@ -979,11 +1014,89 @@
         "inputs": [
             {
                 "internalType": "uint256",
+                "name": "_freeSpinTokenPrice",
+                "type": "uint256"
+            }
+        ],
+        "name": "setFreeSpinTokenPrice",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bool",
+                "name": "_freeSpinningEnabled",
+                "type": "bool"
+            }
+        ],
+        "name": "setFreeSpinningEnabled",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_maxEthSpinPrice",
+                "type": "uint256"
+            }
+        ],
+        "name": "setMaxEthSpinPrice",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
                 "name": "_maxRelativePayout",
                 "type": "uint256"
             }
         ],
         "name": "setMaxRelativePayout",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_maxTokenSpinPrice",
+                "type": "uint256"
+            }
+        ],
+        "name": "setMaxTokenSpinPrice",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_minEthSpinPrice",
+                "type": "uint256"
+            }
+        ],
+        "name": "setMinEthSpinPrice",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_minTokenSpinPrice",
+                "type": "uint256"
+            }
+        ],
+        "name": "setMinTokenSpinPrice",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -1082,12 +1195,12 @@
     {
         "inputs": [
             {
-                "internalType": "uint256",
-                "name": "_tokenSpinPrice",
-                "type": "uint256"
+                "internalType": "bool",
+                "name": "_tokenSpinningEnabled",
+                "type": "bool"
             }
         ],
-        "name": "setTokenSpinPrice",
+        "name": "setTokenSpinningEnabled",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -1095,12 +1208,25 @@
     {
         "inputs": [
             {
-                "internalType": "bool",
-                "name": "_tokenSpinningEnabled",
-                "type": "bool"
+                "internalType": "uint256",
+                "name": "_vrfFee",
+                "type": "uint256"
             }
         ],
-        "name": "setTokenSpinningEnabled",
+        "name": "setVrfFee",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_vrfFeeAddress",
+                "type": "address"
+            }
+        ],
+        "name": "setVrfFeeAddress",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -1190,23 +1316,16 @@
         "type": "function"
     },
     {
-        "inputs": [],
-        "name": "tokenSpin",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [],
-        "name": "tokenSpinPrice",
-        "outputs": [
+        "inputs": [
             {
                 "internalType": "uint256",
-                "name": "",
+                "name": "tokenSpinPrice",
                 "type": "uint256"
             }
         ],
-        "stateMutability": "view",
+        "name": "tokenSpin",
+        "outputs": [],
+        "stateMutability": "payable",
         "type": "function"
     },
     {
@@ -1252,6 +1371,32 @@
         "name": "transferOwnership",
         "outputs": [],
         "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "vrfFee",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "vrfFeeAddress",
+        "outputs": [
+            {
+                "internalType": "address payable",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     },
     {

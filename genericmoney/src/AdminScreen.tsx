@@ -53,11 +53,14 @@ const AdminScreen = () => {
     const [currentTimestamp, setCurrentTimestamp] = useState('Loading...');
 
     // Slots
-    const [ethSpinPrice, setEthSpinPrice] = useState(0);
-    const [tokenSpinPrice, setTokenSpinPrice] = useState(0);
+    const [minEthSpinPrice, setMinEthSpinPrice] = useState(0);
+    const [maxEthSpinPrice, setMaxEthSpinPrice] = useState(0);
+    const [minTokenSpinPrice, setMinTokenSpinPrice] = useState(0);
+    const [maxTokenSpinPrice, setMaxTokenSpinPrice] = useState(0);
     const [totalRoundsPlayed, setTotalRoundsPlayed] = useState();
     const [idsFulfilled, setIdsFulfilled] = useState('');
     const [prizePool, setPrizePool] = useState();
+    const [vrfFee, setVrfFee] = useState();
     const [potFee, setPotFee] = useState();
     const [teamFee, setTeamFee] = useState();
     const [stakingAddressesCount, setStakingAddressesCount] = useState();
@@ -70,8 +73,11 @@ const AdminScreen = () => {
     const [symbolsCount, setSymbolsCount] = useState(); // Amount of symbols on the wheels
     const [payouts, setPayouts] = useState([]);
 
-    const [newEthSpinPrice, setNewEthSpinPrice] = useState('');
-    const [newTokenSpinPrice, setNewTokenSpinPrice] = useState('');
+    const [newMinEthSpinPrice, setNewMinEthSpinPrice] = useState('');
+    const [newMaxEthSpinPrice, setNewMaxEthSpinPrice] = useState('');
+    const [newMinTokenSpinPrice, setNewMinTokenSpinPrice] = useState('');
+    const [newMaxTokenSpinPrice, setNewMaxTokenSpinPrice] = useState('');
+    const [newVrfFee, setNewVrfFee] = useState('');
     const [newPotFee, setNewPotFee] = useState('');
     const [newTeamFee, setNewTeamFee] = useState('');
     const [newStakingFees, setNewStakingFees] = useState([]);
@@ -116,12 +122,15 @@ const AdminScreen = () => {
             const currentBlockNumber = await web3.eth.getBlockNumber();
             const currentTimestamp = (await web3.eth.getBlock(currentBlockNumber)).timestamp;
 
-            const tokenSpinPrice = await slotsContract.methods.tokenSpinPrice().call();
-            const ethSpinPrice = await slotsContract.methods.ethSpinPrice().call();
+            const minTokenSpinPrice = await slotsContract.methods.minTokenSpinPrice().call();
+            const maxTokenSpinPrice = await slotsContract.methods.maxTokenSpinPrice().call();
+            const minEthSpinPrice = await slotsContract.methods.minEthSpinPrice().call();
+            const maxEthSpinPrice = await slotsContract.methods.maxEthSpinPrice().call();
 
             const totalRoundsPlayed = await slotsContract.methods.getTotalRoundsPlayed().call();
             const idsFulfilled = await slotsContract.methods.idsFulfilled().call();
             const prizePool = await slotsContract.methods.prizePool().call();
+            const vrfFee = await slotsContract.methods.vrfFee().call();
             const potFee = await slotsContract.methods.potFee().call();
             const teamFee = await slotsContract.methods.teamFee().call();
             const stakingAddressesCount = await slotsContract.methods.getStakingAddressesCount().call();
@@ -159,12 +168,15 @@ const AdminScreen = () => {
 
             setCurrentTimestamp(String(currentTimestamp));
 
-            setTokenSpinPrice(tokenSpinPrice);
-            setEthSpinPrice(ethSpinPrice);
+            setMinTokenSpinPrice(minTokenSpinPrice);
+            setMaxTokenSpinPrice(maxTokenSpinPrice);
+            setMinEthSpinPrice(minEthSpinPrice);
+            setMaxEthSpinPrice(maxEthSpinPrice);
 
             setTotalRoundsPlayed(totalRoundsPlayed);
             setIdsFulfilled(idsFulfilled);
             setPrizePool(prizePool);
+            setVrfFee(vrfFee);
             setPotFee(potFee);
             setNewPotFee(potFee);
             setTeamFee(teamFee);
@@ -199,16 +211,16 @@ const AdminScreen = () => {
         } catch (ex) { }
     };
 
-    const handleSetTokenSpinPriceClicked = async () => {
+    const handleSetMinTokenSpinPriceClicked = async () => {
         try {
             await slotsContract.methods
-                .setTokenSpinPrice(
-                    web3.utils.toWei(newTokenSpinPrice, 'ether')
+                .setMinTokenSpinPrice(
+                    web3.utils.toWei(newMinTokenSpinPrice, 'ether')
                 )
                 .send({ from: account })
                 .once("transactionHash", () => {
                     setIsInitialized(false);
-                    setNewTokenSpinPrice('');
+                    setNewMinTokenSpinPrice('');
                 })
                 .then(() => {
                     fetchContractData();
@@ -219,16 +231,56 @@ const AdminScreen = () => {
         }
     };
 
-    const handleSetEthSpinPriceClicked = async () => {
+    const handleSetMaxTokenSpinPriceClicked = async () => {
         try {
             await slotsContract.methods
-                .setEthSpinPrice(
-                    web3.utils.toWei(newEthSpinPrice, 'ether')
+                .setMaxTokenSpinPrice(
+                    web3.utils.toWei(newMaxTokenSpinPrice, 'ether')
                 )
                 .send({ from: account })
                 .once("transactionHash", () => {
                     setIsInitialized(false);
-                    setNewTokenSpinPrice('');
+                    setNewMaxTokenSpinPrice('');
+                })
+                .then(() => {
+                    fetchContractData();
+                });
+
+        } catch (ex) {
+            return;
+        }
+    };
+
+    const handleSetMinEthSpinPriceClicked = async () => {
+        try {
+            await slotsContract.methods
+                .setMinEthSpinPrice(
+                    web3.utils.toWei(newMinEthSpinPrice, 'ether')
+                )
+                .send({ from: account })
+                .once("transactionHash", () => {
+                    setIsInitialized(false);
+                    setNewMinEthSpinPrice('');
+                })
+                .then(() => {
+                    fetchContractData();
+                });
+
+        } catch (ex) {
+            return;
+        }
+    };
+
+    const handleSetMaxEthSpinPriceClicked = async () => {
+        try {
+            await slotsContract.methods
+                .setMaxEthSpinPrice(
+                    web3.utils.toWei(newMaxEthSpinPrice, 'ether')
+                )
+                .send({ from: account })
+                .once("transactionHash", () => {
+                    setIsInitialized(false);
+                    setNewMaxEthSpinPrice('');
                 })
                 .then(() => {
                     fetchContractData();
@@ -252,6 +304,26 @@ const AdminScreen = () => {
        updatedStakingFees[index].fee = newValue;
        setNewStakingFees(updatedStakingFees);
     }
+
+    const handleSetVrfFeeClicked = async () => {
+        try {
+            await slotsContract.methods
+                .setVrfFee(
+                    web3.utils.toWei(newVrfFee, 'ether')
+                )
+                .send({ from: account })
+                .once("transactionHash", () => {
+                    setIsInitialized(false);
+                    setNewVrfFee('');
+                })
+                .then(() => {
+                    fetchContractData();
+                });
+
+        } catch (ex) {
+            return;
+        }
+    };
 
     const handleSetAllFeesClicked = async () => {
         try {
@@ -508,25 +580,52 @@ const AdminScreen = () => {
                     <p>Total rounds played: {isInitialized ? totalRoundsPlayed : loadingMessage}. (Total amount of started spins.)</p>
                     <p>Total rounds fulfilled: {isInitialized ? idsFulfilled : loadingMessage}. (Total amount of spins fulfilled by VRF.)</p>
 
-                    <p>GEN spin price: {isInitialized ? web3.utils.fromWei(tokenSpinPrice).toLocaleString() + " GEN" : loadingMessage}</p>
-                    <span>Set GEN spin price: </span>
+                    <p>Min GEN spin price: {isInitialized ? web3.utils.fromWei(minTokenSpinPrice).toLocaleString() + " GEN" : loadingMessage}</p>
+                    <span>Set min GEN spin price: </span>
                     <input style={{ border: '3px solid #848584', fontFamily: 'MS Sans Serif', fontSize: '1rem', padding: '0.43rem' }}
-                        value={newTokenSpinPrice}
-                        onChange={e => setNewTokenSpinPrice(e.target.value)}
+                        value={newMinTokenSpinPrice}
+                        onChange={e => setNewMinTokenSpinPrice(e.target.value)}
                     />
                     <span> GEN</span>
-                    <Button primary onPress={() => handleSetTokenSpinPriceClicked()} style={{ width: 200 }}>Set GEN spin price</Button>
+                    <Button primary onPress={() => handleSetMinTokenSpinPriceClicked()} style={{ width: 200 }}>Set min GEN spin price</Button>
 
-                    <p>ETH spin price: {isInitialized ? web3.utils.fromWei(ethSpinPrice).toLocaleString() + " ETH" : loadingMessage}</p>
-                    <span>Set ETH spin price: </span>
+                    <p>Max GEN spin price: {isInitialized ? web3.utils.fromWei(maxTokenSpinPrice).toLocaleString() + " GEN" : loadingMessage}</p>
+                    <span>Set max GEN spin price: </span>
                     <input style={{ border: '3px solid #848584', fontFamily: 'MS Sans Serif', fontSize: '1rem', padding: '0.43rem' }}
-                        value={newEthSpinPrice}
-                        onChange={e => setNewEthSpinPrice(e.target.value)}
+                        value={newMaxTokenSpinPrice}
+                        onChange={e => setNewMaxTokenSpinPrice(e.target.value)}
+                    />
+                    <span> GEN</span>
+                    <Button primary onPress={() => handleSetMaxTokenSpinPriceClicked()} style={{ width: 200 }}>Set max GEN spin price</Button>
+
+                    <p>Min ETH spin price: {isInitialized ? web3.utils.fromWei(minEthSpinPrice).toLocaleString() + " ETH" : loadingMessage}</p>
+                    <span>Set min ETH spin price: </span>
+                    <input style={{ border: '3px solid #848584', fontFamily: 'MS Sans Serif', fontSize: '1rem', padding: '0.43rem' }}
+                        value={newMinEthSpinPrice}
+                        onChange={e => setNewMinEthSpinPrice(e.target.value)}
                     />
                     <span> ETH</span>
-                    <Button primary onPress={() => handleSetEthSpinPriceClicked()} style={{ width: 200 }}>Set ETH spin price</Button>
+                    <Button primary onPress={() => handleSetMinEthSpinPriceClicked()} style={{ width: 200 }}>Set min ETH spin price</Button>
+
+                    <p>Max ETH spin price: {isInitialized ? web3.utils.fromWei(maxEthSpinPrice).toLocaleString() + " ETH" : loadingMessage}</p>
+                    <span>Set max ETH spin price: </span>
+                    <input style={{ border: '3px solid #848584', fontFamily: 'MS Sans Serif', fontSize: '1rem', padding: '0.43rem' }}
+                        value={newMaxEthSpinPrice}
+                        onChange={e => setNewMaxEthSpinPrice(e.target.value)}
+                    />
+                    <span> ETH</span>
+                    <Button primary onPress={() => handleSetMaxEthSpinPriceClicked()} style={{ width: 200 }}>Set max ETH spin price</Button>
                     
                     <h3>Fees</h3>
+                    <p>VRF Fee: {isInitialized ? web3.utils.fromWei(vrfFee).toLocaleString() + " ETH" : loadingMessage}</p>
+                    <span>Set VRF Fee: </span>
+                    <input style={{ border: '3px solid #848584', fontFamily: 'MS Sans Serif', fontSize: '1rem', padding: '0.43rem' }}
+                        value={newVrfFee}
+                        onChange={e => setNewVrfFee(e.target.value)}
+                    />
+                    <span> ETH</span>
+                    <Button primary onPress={() => handleSetVrfFeeClicked()} style={{ width: 200 }}>Set VRF fee</Button>
+
                     <p>Pot fee: {isInitialized ? (Number(potFee) / 100).toFixed(2) + " %" : loadingMessage}</p>
                     <p>Team fee: {isInitialized ? (Number(teamFee) / 100).toFixed(2) + " %" : loadingMessage}</p>
                     <p>Staking fees: {isInitialized ? stakingAddressesCount == 0 ? "No staking fees added" : "" : loadingMessage}</p>
