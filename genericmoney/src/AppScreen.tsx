@@ -82,6 +82,7 @@ const AppScreen = () => {
   const tokenContract = new web3.eth.Contract(tokenABI, tokenContractAddy);
 
   // React states for the dApp
+  const [vrfFee, setVrfFee] = useState('');
   const [priceETH, setPriceETH] = useState('Loading...');
   const [priceGEN, setPriceGEN] = useState('Loading...');
   const [pendingPrize, setPendingPrize] = useState('Loading...');
@@ -129,9 +130,10 @@ const AppScreen = () => {
 
         setSpinHistory(historyArray);
         //console.warn('spinHistory', historyArray);
-          
-        const priceEth = await slotContract.methods.ethSpinPrice().call();
-        const priceGEN = await slotContract.methods.tokenSpinPrice().call();
+
+        const vrfFee = await slotContract.methods.vrfFee().call();  
+        const priceEth = await slotContract.methods.minEthSpinPrice().call();
+        const priceGEN = await slotContract.methods.minTokenSpinPrice().call();
         const allowance = await tokenContract.methods
           .allowance(account, slotContractAddy)
           .call();
@@ -175,12 +177,14 @@ const AppScreen = () => {
     if (!!slotContract) {
       try {
         // Obtain the roll price directly from the contract and update it in the case it gets modified at some point.
-        const price = await slotContract.methods.ethSpinPrice().call();
+        const vrfFee = await slotContract.methods.vrfFee().call();
+        const price = await slotContract.methods.minEthSpinPrice().call();
+        const totalPrice = web3.utils.toBN(price).add(web3.utils.toBN(vrfFee));
         setPriceETH(web3.utils.fromWei(price));
         // Roll the slot machine
         await slotContract.methods
           .ethSpin()
-          .send({ from: account, value: price });
+          .send({ from: account, value: totalPrice });
         const roundIndex = (await slotContract.methods.getLastRoundsPlayed(account, 1).call())[0];
         // Rolling state for the UI
         setIsSlotRolling(true);
@@ -263,10 +267,11 @@ const AppScreen = () => {
     if (!!slotContract) {
       try {
         // Obtain the roll price directly from the contract and update it in the case it gets modified at some point.
-        const price = await slotContract.methods.tokenSpinPrice().call();
+        const vrfFee = await slotContract.methods.vrfFee().call();
+        const price = await slotContract.methods.minTokenSpinPrice().call();
         setPriceGEN(web3.utils.fromWei(price));
         // Roll the slot machine
-        await slotContract.methods.tokenSpin().send({ from: account });
+        await slotContract.methods.tokenSpin(price).send({ from: account, value: vrfFee });
 
         const roundIndex = (await slotContract.methods.getLastRoundsPlayed(account, 1).call())[0];
         // Rolling state for the UI
