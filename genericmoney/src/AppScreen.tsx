@@ -40,6 +40,15 @@ import tokenABI from './assets/contracts/tokenABI.json';
 
 import GenericLogo from './assets/images/gcp.png';
 import SlotMachine from './assets/images/slots.png';
+import Reel1 from './assets/images/reel/1.png';
+import Reel2 from './assets/images/reel/2.png';
+import Reel3 from './assets/images/reel/3.png';
+import Reel4 from './assets/images/reel/4.png';
+import Reel5 from './assets/images/reel/5.png';
+import Reel6 from './assets/images/reel/6.png';
+import Reel7 from './assets/images/reel/7.png';
+import Reel8 from './assets/images/reel/8.png';
+import Reel9 from './assets/images/reel/9.png';
 // import ReelMetaMask from './assets/images/slots.png';
 // import Reel from './assets/images/slots.png';
 import ADDRESSES from './constants/addresses';
@@ -65,6 +74,10 @@ const AppScreen = () => {
       // console.error(error);
     }
   };
+  
+  const [reel1, setReel1] = useState('');
+  const [reel2, setReel2] = useState('');
+  const [reel3, setReel3] = useState('');
   
   // Web3 implementation
   const web3 = new Web3(Web3.givenProvider);
@@ -331,13 +344,30 @@ const AppScreen = () => {
   useEffect(() => {
     const animation = Animated.loop(
       Animated.timing(translateY, {
-        toValue: -200,
-        duration: 100,
+        toValue: -500,
+        duration: 150,
         useNativeDriver: false,
       })
     );
     animation.start();
   });
+  
+  const imageMap = (reelNumber: string) => {
+    if (reelNumber === 'random') {
+      reelNumber = String(Math.floor(Math.random() * 9));
+    }
+    switch (reelNumber) {
+      case '0': return Reel1;
+      case '1': return Reel2;
+      case '2': return Reel3;
+      case '3': return Reel4;
+      case '4': return Reel5;
+      case '5': return Reel6;
+      case '6': return Reel7;
+      case '7': return Reel8;
+      case '8': return Reel9;
+    }
+  }
 
   return (
     <View style={styles.background}>
@@ -402,23 +432,22 @@ const AppScreen = () => {
                   position: 'absolute',
                   width: '98%',
                   textAlign: 'center',
-                  paddingTop: '36.4%',
+                  paddingTop: '38%',
                   marginTop: '2.7rem',
                   left: '1.3%',
                   zIndex: -1,
                 }}>
                   {isRoundFetch === true ? (
                       <Text>
-                        <p style={{
-                          fontWeight: 'bold',
-                          fontSize: 'clamp(0rem, 9.6vw, 6.2rem)',
-                          padding: '0 2%',
-                          margin: 0,
-                        }}>
-                          <span style={{position: 'absolute', left: '33.7%'}}>{roundInfo.['symbols'][0]}</span>
-                          <span>{roundInfo['symbols'][1]}</span>
-                          <span style={{position: 'absolute', right: '33.7%'}}>{roundInfo['symbols'][2]}</span>
-                        </p>
+                        <div style={{position: 'absolute', left: '32.2%', width: '7.5vw', maxWidth: '4.6rem', minWidth: '1.3rem'}}>
+                          <img src={imageMap( roundInfo['symbols'][0] )} style={{width: '100%', height: '100%'}}/>
+                        </div>
+                        <div style={{position: 'absolute', margin: 'auto', left: '-0.35vw', right: 0, width: '7.5vw', maxWidth: '4.6rem', minWidth: '1.3rem'}}>
+                          <img src={imageMap( roundInfo['symbols'][1] )} style={{width: '100%', height: '100%'}}/>
+                        </div>
+                        <div style={{position: 'absolute', right: '32.8%', width: '7.5vw', maxWidth: '4.6rem', minWidth: '1.3rem'}}>
+                          <img src={imageMap( roundInfo['symbols'][2] )} style={{width: '100%', height: '100%'}}/>
+                        </div>
                       </Text>
                   ) : (
                       <>
@@ -427,7 +456,7 @@ const AppScreen = () => {
                             style={{
                               left: '1.3%',
                               marginTop: '-21vw',
-                              paddingTop: '36.4%',
+                              paddingTop: '51.4%',
                               textAlign: 'center',
                               width: '98%',
                               maxHeight: '40vw',
@@ -444,56 +473,71 @@ const AppScreen = () => {
                                 transform: [{ translateY }],
                               }}
                             >
-                            <span style={{position: 'absolute', left: '33.7%'}}>
-                              1<br/>
-                              2<br/>
-                              3<br/>
-                              4<br/>
-                              5<br/>
-                              6<br/>
-                              7<br/>
-                              8<br/>
-                              9<br/>
-                              0
-                            </span>
-                            <span>
-                              2<br/>
-                              3<br/>
-                              4<br/>
-                              5<br/>
-                              6<br/>
-                              7<br/>
-                              8<br/>
-                              9<br/>
-                              0<br/>
-                              1
-                            </span>
-                            <span style={{position: 'absolute', right: '33.7%', top: 0}}>
-                              3<br/>
-                              4<br/>
-                              5<br/>
-                              6<br/>
-                              7<br/>
-                              8<br/>
-                              9<br/>
-                              0<br/>
-                              1<br/>
-                              2
-                            </span>
+                            <div style={{position: 'absolute', left: '32.2%', width: '7.5vw', maxWidth: '4.6rem', minWidth: '1.3rem'}}>
+                              <img src={imageMap('1')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('2')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('3')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('4')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('5')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('6')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('7')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('8')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('9')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('0')} style={{width: '100%', height: '100%'}} />
+                            </div>
+                            <div style={{position: 'absolute', margin: 'auto', left: '-0.35vw', right: 0, width: '7.5vw', maxWidth: '4.6rem', minWidth: '1.3rem'}}>
+                              <img src={imageMap('2')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('3')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('4')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('5')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('6')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('7')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('8')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('9')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('0')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('1')} style={{width: '100%', height: '100%'}} />
+                            </div>
+                            <div style={{position: 'absolute', right: '32.8%', width: '7.5vw', maxWidth: '4.6rem', minWidth: '1.3rem'}}>
+                              <img src={imageMap('3')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('4')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('5')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('6')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('7')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('8')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('9')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('0')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('1')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('2')} style={{width: '100%', height: '100%'}} />
+                            </div>
                             </Animated.Text>
                           </View>
                         ) : (
                           <Text>
-                            <p style={{
+                            <div style={{position: 'absolute', left: '32.2%', width: '7.5vw', maxWidth: '4.6rem', minWidth: '1.3rem'}}>
+                              <img src={imageMap('1')} style={{width: '100%', height: '100%'}} />
+                            </div>
+                            <div style={{position: 'absolute', margin: 'auto', left: '-0.35vw', right: 0, width: '7.5vw', maxWidth: '4.6rem', minWidth: '1.3rem'}}>
+                              <img src={imageMap('2')} style={{width: '100%', height: '100%'}} />
+                            </div>
+                            <div style={{position: 'absolute', right: '32.8%', width: '7.5vw', maxWidth: '4.6rem', minWidth: '1.3rem'}}>
+                              <img src={imageMap('3')} style={{width: '100%', height: '100%'}} />
+                            </div>
+                            {/* <p style={{
                               fontWeight: 'bold',
                               fontSize: 'clamp(0rem, 9.6vw, 6.2rem)',
                               padding: '0 2%',
                               margin: 0,
                             }}>
-                              <span style={{position: 'absolute', left: '33.7%'}}>#</span>
-                              <span>#</span>
-                              <span style={{position: 'absolute', right: '33.7%'}}>#</span>
-                            </p>
+                              <span style={{position: 'absolute', left: '33.7%'}}>
+                                <Image source={{uri: imageMap('1')}} style={{width: 200, height: 200}} />
+                              </span>
+                              <span>
+                                <Image source={{uri: imageMap('2')}} style={{width: 200, height: 200}} />
+                              </span>
+                              <span style={{position: 'absolute', right: '33.7%'}}>
+                                <Image source={{uri: imageMap('3')}} style={{width: 200, height: 200}} />
+                              </span>
+                            </p> */}
                           </Text>
                           )}
                       </>
@@ -676,11 +720,11 @@ const AppScreen = () => {
                       flexWrap: 'wrap',
                       justifyContent: 'center',
                 }}>
-                    <div style={{ margin: '0 0.25rem'}}>
-                      <Button primary disabled={isSlotRolling || !active || !hasAllowance} onPress={() => rollToken()}>
+                    <div>
+                      <Button style={{ margin: '0 0.25rem .5rem'}} primary disabled={isSlotRolling || !active || !hasAllowance} onPress={() => rollToken()}>
                         <span style={{fontFamily: 'MS Sans Serif'}}>Spin with GEN {active ? (<span> {priceGEN}</span>) : (<span></span>)}</span>
                       </Button> 
-                      <Button primary disabled={hasAllowance} onPress={() => handleApprove()}>Approve</Button>
+                      <Button style={{ margin: '0 0.25rem .5rem'}} primary disabled={hasAllowance} onPress={() => handleApprove()}>Approve</Button>
                       {/*hasAllowance ? (
                       <Button primary disabled={isSlotRolling || !active} onPress={() => rollToken()}>Spin</Button>
                       ) : (
@@ -689,8 +733,8 @@ const AppScreen = () => {
                       )
                       */}
                     </div>
-                    <div style={{ margin: '0 0.25rem'}}>
-                      <Button primary disabled={isSlotRolling || !active} onPress={() => rollEth()}>
+                    <div>
+                      <Button style={{ margin: '0 0.25rem .5rem'}} primary disabled={isSlotRolling || !active} onPress={() => rollEth()}>
                         <span style={{fontFamily: 'MS Sans Serif'}}>Spin with ETH {active ? (<span> {priceETH}</span>) : (<span></span>)}</span>
                       </Button>
                     </div>
