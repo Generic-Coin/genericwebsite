@@ -18,6 +18,7 @@ import {
   Text,
   ScrollView,
   Menu,
+  Window,
   // Anchor,
   // Select,
   // Fieldset,
@@ -30,6 +31,8 @@ import {
   useWalletConnect,
   withWalletConnect,
 } from '@walletconnect/react-native-dapp';
+import { notificationService } from './util/notifications';
+
 
 
 import { useWeb3React } from '@web3-react/core';
@@ -372,81 +375,56 @@ const AppScreen = () => {
   return (
     <View style={styles.background}>
       <View style={styles.container}>
-        <AppBar style={styles.header}>
-          {/* <View style={styles.price}>
-            {showGenericPrice ? (
-              <Text style={styles.priceText}>
-                <sup>$</sup>
-                <strong>{showGenericPrice}</strong>
-                <br />
-                <sup>
-                  <i>per 1M</i>
-                </sup>
-              </Text>
-            ) : (
-              <Text style={styles.priceText}>
-                price
-                <br />
-                loading...
-              </Text>
-            )}{' '}
-          </View> */}
-          <View style={styles.logo}>
-            <Image style={styles.logoImage} source={GenericLogo} />
-            <Text style={styles.heading} bold disabled>
-              Slots
-            </Text>
-          </View>
-          {/* <Button
-            square
-            variant='raised'
-            size='lg'
-            style={styles.aboutButton}
-            onPress={() => openLink('/')}
+        
+        <View style={{ backgroundColor: 'teal', flex: 1, padding: 16 }}>
+          <Window
+            title='slots.exe'
+            style={{flex: 1}}
           >
-            <Image
-              style={styles.questionMark}
-              source={{
-                uri:
-                  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAFVBMVEUAAACAgID///8AAADAwMCAAAD/AADqeraFAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAHdElNRQflAQwXHQ1lXxPNAAAAqElEQVQoz5WOMQ6DMAxFLUXda3yCGLrTwAmC2CtV5QJVuf8RmmCCTaQOtX6Wp+cfA5aBfRpuJQdAkhyASPLToGGQ/FuKVWnTVaWB/R3xakoDUxcmU0rsw9T15lJV9m9VKZc2zLyBXNr6wAqyHwkV5NLRp1OMgRSZC5DSUYGMixUAUeaHKhuZ36q4IW0tH7OUtm7r+jTAxWU9GfA6CwC1AJdKSDt9BVx6XzBwJ8Kxeb3/AAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIxLTAxLTEyVDIzOjI5OjEzKzAwOjAwyc9MIQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMS0wMS0xMlQyMzoyOToxMyswMDowMLiS9J0AAAAASUVORK5CYII=',
-              }}
-            />
-          </Button> */}
-        </AppBar>
+            <div style={{ margin:'-2.375rem .15rem 0 0' }}>
+              <ConnectMetamask />
+            </div>
+            <View style={styles.windowContent}>
+              <Text style={{ fontSize: '2.5rem', margin: '.75rem' }}>
+                  <div style={{textAlign: 'center'}}>
+                    <b>CURRENT JACKPOT</b><br/>
+                    <div style={{
+                      color: '#fff',
+                      background: '#000',
+                      border: '.5rem solid #6a6a6a',
+                      padding: '1rem .5rem'
+                    }}>{prizePool}</div>
+                  </div>
+              </Text>
 
-        <Panel variant='raised' style={styles.panel}>
-          <Panel variant='cutout' background='canvas' style={styles.cutout}>
-            <ScrollView
-              style={styles.scrollView}
-              scrollViewProps={{
-                contentContainerStyle: styles.content,
-              }}
-              alwaysShowScrollbars
-            >
-
-              <Panel variant='raised' style={[styles.zpanel]}>
-                <ConnectMetamask />
-                
-                <img style={{marginTop: '1rem'}} src={SlotMachine} />
-                <div style={{
-                  position: 'absolute',
-                  width: '98%',
-                  textAlign: 'center',
-                  paddingTop: '38%',
-                  marginTop: '2.7rem',
-                  left: '1.3%',
+              <div style={{
+                  position: 'relative',
+                  width: 'auto',
+                  padding: '2rem 0',
+                  margin: '1rem',
                   zIndex: -1,
+                  height: '7rem',
+                  overflow: 'hidden',
+                  border: '0.3rem black solid',
+                  left: 0,
+                  right: 0,
+                  textAlign: 'center',
+                  display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'
                 }}>
                   {isRoundFetch === true ? (
                       <Text>
-                        <div style={{position: 'absolute', left: '32.2%', width: '7.5vw', maxWidth: '4.6rem', minWidth: '1.3rem'}}>
-                          <img src={imageMap( roundInfo['symbols'][0] )} style={{width: '100%', height: '100%'}}/>
-                        </div>
-                        <div style={{position: 'absolute', margin: 'auto', left: '-0.35vw', right: 0, width: '7.5vw', maxWidth: '4.6rem', minWidth: '1.3rem'}}>
-                          <img src={imageMap( roundInfo['symbols'][1] )} style={{width: '100%', height: '100%'}}/>
-                        </div>
-                        <div style={{position: 'absolute', right: '32.8%', width: '7.5vw', maxWidth: '4.6rem', minWidth: '1.3rem'}}>
-                          <img src={imageMap( roundInfo['symbols'][2] )} style={{width: '100%', height: '100%'}}/>
+                        <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: '100%'}}>
+
+                          <div style={{width:'30%', maxWidth:'7.5rem', margin:'0 1rem', flex:1}}>
+                            <img src={imageMap( roundInfo['symbols'][0] )} style={{width: '100%', height: '100%'}}/>
+                          </div>
+                          <div style={{width:'30%', maxWidth:'7.5rem', margin:'0 1rem', flex:1}}>
+                            <img src={imageMap( roundInfo['symbols'][1] )} style={{width: '100%', height: '100%'}}/>
+                          </div>
+                          <div style={{width:'30%', maxWidth:'7.5rem', margin:'0 1rem', flex:1}}>
+                            <img src={imageMap( roundInfo['symbols'][2] )} style={{width: '100%', height: '100%'}}/>
+                          </div>
+
                         </div>
                       </Text>
                   ) : (
@@ -458,7 +436,6 @@ const AppScreen = () => {
                               marginTop: '-21vw',
                               paddingTop: '51.4%',
                               textAlign: 'center',
-                              width: '98%',
                               maxHeight: '40vw',
                               overflow: 'hidden',
                             }}
@@ -473,7 +450,9 @@ const AppScreen = () => {
                                 transform: [{ translateY }],
                               }}
                             >
-                            <div style={{position: 'absolute', left: '32.2%', width: '7.5vw', maxWidth: '4.6rem', minWidth: '1.3rem'}}>
+                            <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>
+
+                            <div style={{width:'30%', maxWidth:'7.5rem', margin:'0 1rem', flex:1}}>
                               <img src={imageMap('1')} style={{width: '100%', height: '100%'}} /><br/>
                               <img src={imageMap('2')} style={{width: '100%', height: '100%'}} /><br/>
                               <img src={imageMap('3')} style={{width: '100%', height: '100%'}} /><br/>
@@ -485,7 +464,7 @@ const AppScreen = () => {
                               <img src={imageMap('9')} style={{width: '100%', height: '100%'}} /><br/>
                               <img src={imageMap('0')} style={{width: '100%', height: '100%'}} />
                             </div>
-                            <div style={{position: 'absolute', margin: 'auto', left: '-0.35vw', right: 0, width: '7.5vw', maxWidth: '4.6rem', minWidth: '1.3rem'}}>
+                            <div style={{width:'30%', maxWidth:'7.5rem', margin:'0 1rem', flex:1}}>
                               <img src={imageMap('2')} style={{width: '100%', height: '100%'}} /><br/>
                               <img src={imageMap('3')} style={{width: '100%', height: '100%'}} /><br/>
                               <img src={imageMap('4')} style={{width: '100%', height: '100%'}} /><br/>
@@ -497,7 +476,7 @@ const AppScreen = () => {
                               <img src={imageMap('0')} style={{width: '100%', height: '100%'}} /><br/>
                               <img src={imageMap('1')} style={{width: '100%', height: '100%'}} />
                             </div>
-                            <div style={{position: 'absolute', right: '32.8%', width: '7.5vw', maxWidth: '4.6rem', minWidth: '1.3rem'}}>
+                            <div style={{width:'30%', maxWidth:'7.5rem', margin:'0 1rem', flex:1}}>
                               <img src={imageMap('3')} style={{width: '100%', height: '100%'}} /><br/>
                               <img src={imageMap('4')} style={{width: '100%', height: '100%'}} /><br/>
                               <img src={imageMap('5')} style={{width: '100%', height: '100%'}} /><br/>
@@ -509,247 +488,108 @@ const AppScreen = () => {
                               <img src={imageMap('1')} style={{width: '100%', height: '100%'}} /><br/>
                               <img src={imageMap('2')} style={{width: '100%', height: '100%'}} />
                             </div>
+
+                            </div>
                             </Animated.Text>
                           </View>
                         ) : (
                           <Text>
-                            <div style={{position: 'absolute', left: '32.2%', width: '7.5vw', maxWidth: '4.6rem', minWidth: '1.3rem'}}>
-                              <img src={imageMap('1')} style={{width: '100%', height: '100%'}} />
+                            <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: '100%'}}>
+                              <div style={{width:'30%', maxWidth:'7.5rem', margin:'0 1rem', flex:1}}>
+                                <img src={imageMap('1')} style={{width: '100%', height: '100%'}} />
+                              </div>
+                              <div style={{width:'30%', maxWidth:'7.5rem', margin:'0 1rem', flex:1}}>
+                                <img src={imageMap('2')} style={{width: '100%', height: '100%'}} />
+                              </div>
+                              <div style={{width:'30%', maxWidth:'7.5rem', margin:'0 1rem', flex:1}}>
+                                <img src={imageMap('3')} style={{width: '100%', height: '100%'}} />
+                              </div>
                             </div>
-                            <div style={{position: 'absolute', margin: 'auto', left: '-0.35vw', right: 0, width: '7.5vw', maxWidth: '4.6rem', minWidth: '1.3rem'}}>
-                              <img src={imageMap('2')} style={{width: '100%', height: '100%'}} />
-                            </div>
-                            <div style={{position: 'absolute', right: '32.8%', width: '7.5vw', maxWidth: '4.6rem', minWidth: '1.3rem'}}>
-                              <img src={imageMap('3')} style={{width: '100%', height: '100%'}} />
-                            </div>
-                            {/* <p style={{
-                              fontWeight: 'bold',
-                              fontSize: 'clamp(0rem, 9.6vw, 6.2rem)',
-                              padding: '0 2%',
-                              margin: 0,
-                            }}>
-                              <span style={{position: 'absolute', left: '33.7%'}}>
-                                <Image source={{uri: imageMap('1')}} style={{width: 200, height: 200}} />
-                              </span>
-                              <span>
-                                <Image source={{uri: imageMap('2')}} style={{width: 200, height: 200}} />
-                              </span>
-                              <span style={{position: 'absolute', right: '33.7%'}}>
-                                <Image source={{uri: imageMap('3')}} style={{width: 200, height: 200}} />
-                              </span>
-                            </p> */}
+
                           </Text>
                           )}
                       </>
                     )}
-                </div>
-                
-                <div style={{
-                  position: 'absolute',
-                  width: '100%',
-                  top: '3.7rem',
-                  paddingTop: '15.2%',
-                  left: '21.5%',
-                }}>
-                  <Text>
-                  {active ? (
-                    <div style={{
-                      textAlign: 'left', 
-                      margin: '0 0.5rem',
-                      color: '#ffffff',
-                      fontSize: 'clamp(0rem, 2.03vw, 1.3rem)',
-                    }}>
-                      {(active && tokenBalance) ? (<span>GEN: { Math.round(Number(tokenBalance)).toLocaleString() }</span>) : (<></>)}<br/>
-                      {(active && BNBBalance) ? (<span>ETH: { Number(BNBBalance).toFixed(4).toLocaleString() }</span>) : (<></>)}  
-                    </div>
-                  ) : (
-                    <></>
-                  )}
-                  </Text>
-                </div>
-                
-                <div style={{
-                  position: 'absolute',
-                  width: '98%',
-                  top: '3.2rem',
-                  paddingTop: '60.1%',
-                }}>
-                  <Text style={{
-                    color: '#fff',
-                    fontSize: 'clamp(0.3rem, 1.23rem, 2.2vw)',
-                  }}>
-                    <div style={{textAlign: 'center'}}><b>Pot: </b> {prizePool}</div>
-                  </Text>
-                </div>
-                
-                <div style={{
-                  position: 'absolute',
-                  width: '98%',
-                  top: '2.9rem',
-                  paddingTop: '74.6%',
-                }}>
-                  <Text>
-                      {isRoundFetch === true ? (
-                        <Text style={{
-                          color: '#fff',
-                          fontSize: 'clamp(0.3rem, 1.23rem, 2.2vw)',
-                        }}>
-                          <div style={{textAlign: 'center'}}><b>Payout: {Math.round(web3.utils.fromWei(roundInfo['payout'])).toLocaleString()}</b></div>
-                        </Text>
-                      ) : (
-                      <>
+              </div>
 
-                      </>
+              <div style={{  display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: '100%' }}>
+                <div style={{width:'30%', flex: 1, padding: '0 1rem',}}>
+                  <Text>
+                    {active ? (
+                      <div style={{
+                        textAlign: 'center', 
+                        margin: '0 0.5rem',
+                        fontSize: '2rem',
+                      }}>
+                        {(active && tokenBalance) ? (<div>
+                          <div>GEN BALANCE<br/></div>
+                          <div style={{
+                            color: '#fff',
+                            background: '#000',
+                            border: '.5rem solid #6a6a6a',
+                            padding: '1rem .5rem'
+                          }}>{ Math.round(Number(tokenBalance)).toLocaleString() }</div>
+                        </div>) : (<></>)}<br/>
+                      </div>
+                    ) : (
+                      <></>
+                    )}
+                    </Text>
+                </div>
+                <div style={{width:'30%', flex: 1, justifyContent: 'center', display: 'flex', alignItems: 'end'}}>
+                  <Image style={{width: '5rem', height: '5rem'}} source={GenericLogo} />
+                </div>
+                <div style={{width:'30%', flex: 1, padding: '0 1rem',}}>
+                  <Text>
+                    {active ? (
+                      <div style={{
+                        textAlign: 'center', 
+                        margin: '0 0.5rem',
+                        fontSize: '2rem',
+                      }}>
+                        {(active && BNBBalance) ? (<div>
+                          <div>ETH BALANCE<br/></div>
+                          <div style={{
+                            color: '#fff',
+                            background: '#000',
+                            border: '.5rem solid #6a6a6a',
+                            padding: '1rem .5rem'
+                          }}>{ Number(BNBBalance).toFixed(4).toLocaleString() }</div>
+                        </div>) : (<></>)}<br/>
+                      </div>
+                    ) : (
+                      <></>
                     )}
                   </Text>
                 </div>
+              </div>
 
-                
-                {/* <svg viewbox="0 0 400 400"> 
-                  <defs>
-                    <clipPath id="counter-clippath">
-                      <rect x="50" y="0" width="320" height="72" />
-                    </clipPath>
-                  </defs>
-                  <circle fill="#ccc" cx="200" cy="200" r="200" />
-                  <circle
-                    cx="200"
-                    cy="200"
-                    r="160"
-                    transform="rotate(-90, 200, 200)"
-                    stroke-dasharray="0, 1000"
-                    stroke="#7cb342"
-                    stroke-width="80"
-                    data-fallback="edge"
-                  >
-                    <animate
-                      attributeName="stroke-dasharray"
-                      dur="1s"
-                      to="300,1000"
-                      fill="freeze"
-                      begin="1s;op.end+1s"
-                    />
-                  </circle>
-                  <circle cx="200" cy="200" r="160" fill="#fff" />
-                  <g
-                    class="counter-clippath"
-                    clip-path="url(#counter-clippath)"
-                    transform="translate(0, 165)"
-                  >
-                    <g class="move-svg-text">
-                      <animateTransform
-                        attributeName="transform"
-                        type="translate"
-                        dur="1s"
-                        calcMode="discrete"
-                        values="0 0; 0 -90; 0 -180; 0 -270; 0 -360; 0 -450; 0 -540"
-                        fill="freeze"
-                        begin="1s;op.end+1s"
-                      />
-                      <text
-                        x="200"
-                        y="70"
-                        text-anchor="middle"
-                        font-size="100"
-                        fill="#3c4946"
-                      >
-                        1%
-                      </text>
-                      <text
-                        x="200"
-                        y="160"
-                        text-anchor="middle"
-                        font-size="100"
-                        fill="#3c4946"
-                      >
-                        3%
-                      </text>
-                      <text
-                        x="200"
-                        y="250"
-                        text-anchor="middle"
-                        font-size="100"
-                        fill="#3c4946"
-                      >
-                        5%
-                      </text>
-                      <text
-                        x="200"
-                        y="340"
-                        text-anchor="middle"
-                        font-size="100"
-                        fill="#3c4946"
-                      >
-                        7%
-                      </text>
-                      <text
-                        x="200"
-                        y="430"
-                        text-anchor="middle"
-                        font-size="100"
-                        fill="#3c4946"
-                      >
-                        9%
-                      </text>
-                      <text
-                        x="200"
-                        y="520"
-                        text-anchor="middle"
-                        font-size="100"
-                        fill="#3c4946"
-                      >
-                        11%
-                      </text>
-                      <text
-                        x="200"
-                        y="610"
-                        text-anchor="middle"
-                        font-size="100"
-                        fill="#3c4946"
-                      >
-                        13%
-                      </text>
-                    </g>
-                  </g>
-                </svg>*/}
-
-
-                <div style={{
-                      display: 'flex',
-                      marginTop: '1rem',
-                      flexWrap: 'wrap',
-                      justifyContent: 'center',
-                }}>
-                    <div>
-                      <Button style={{ margin: '0 0.25rem .5rem'}} primary disabled={isSlotRolling || !active || !hasAllowance} onPress={() => rollToken()}>
-                        <span style={{fontFamily: 'MS Sans Serif'}}>Spin with GEN {active ? (<span> {priceGEN}</span>) : (<span></span>)}</span>
-                      </Button> 
-                      <Button style={{ margin: '0 0.25rem .5rem'}} primary disabled={hasAllowance} onPress={() => handleApprove()}>Approve</Button>
-                      {/*hasAllowance ? (
-                      <Button primary disabled={isSlotRolling || !active} onPress={() => rollToken()}>Spin</Button>
-                      ) : (
-                        // <Button primary disabled={!hasAllowance} onPress={() => handleApprove()}>Approve</Button>
-                        <Button primary disabled={hasAllowance} onPress={() => handleApprove()}>Approve</Button>
-                      )
-                      */}
+              <div style={{  display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: '100%' }}>
+                    <div style={{width:'30%', flex: 1, padding: '0 1rem',}}>
+                      <div>
+                        <Button style={{ margin: '0 0.25rem 1rem'}} primary disabled={isSlotRolling || !active || !hasAllowance} onPress={() => rollToken()}>
+                          <span style={{fontFamily: 'MS Sans Serif'}}>GEN SPIN{active ? (<span> {priceGEN}</span>) : (<span></span>)}</span>
+                        </Button> 
+                        <Button style={{ margin: '0 0.25rem 1rem'}} primary disabled={hasAllowance} onPress={() => handleApprove()}>Approve</Button>
+                      </div>
                     </div>
-                    <div>
-                      <Button style={{ margin: '0 0.25rem .5rem'}} primary disabled={isSlotRolling || !active} onPress={() => rollEth()}>
-                        <span style={{fontFamily: 'MS Sans Serif'}}>Spin with ETH {active ? (<span> {priceETH}</span>) : (<span></span>)}</span>
-                      </Button>
+                    <div style={{width:'30%', flex: 1, justifyContent: 'center', display: 'flex'}}>
+                      <div><Text><h3>GENERIC COIN</h3></Text></div>
                     </div>
-                  { /*<div style={{paddingRight: '2%', float: 'left'}}>
-                    <p><b>Spin with GENv3:</b></p>
-                    
-              </div> */}
+                    <div style={{width:'30%', flex: 1, padding: '0 1rem',}}>
+                      <div>
+                        <Button style={{ margin: '0 0.25rem 1rem'}} primary disabled={isSlotRolling || !active} onPress={() => rollEth()}>
+                          <span style={{fontFamily: 'MS Sans Serif'}}>ETH SPIN {active ? (<span> {priceETH}</span>) : (<span></span>)}</span>
+                        </Button>
+                      </div>
+                    </div>
                 </div>
-                
- 
-              </Panel>
+
               
-              {active && spinHistory ? (
+                {active && spinHistory ? (
                 <List.Accordion
                 title='Recent Spins'
+                style={{margin: '1rem'}}
                 >
                 <div style={{
                       margin: '1rem auto 0',
@@ -776,28 +616,11 @@ const AppScreen = () => {
               ) : (
                 <></>
               )}
+              
+            </View>
+          </Window>
+        </View>
 
-
-            </ScrollView>
-          </Panel>
-          <View style={[styles.statusBar]}>
-            <Panel
-              variant='well'
-              style={[styles.statusBarItem, { flexGrow: 1, marginRight: 4 }]}
-            ></Panel>
-            <Panel variant='well' style={[styles.statusBarItem]}>
-              {/* <Text>        
-                  <a
-                    href="mailto:admin@generic.money"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    admin@generic.money
-                  </a>
-                </Text> */}
-            </Panel>
-          </View>
-        </Panel>
       </View>
       <View style={styles.startMenu}>
         <AppBar style={styles.startHeader}>
@@ -829,8 +652,32 @@ const AppScreen = () => {
               <Menu.Item
                 size='lg'
                 // disabled
+                onPress={() => openLink('/team')}
+                title='Team'
+              />
+              <Menu.Item
+                size='lg'
+                disabled
+                onPress={() => openLink('/socials')}
+                title='Socials'
+              />
+              <Menu.Item
+                size='lg'
+                disabled
+                onPress={() => openLink('/info')}
+                title='Info'
+              />
+              <Menu.Item
+                size='lg'
+                // disabled
                 onPress={() => openLink('/slots')}
                 title='Slots'
+              />
+              <Menu.Item
+                size='lg'
+                disabled
+                onPress={() => openLink('/exchange')}
+                title='Exchange'
               />
               <Menu.Item
                 size='lg'

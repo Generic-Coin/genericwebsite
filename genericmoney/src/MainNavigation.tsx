@@ -3,6 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { AppBar } from 'react95-native';
 import type { Theme } from 'react95-native';
 import GenericScreen from './GenericScreen';
+import TeamScreen from './TeamScreen';
 import AppScreen from './AppScreen';
 import StakingScreen from './StakingScreen';
 import NFTScreen from './NFTScreen';
@@ -34,6 +35,9 @@ const MainNavigation = (props: Props) => {
       >
         <Stack.Screen name='home' options={{ title: 'Generic Coin' }}>
           {() => <GenericScreen {...props} />}
+        </Stack.Screen>
+        <Stack.Screen name='team' options={{ title: 'Generic Team' }}>
+          {() => <TeamScreen {...props} />}
         </Stack.Screen>
         <Stack.Screen name='slots' options={{ title: 'Generic Slots' }}>
           {() => <AppScreen {...props} />}

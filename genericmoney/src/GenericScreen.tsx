@@ -6,7 +6,7 @@ import {
   Linking,
   ImageBackground,
 } from 'react-native';
-import { Video } from 'expo-av';
+import { Video, ResizeMode } from 'expo-av';
 import {
   Panel,
   AppBar,
@@ -25,11 +25,8 @@ import {
 import GenericLogo from './assets/images/gcp.png';
 import GenericSizzle from './assets/genericday.mp4';
 import GenericWhitepaper from './assets/generic-whitepaper.pdf';
+import Roadmap from './assets/images/roadmap.png';
 import James from './assets/images/james.png';
-import Caribou from './assets/images/caribou.png';
-import Larry from './assets/images/larry.png';
-import Charlie from './assets/images/charlie.png';
-import Lord from './assets/images/lord.png';
 import ComingSoon from './assets/images/comingsoon.png';
 import BlockSpot from './assets/images/bs.png';
 import CoinPaprika from './assets/images/cp.png';
@@ -97,61 +94,10 @@ const GenericScreen = () => {
     } else return null;
   };
 
-  const [memberUrl, setMemberUrl] = useState(
-    'https://www.linkedin.com/in/james-smith-770045238/',
-  );
-  const renderMemberLink = () => {
-    if (memberUrl) {
-      return (
-        <a href={memberUrl} target='_blank' rel='noreferrer'>
-          LinkedIn
-        </a>
-      );
-    } else return null;
-  };
 
-  const options = [
-    'James Smith',
-    'Lord Johnson',
-    'Joel Cuthriell',
-    'Charlie Doodle',
-    'Garry Schmittens',
-  ].map(o => ({
-    label: o,
-    value: o,
-  }));
-  const [value, setValue] = useState(options[0].value);
-
-  const changeMember = (newValue: string) => {
-    setValue(newValue);
-
-    if (newValue === 'James Smith') {
-      setMemberTitle('Generic CEO');
-      setMemberImage({ uri: James });
-      setMemberUrl('https://www.linkedin.com/in/james-smith-770045238/');
-    }
-    if (newValue === 'Lord Johnson') {
-      setMemberTitle('Developer');
-      setMemberImage({ uri: Lord });
-      setMemberUrl('https://www.linkedin.com/in/lord-johnson-91561a240/');
-    }
-    if (newValue === 'Joel Cuthriell') {
-      setMemberTitle('UI/UX');
-      setMemberImage({ uri: Caribou });
-      setMemberUrl('https://www.linkedin.com/in/joelcuthriell/');
-    }
-    if (newValue === 'Charlie Doodle') {
-      setMemberTitle('Designer');
-      setMemberImage({ uri: Charlie });
-      setMemberUrl('https://www.linkedin.com/in/charlie-doodle-bab078239/');
-    }
-    if (newValue === 'Garry Schmittens') {
-      setMemberTitle('Advisor');
-      setMemberImage({ uri: Larry });
-      setMemberUrl('https://www.linkedin.com/in/larry-smitt-957052238/');
-    }
-  };
   
+  const video = React.useRef(null);
+  const [status, setStatus] = React.useState({});
 
   return (
     <View style={styles.background}>
@@ -284,119 +230,24 @@ const GenericScreen = () => {
                   }}
                   alwaysShowScrollbars
                 >
-                  <Text style={styles.centered}>
-                    You can buy it
-                    <br />
-                    You can sell it
-                    <br />
-                    You can hold it
-                    <br />
-                    Solution to all your problems, have a generic day!
-                    <br />
-                    Fortune favors the brave.
-                  </Text>
-
-                  <br />
-                  <List.Accordion
-                    title='Video Presentation'
-                    style={styles.section}
-                  >
                     <Video
+                      style={styles.video}
                       source={GenericSizzle}
-                      rate={1.0}
-                      volume={1.0}
-                      isMuted={false}
-                      resizeMode='cover'
-                      shouldPlay
+                      useNativeControls
                       isLooping
-                      style={styles.videoPresentation}
+                      resizeMode={ResizeMode.CONTAIN}
+                      onPlaybackStatusUpdate={status => setStatus(() => status)}
                     />
-                  </List.Accordion>
+                  <br />
 
-                  <List.Accordion
-                    title='Decentralized Exchanges'
-                    style={styles.section}
-                    defaultExpanded
-                  >
-                    <br />
-                    <Text style={styles.centered}>
-                      <a
-                        href='https://apeswap.finance/swap/?outputCurrency=0x98a61CA1504b92Ae768eF20b85aa97030b7a1Edf'
-                        target='_blank'
-                        rel='noreferrer'
-                        style={{ textDecoration: 'none' }}
-                      >
-                        <Button
-                          primary
-                          style={{
-                            width: '100%',
-                            maxWidth: '50vw',
-                            minWidth: '16rem',
-                          }}
-                        >
-                          Buy on ApeSwap (Official Partner)
-                        </Button>
-                      </a>
-                      <br />
-                      <br />
-                      <a
-                        href='https://pancakeswap.finance/swap?outputCurrency=0x98a61CA1504b92Ae768eF20b85aa97030b7a1Edf'
-                        target='_blank'
-                        rel='noreferrer'
-                        style={{ textDecoration: 'none' }}
-                      >
-                        <Button
-                          primary
-                          style={{
-                            width: '100%',
-                            maxWidth: '50vw',
-                            minWidth: '16rem',
-                          }}
-                        >
-                          Buy on PancakeSwap
-                        </Button>
-                      </a>
-                      <br />
-                      <br />
-                    </Text>
-                  </List.Accordion>
-                  <List.Accordion
-                    title='Centralized Exchanges'
-                    style={styles.section}
-                    defaultExpanded
-                  >
-                    <br />
-                    <Text style={styles.centered}>
-                      <a
-                        href='https://tokpie.com/view_exchange/genv3-bnb/'
-                        target='_blank'
-                        rel='noreferrer'
-                        style={{ textDecoration: 'none' }}
-                      >
-                        <Button
-                          primary
-                          style={{
-                            width: '100%',
-                            maxWidth: '50vw',
-                            minWidth: '16rem',
-                          }}
-                        >
-                          Buy on Tokpie
-                        </Button>
-                      </a>
-                      <br />
-                      <br />
-                    </Text>
-                  </List.Accordion>
-
-                  <List.Accordion
+                  {/* <List.Accordion
                     title='Contract'
                     style={styles.section}
                     defaultExpanded
                   >
                     <Text style={styles.centered}>
                       <a
-                        href='https://bscscan.com/token/0x98a61ca1504b92ae768ef20b85aa97030b7a1edf'
+                        href='https://arbiscan.io/address/0x98a61ca1504b92ae768ef20b85aa97030b7a1edf'
                         target='_blank'
                         rel='noreferrer'
                       >
@@ -407,7 +258,7 @@ const GenericScreen = () => {
                       </a>
                       <br />
                       <a
-                        href='https://bscscan.com/token/0x98a61ca1504b92ae768ef20b85aa97030b7a1edf'
+                        href='https://arbiscan.io/address/0x98a61ca1504b92ae768ef20b85aa97030b7a1edf'
                         target='_blank'
                         rel='noreferrer'
                         style={{ textDecoration: 'none' }}
@@ -420,31 +271,37 @@ const GenericScreen = () => {
                             minWidth: '16rem',
                           }}
                         >
-                          View on BscScan
+                          View on ArbiScan
                         </Button>
                       </a>
                       <br />
                       <br />
                     </Text>
-                  </List.Accordion>
+                  </List.Accordion> */}
 
-                  <List.Accordion
-                    title='Whitepaper'
-                    style={styles.section}
-                    defaultExpanded
-                  >
-                    <Text style={styles.textIndent}>
-                      <a
-                        href={GenericWhitepaper}
-                        target='_blank'
-                        rel='noreferrer'
-                      >
-                        <p>View Whitepaper</p>
-                      </a>
-                    </Text>
-                  </List.Accordion>
-
-                  <List.Accordion title='Tokenomics' style={styles.section}>
+                  {/* <Button>
+                    <a
+                      href={GenericWhitepaper}
+                      target='_blank'
+                      rel='noreferrer'
+                    >
+                      <p>View Whitepaper</p>
+                    </a><br/>
+                  </Button> */}
+                  <div style={{maxWidth:'13rem', margin:'0 0 1rem'}}>
+                  <Button onPress={() => openLink(GenericWhitepaper)}>
+                    <div style={{float: 'left', fontFamily: 'MS Sans Serif', margin: '0.25rem 0 0 0.4rem'}}>
+                       View Whitepaper
+                    </div>
+                  </Button>
+                  </div>
+                  
+                  <div style={{padding:'1rem', margin:'auto 0', width:'94.3%', background:'#008080'}}>
+                    <img style={{width:'100%'}} src={Roadmap} />
+                  </div>
+                  <br/><br/>
+                  
+                  {/* <List.Accordion title='Tokenomics' style={styles.section}>
                     <table border='2'>
                       <thead>
                         <tr>
@@ -535,9 +392,9 @@ const GenericScreen = () => {
                         </tr>
                       </tbody>
                     </table>
-                  </List.Accordion>
+                  </List.Accordion> */}
 
-                  <List.Accordion title='Roadmap' style={styles.section}>
+                  {/* <List.Accordion title='Roadmap' style={styles.section}>
                     <Text style={styles.textIndent}>
                       <p>
                         <s>CEX Listing</s> <i>completed</i>
@@ -573,47 +430,20 @@ const GenericScreen = () => {
                       <p>Generic NFTs</p>
                       <p>Generic Ad Campaign</p>
                     </Text>
-                  </List.Accordion>
+                  </List.Accordion> */}
 
-                  <List.Accordion
-                    title='Team'
-                    style={styles.section}
-                    defaultExpanded
-                  >
-                    <Panel variant='raised' style={[styles.zpanel]}>
-                      <Text style={styles.textIndent}>
-                        <div>
-                          {renderMemberImage()}
-                          <br />
-                          <br />
-                        </div>
-                        <div>
-                          <Text style={styles.zlink}>
-                            {renderMemberTitle()}
-                          </Text>
-                          <Text style={styles.zlink}>{renderMemberLink()}</Text>
-                          <br />
-                        </div>
-                        <br />
-                        <div>
-                          <Fieldset label='Members:' style={[{ padding: 20 }]}>
-                            <View style={{ zIndex: 999 }}>
-                              <Select
-                                menuMaxHeight={130}
-                                options={options}
-                                value={value}
-                                onChange={newValue => changeMember(newValue)}
-                                style={[{ width: '100%', minWidth: 150 }]}
-                              />
-                            </View>
-                          </Fieldset>
-                        </div>
-                      </Text>
-                    </Panel>
-                  </List.Accordion>
 
                   <List.Accordion title='Partnerships' style={styles.section}>
                     <Text style={styles.textIndent}>
+                      <p>
+                        <a
+                          href='https://chain.link/'
+                          target='_blank'
+                          rel='noreferrer'
+                        >
+                          Chainlink
+                        </a>
+                      </p>
                       <p>
                         <a
                           href='https://apeswap.finance/'
@@ -658,7 +488,7 @@ const GenericScreen = () => {
                       </View>
                       <View style={styles.associatedItem}>
                         <a
-                          href='https://discord.gg/j8FgQ2X3Rz'
+                          href='https://discord.gg/ptPzYSXSaM'
                           target='_blank'
                           rel='noreferrer'
                         >
@@ -719,7 +549,7 @@ const GenericScreen = () => {
                     </View>
                   </List.Accordion>
 
-                  <View style={styles.associatedContainer}>
+                  {/* <View style={styles.associatedContainer}>
                     <View style={styles.associatedItem}>
                       <a
                         href='https://coinpaprika.com/coin/genv3-generic-coin/'
@@ -804,7 +634,7 @@ const GenericScreen = () => {
                         />
                       </a>
                     </View>
-                  </View>
+                  </View> */}
                 </ScrollView>
               </Panel>
               <View style={[styles.statusBar]}>
@@ -858,8 +688,32 @@ const GenericScreen = () => {
               <Menu.Item
                 size='lg'
                 // disabled
+                onPress={() => openLink('/team')}
+                title='Team'
+              />
+              <Menu.Item
+                size='lg'
+                disabled
+                onPress={() => openLink('/socials')}
+                title='Socials'
+              />
+              <Menu.Item
+                size='lg'
+                disabled
+                onPress={() => openLink('/info')}
+                title='Info'
+              />
+              <Menu.Item
+                size='lg'
+                // disabled
                 onPress={() => openLink('/slots')}
                 title='Slots'
+              />
+              <Menu.Item
+                size='lg'
+                disabled
+                onPress={() => openLink('/exchange')}
+                title='Exchange'
               />
               <Menu.Item
                 size='lg'
@@ -931,10 +785,9 @@ const styles = StyleSheet.create({
   },
   videoPresentation: {
     position: 'relative',
-    width: '70vw',
-    maxWidth: 700,
+    width: '100%',
     height: 'auto',
-    margin: 'auto',
+    margin: '2rem auto',
   },
   background: {
     flex: 1,

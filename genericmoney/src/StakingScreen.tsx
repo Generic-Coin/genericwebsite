@@ -272,7 +272,7 @@ const StakingScreen = () => {
                     </Panel>
                 </Panel>
             </View>
-            <View style={styles.startMenu}>
+      <View style={styles.startMenu}>
                 <AppBar style={styles.startHeader}>
                   <View>
                     <Menu
@@ -302,8 +302,32 @@ const StakingScreen = () => {
                       <Menu.Item
                         size='lg'
                         // disabled
+                        onPress={() => openLink('/team')}
+                        title='Team'
+                      />
+                      <Menu.Item
+                        size='lg'
+                        disabled
+                        onPress={() => openLink('/socials')}
+                        title='Socials'
+                      />
+                      <Menu.Item
+                        size='lg'
+                        disabled
+                        onPress={() => openLink('/info')}
+                        title='Info'
+                      />
+                      <Menu.Item
+                        size='lg'
+                        // disabled
                         onPress={() => openLink('/slots')}
                         title='Slots'
+                      />
+                      <Menu.Item
+                        size='lg'
+                        disabled
+                        onPress={() => openLink('/exchange')}
+                        title='Exchange'
                       />
                       <Menu.Item
                         size='lg'
