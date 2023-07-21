@@ -438,6 +438,7 @@ const AppScreen = () => {
                               textAlign: 'center',
                               maxHeight: '40vw',
                               overflow: 'hidden',
+                              display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'
                             }}
                           >
                             <Animated.Text
@@ -452,7 +453,7 @@ const AppScreen = () => {
                             >
                             <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>
 
-                            <div style={{width:'30%', maxWidth:'7.5rem', margin:'0 1rem', flex:1}}>
+                            <div style={{width:'7.5rem', height:'7.5rem', margin:'0 1rem', flex:1}}>
                               <img src={imageMap('1')} style={{width: '100%', height: '100%'}} /><br/>
                               <img src={imageMap('2')} style={{width: '100%', height: '100%'}} /><br/>
                               <img src={imageMap('3')} style={{width: '100%', height: '100%'}} /><br/>
@@ -464,7 +465,7 @@ const AppScreen = () => {
                               <img src={imageMap('9')} style={{width: '100%', height: '100%'}} /><br/>
                               <img src={imageMap('0')} style={{width: '100%', height: '100%'}} />
                             </div>
-                            <div style={{width:'30%', maxWidth:'7.5rem', margin:'0 1rem', flex:1}}>
+                            <div style={{width:'7.5rem', height:'7.5rem', margin:'0 1rem', flex:1}}>
                               <img src={imageMap('2')} style={{width: '100%', height: '100%'}} /><br/>
                               <img src={imageMap('3')} style={{width: '100%', height: '100%'}} /><br/>
                               <img src={imageMap('4')} style={{width: '100%', height: '100%'}} /><br/>
@@ -476,7 +477,7 @@ const AppScreen = () => {
                               <img src={imageMap('0')} style={{width: '100%', height: '100%'}} /><br/>
                               <img src={imageMap('1')} style={{width: '100%', height: '100%'}} />
                             </div>
-                            <div style={{width:'30%', maxWidth:'7.5rem', margin:'0 1rem', flex:1}}>
+                            <div style={{width:'7.5rem', height:'7.5rem', margin:'0 1rem', flex:1}}>
                               <img src={imageMap('3')} style={{width: '100%', height: '100%'}} /><br/>
                               <img src={imageMap('4')} style={{width: '100%', height: '100%'}} /><br/>
                               <img src={imageMap('5')} style={{width: '100%', height: '100%'}} /><br/>
@@ -567,18 +568,22 @@ const AppScreen = () => {
               <div style={{  display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: '100%' }}>
                     <div style={{width:'30%', flex: 1, padding: '0 1rem',}}>
                       <div>
-                        <Button style={{ margin: '0 0.25rem 1rem'}} primary disabled={isSlotRolling || !active || !hasAllowance} onPress={() => rollToken()}>
+                        <Button style={{ margin: '0 0.25rem 1rem', height: '4rem'}} primary disabled={isSlotRolling || !active || !hasAllowance} onPress={() => rollToken()}>
                           <span style={{fontFamily: 'MS Sans Serif'}}>GEN SPIN{active ? (<span> {priceGEN}</span>) : (<span></span>)}</span>
                         </Button> 
                         <Button style={{ margin: '0 0.25rem 1rem'}} primary disabled={hasAllowance} onPress={() => handleApprove()}>Approve</Button>
                       </div>
                     </div>
-                    <div style={{width:'30%', flex: 1, justifyContent: 'center', display: 'flex'}}>
+                    <div style={{
+                      width:'30%',
+                      flex: 1, 
+                      justifyContent: 'center', 
+                      display: 'flex'}}>
                       <div><Text><h3>GENERIC COIN</h3></Text></div>
                     </div>
                     <div style={{width:'30%', flex: 1, padding: '0 1rem',}}>
                       <div>
-                        <Button style={{ margin: '0 0.25rem 1rem'}} primary disabled={isSlotRolling || !active} onPress={() => rollEth()}>
+                        <Button style={{ margin: '0 0.25rem 1rem', height: '4rem'}} primary disabled={isSlotRolling || !active} onPress={() => rollEth()}>
                           <span style={{fontFamily: 'MS Sans Serif'}}>ETH SPIN {active ? (<span> {priceETH}</span>) : (<span></span>)}</span>
                         </Button>
                       </div>
@@ -714,6 +719,13 @@ const styles = StyleSheet.create({
   '@keyframes scroll': {
     '0%': { transform: [{ translateY: 0 }] },
     '100%': { transform: [{ translateY: '-100%' }] },
+  },
+  responsiveLogo: {
+    width:'30%',
+    flex: 1, 
+    justifyContent: 'center', 
+    display: 'flex'
+    
   },
   price: {
     position: 'absolute',
