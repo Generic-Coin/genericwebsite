@@ -33,6 +33,7 @@ import {
 } from '@walletconnect/react-native-dapp';
 import { notificationService } from './util/notifications';
 
+import { useMatchMedia } from "./useMatchMedia";
 
 
 import { useWeb3React } from '@web3-react/core';
@@ -113,6 +114,7 @@ const AppScreen = () => {
   const [isFreeSpin, setIsFreeSpin] = useState(false);
   const [spinHistory, setSpinHistory] = useState([]);
   const [verticalMenuOpen, setVerticalMenuOpen] = React.useState(false);
+  const isDesktopResolution = useMatchMedia("(min-width:600px)", true);
   
   let currentBlockNumber: number;
 
@@ -537,9 +539,11 @@ const AppScreen = () => {
                     )}
                     </Text>
                 </div>
-                <div style={{width:'30%', flex: 1, justifyContent: 'center', display: 'flex', alignItems: 'end'}}>
-                  <Image style={{width: '5rem', height: '5rem'}} source={GenericLogo} />
-                </div>
+                {isDesktopResolution ? (
+                      <div style={{width:'30%', flex: 1, justifyContent: 'center', display: 'flex', alignItems: 'end'}}>
+                        <Image style={{width: '5rem', height: '5rem'}} source={GenericLogo} />
+                      </div>
+                    ) : (<></>)}
                 <div style={{width:'30%', flex: 1, padding: '0 1rem',}}>
                   <Text>
                     {active ? (
@@ -574,13 +578,15 @@ const AppScreen = () => {
                         <Button style={{ margin: '0 0.25rem 1rem'}} primary disabled={hasAllowance} onPress={() => handleApprove()}>Approve</Button>
                       </div>
                     </div>
-                    <div style={{
-                      width:'30%',
-                      flex: 1, 
-                      justifyContent: 'center', 
-                      display: 'flex'}}>
-                      <div><Text><h3>GENERIC COIN</h3></Text></div>
-                    </div>
+                    {isDesktopResolution ? (
+                      <div style={{
+                        width:'30%',
+                        flex: 1, 
+                        justifyContent: 'center', 
+                        display: 'flex'}}>
+                        <div><Text><h3>GENERIC COIN</h3></Text></div>
+                      </div>
+                    ) : (<></>)}
                     <div style={{width:'30%', flex: 1, padding: '0 1rem',}}>
                       <div>
                         <Button style={{ margin: '0 0.25rem 1rem', height: '4rem'}} primary disabled={isSlotRolling || !active} onPress={() => rollEth()}>
@@ -590,6 +596,16 @@ const AppScreen = () => {
                     </div>
                 </div>
 
+                {isDesktopResolution ? (<></>) : (
+                  <div>
+                      <div style={{marginTop: '1rem', width:'100%', flex: 1, justifyContent: 'center', display: 'flex', alignItems: 'end'}}>
+                        <div><Image style={{width: '5rem', height: '5rem'}} source={GenericLogo} /></div>
+                      </div>
+                      <div style={{width:'100%', flex: 1, justifyContent: 'center', display: 'flex', alignItems: 'end'}}>
+                        <div><Text><h3>GENERIC COIN</h3></Text></div>
+                      </div>
+                  </div>
+                    )}
               
                 {active && spinHistory ? (
                 <List.Accordion
