@@ -5,7 +5,8 @@ export enum SupportedChainId {
 }
 
 export const SUPPORTED_CHAIN_IDS = [
-  SupportedChainId.ARBITRUM_GOERLI
+  SupportedChainId.ARBITRUM_GOERLI,
+  SupportedChainId.ARBITRUM_ONE,
 ] as const
 
-export const DEFAULT_CHAIN_ID = SupportedChainId.ARBITRUM_GOERLI;
+export const DEFAULT_CHAIN_ID = SupportedChainId.ARBITRUM_ONE;

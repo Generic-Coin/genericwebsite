@@ -6,73 +6,37 @@ import {
   Linking,
   ImageBackground,
 } from 'react-native';
-import { Video, ResizeMode } from 'expo-av';
 import {
   Panel,
   AppBar,
   Button,
-  List,
   Text,
   ScrollView,
-  Divider,
-  Window,
   Anchor,
   Select,
   Fieldset,
   Menu,
-  Title,
+  Card,
+  Container,
 } from 'react95-native';
 import GenericLogo from './assets/images/gcp.png';
-import GenericSizzle from './assets/genericday.mp4';
-import GenericWhitepaper from './assets/generic-whitepaper.pdf';
 import James from './assets/images/james.png';
-import Caribou from './assets/images/caribou.png';
-import Larry from './assets/images/larry.png';
-import Charlie from './assets/images/charlie.png';
-import Lord from './assets/images/lord.png';
+import Eric from './assets/images/eric.png';
+import Rick from './assets/images/rick.png';
+import Katsu from './assets/images/katsu.png';
+import Robert from './assets/images/robert.png';
 import ComingSoon from './assets/images/comingsoon.png';
-import BlockSpot from './assets/images/bs.png';
-import CoinPaprika from './assets/images/cp.png';
-import EmailIcon from './assets/images/em.png';
-import TelegramIcon from './assets/images/te.png';
-import DiscordIcon from './assets/images/di.png';
-import TwitterIcon from './assets/images/tw.png';
-import MediumIcon from './assets/images/me.png';
-import YouTubeIcon from './assets/images/yt.png';
-import GitHubIcon from './assets/images/gh.png';
-import CoinWatchIcon from './assets/images/cw.png';
-import TokenPieIcon from './assets/images/tp.png';
-import ApeSwapIcon from './assets/images/as.png';
-import PancakeSwapIcon from './assets/images/ps.png';
-import CoinCheckupIcon from './assets/images/cc.png';
-
-import { notificationService } from './util/notifications';
+import jamesCopy from './bios/james.html';
+import ericCopy from './bios/eric.html';
+import rickCopy from './bios/rick.html';
+import katsuCopy from './bios/katsu.html';
+import robertCopy from './bios/robert.html';
 
 const TeamScreen = () => {
-  useEffect(() => {
-    getPrices();
-  }, []);
 
   const [verticalMenuOpen, setVerticalMenuOpen] = React.useState(false);
 
-  const [showGenericPrice, setShowGenericPrice] = useState(0);
-  const getPrices = async () => {
-    try {
-      // const response = await fetch(
-      //   'https://api.coinpaprika.com/v1/tickers/genv3-generic-coin',
-      // );
-      const responseJson = await response.json();
-      const digestedResponse =
-        Math.round(responseJson.quotes.USD.price * 1000000 * 100) / 100;
-      setShowGenericPrice(digestedResponse);
-    } catch (error) {
-      // console.error(error);
-    }
-  };
-
-  const [showAboutModal, setShowAboutModal] = useState(false);
   const openLink = (url: string) => {
-    // Linking.openURL(url).catch(err => console.warn("Couldn't load page", err));
     Linking.openURL(url).catch(err => console.warn("Couldn't load page", err));
   };
 
@@ -110,6 +74,8 @@ const TeamScreen = () => {
     } else return null;
   };
 
+  const [memberCopy, setMemberCopy] = useState(jamesCopy);
+
   const options = [
     'James Smith',
     'Eric Estrada',
@@ -128,33 +94,36 @@ const TeamScreen = () => {
     if (newValue === 'James Smith') {
       setMemberTitle('Generic CEO');
       setMemberImage({ uri: James });
+      setMemberCopy(jamesCopy)
       // setMemberUrl('https://www.linkedin.com/in/james-smith-770045238/');
     }
+
     if (newValue === 'Eric Estrada') {
       setMemberTitle('CEO');
-      setMemberImage({ uri: ComingSoon });
+      setMemberImage({ uri: Eric });
+      setMemberCopy(ericCopy)
       // setMemberUrl('https://www.linkedin.com/in/lord-johnson-91561a240/');
     }
     if (newValue === 'Robert Stevenson') {
       setMemberTitle('Developer');
-      setMemberImage({ uri: ComingSoon });
+      setMemberImage({ uri: Robert });
+      setMemberCopy(robertCopy)
       // setMemberUrl('https://www.linkedin.com/in/joelcuthriell/');
     }
     if (newValue === 'Katsu Mori') {
       setMemberTitle('Web Developer');
-      setMemberImage({ uri: ComingSoon });
+      setMemberImage({ uri: Katsu });
+      setMemberCopy(katsuCopy)
       // setMemberUrl('https://www.linkedin.com/in/charlie-doodle-bab078239/');
     }
     if (newValue === 'Rick Gene') {
       setMemberTitle('Community Manager');
-      setMemberImage({ uri: ComingSoon });
+      setMemberImage({ uri: Rick });
+      setMemberCopy(rickCopy)
       // setMemberUrl('https://www.linkedin.com/in/larry-smitt-957052238/');
     }
   };
   
-  const video = React.useRef(null);
-  const [status, setStatus] = React.useState({});
-
   return (
     <View style={styles.background}>
       <View style={styles.container}>
@@ -173,38 +142,53 @@ const TeamScreen = () => {
               scrollViewProps={{
                 contentContainerStyle: styles.content,
               }}
-              alwaysShowScrollbars
             >
 
             <Panel variant='raised' style={[styles.zpanel]}>
-              <Text style={styles.textIndent}>
-                <div>
-                  {renderMemberImage()}
-                  <br />
-                  <br />
-                </div>
-                <div>
-                  <Text style={styles.zlink}>
-                    {renderMemberTitle()}
-                  </Text>
-                  <Text style={styles.zlink}>{renderMemberLink()}</Text>
-                  <br />
-                </div>
-                <br />
-                <div>
-                  <Fieldset label='Members:' style={[{ padding: 20 }]}>
-                    <View style={{ zIndex: 999 }}>
-                      <Select
-                        menuMaxHeight={130}
-                        options={options}
-                        value={value}
-                        onChange={newValue => changeMember(newValue)}
-                        style={[{ width: '100%', minWidth: 150 }]}
-                      />
-                    </View>
-                  </Fieldset>
-                </div>
-              </Text>
+              
+
+            <div style={{  display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: '100%' }}>
+                  <div style={{flex: 1, padding: '0 1rem',}}>
+                    <Text style={styles.textIndent}>
+                      <div>
+                        {renderMemberImage()}
+                        <br />
+                        <br />
+                      </div>
+                      <div>
+                        <Text style={styles.zlink}>
+                          {renderMemberTitle()}
+                        </Text>
+                        <Text style={styles.zlink}>{renderMemberLink()}</Text>
+                        <br />
+                      </div>
+                      <br />
+                      <div>
+                        <Fieldset label='Members:' style={[{ padding: 20 }]}>
+                          <View style={{ zIndex: 999 }}>
+                            <Select
+                              menuMaxHeight={130}
+                              options={options}
+                              value={value}
+                              onChange={newValue => changeMember(newValue)}
+                              style={[{ width: '100%', minWidth: 150 }]}
+                            />
+                          </View>
+                        </Fieldset>
+                      </div>
+                    </Text>
+                  </div>
+                  <div style={{flex: 2, padding: '0 1rem', zIndex: '-10'}}>
+                    <Card>
+                      <Card.Content>
+                        <Text>
+                          {memberCopy}
+                        </Text>
+                      </Card.Content>
+                    </Card>
+                  </div>
+            </div>
+
             </Panel>
 
             </ScrollView>
@@ -263,18 +247,6 @@ const TeamScreen = () => {
               />
               <Menu.Item
                 size='lg'
-                disabled
-                onPress={() => openLink('/socials')}
-                title='Socials'
-              />
-              <Menu.Item
-                size='lg'
-                disabled
-                onPress={() => openLink('/info')}
-                title='Info'
-              />
-              <Menu.Item
-                size='lg'
                 // disabled
                 onPress={() => openLink('/slots')}
                 title='Slots'
@@ -287,7 +259,7 @@ const TeamScreen = () => {
               />
               <Menu.Item
                 size='lg'
-                // disabled
+                disabled
                 onPress={() => openLink('/staking')}
                 title='Staking'
               />
@@ -486,3 +458,7 @@ const styles = StyleSheet.create({
 });
 
 export default TeamScreen;
+
+function componentDidMount() {
+  throw new Error('Function not implemented.');
+}

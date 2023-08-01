@@ -28,6 +28,7 @@ const App = () => {
         staking: 'staking',
         nft: 'nft',
         admin: 'admin',
+        exchange: 'exchange',
       },
     },
   };

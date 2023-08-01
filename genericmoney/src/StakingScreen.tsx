@@ -239,7 +239,6 @@ const StakingScreen = () => {
                             scrollViewProps={{
                                 contentContainerStyle: styles.content,
                             }}
-                            alwaysShowScrollbars
                         >
 
                             <div>
@@ -307,18 +306,6 @@ const StakingScreen = () => {
                       />
                       <Menu.Item
                         size='lg'
-                        disabled
-                        onPress={() => openLink('/socials')}
-                        title='Socials'
-                      />
-                      <Menu.Item
-                        size='lg'
-                        disabled
-                        onPress={() => openLink('/info')}
-                        title='Info'
-                      />
-                      <Menu.Item
-                        size='lg'
                         // disabled
                         onPress={() => openLink('/slots')}
                         title='Slots'
@@ -331,7 +318,7 @@ const StakingScreen = () => {
                       />
                       <Menu.Item
                         size='lg'
-                        // disabled
+                        disabled
                         onPress={() => openLink('/staking')}
                         title='Staking'
                       />

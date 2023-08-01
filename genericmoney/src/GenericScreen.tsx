@@ -32,7 +32,6 @@ import BlockSpot from './assets/images/bs.png';
 import CoinPaprika from './assets/images/cp.png';
 import EmailIcon from './assets/images/em.png';
 import TelegramIcon from './assets/images/te.png';
-import DiscordIcon from './assets/images/di.png';
 import TwitterIcon from './assets/images/tw.png';
 import MediumIcon from './assets/images/me.png';
 import YouTubeIcon from './assets/images/yt.png';
@@ -102,125 +101,15 @@ const GenericScreen = () => {
   return (
     <View style={styles.background}>
       <View style={styles.container}>
-        {showAboutModal ? (
-          <Window
-            title='Info'
-            style={{ flex: 1 }}
-            onClose={() => setShowAboutModal(false)}
-          >
-            <View
-              style={{
-                padding: 16,
-                justifyContent: 'space-between',
-                flex: 1,
-              }}
-            >
-              <Panel
-                variant='cutout'
-                background='material'
-                style={styles.cutout}
-              >
-                <ScrollView
-                  style={styles.scrollView}
-                  scrollViewProps={{
-                    contentContainerStyle: styles.content,
-                  }}
-                >
-                  <View style={styles.infoView}>
-                    <Text style={{ lineHeight: 24 }}>
-                      <></>
-
-                      <br />
-                      <div style={{ float: 'left', width: '100%' }}>
-                        <Text
-                          bold
-                          style={{
-                            fontSize: 22,
-                            marginBottom: 16,
-                          }}
-                        >
-                          Contact
-                        </Text>
-                        <p>
-                          <a
-                            href='mailto:admin@generic.money'
-                            target='_blank'
-                            rel='noreferrer'
-                          >
-                            admin@generic.money
-                          </a>
-                        </p>
-                      </div>
-                    </Text>
-                  </View>
-                </ScrollView>
-              </Panel>
-              <View>
-                <Divider style={{ marginTop: 16 }} />
-                <Button
-                  primary
-                  style={{ marginTop: 16, alignSelf: 'flex-end', width: 150 }}
-                  onPress={() => setShowAboutModal(false)}
-                >
-                  OK
-                </Button>
-              </View>
-            </View>
-          </Window>
-        ) : (
-          <>
+      <>
             <AppBar style={styles.header}>
-              {/* <View style={styles.price}>
-                {showGenericPrice ? (
-                  <Text style={styles.priceText}>
-                    <sup>$</sup>
-                    <strong>{showGenericPrice}</strong>
-                    <br />
-                    <sup>
-                      <i>per 1M</i>
-                    </sup>
-                  </Text>
-                ) : (
-                  <Text style={styles.priceText}>
-                    price
-                    <br />
-                    loading...
-                  </Text>
-                )}{' '}
-              </View> */}
               <View style={styles.logo}>
                 <Image style={styles.logoImage} source={GenericLogo} />
                 <Text style={styles.heading} bold disabled>
                   Generic Coin
                 </Text>
               </View>
-              {/* <Button
-                square
-                variant='raised'
-                size='lg'
-                style={styles.aboutButton}
-                onPress={() => setShowAboutModal(true)}
-              >
-                <Image
-                  style={styles.questionMark}
-                  source={{
-                    uri:
-                      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAJ1BMVEUAAACAgID///8AAADAwMAAgIAAgAAA/wCAAID/AP+AgAD//wAA///5GE4vAAAAAXRSTlMAQObYZgAAAAFiS0dEAIgFHUgAAAAHdElNRQflAQwXHQ1lXxPNAAAAq0lEQVQoz2NgIAcIggADI4gUAPOFlIAAShqA+GCmMIhQEjE0YBAVEnIBAmEVIOEkkpYMEgCrcAKrKC9GUwERQFJhbIymwtQATUVHM5qKmZPRVCAJQFQgGQpRgWQoRMWqxWgqdm+Gq1BCEkCyFmIokrUYhoYGo6k4cxjNUAwBsKHgUBdWBJFgQ41BwERYBEyDBEJBINjYGEyHGjAYQ2RCQyEMA2jsMQNNIxYAAJmCSHaZSKbTAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIxLTAxLTEyVDIzOjI5OjEzKzAwOjAwyc9MIQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMS0wMS0xMlQyMzoyOToxMyswMDowMLiS9J0AAAAASUVORK5CYII=',
-                  }}
-                />
-              </Button> */}
             </AppBar>
-            {/* <ScrollPanel style={styles.scrollPanel}>
-            {themes.map(theme => (
-              <ThemeButton
-                theme={theme}
-                currentTheme={currentTheme}
-                selected={theme.name === currentTheme.name}
-                onPress={() => setThemeProp(theme)}
-                key={theme.name}
-              />
-            ))}
-          </ScrollPanel> */}
             <Panel variant='raised' style={styles.panel}>
               <Panel variant='cutout' background='canvas' style={styles.cutout}>
                 <ScrollView
@@ -228,8 +117,51 @@ const GenericScreen = () => {
                   scrollViewProps={{
                     contentContainerStyle: styles.content,
                   }}
-                  alwaysShowScrollbars
                 >
+                  <div style={{  display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
+                    <div style={{flex: 1, margin:'0 .5rem 1rem 0'}}>
+                      <a href='https://app.uniswap.org/#/swap?outputCurrency=0x884e1db2bde9023203aa900a5f35b87bbab001b9&chain=arbitrum'
+                          target='_blank'
+                          rel='noreferrer'
+                          style={{ textDecoration: 'none' }}
+                        >
+                          <Button
+                            primary
+                          >
+                            Buy Generic Coin
+                          </Button>
+                        </a>
+                    </div>
+                    <div style={{flex: 1, margin:'0 .5rem 1rem'}}>
+                        <Button
+                            onPress={() => openLink(GenericWhitepaper)}
+                            primary
+                          >
+                            View Whitepaper
+                        </Button>
+                    </div>
+                    <div style={{flex: 1, margin:'0 0 1rem .5rem'}}>
+                      <a href='https://arbiscan.io/address/0x884e1dB2Bde9023203Aa900A5f35B87BbAb001B9'
+                          target='_blank'
+                          rel='noreferrer'
+                          style={{ textDecoration: 'none' }}
+                        >
+                          <Button
+                            primary
+                          >
+                            View Contract
+                          </Button>
+                        </a>
+                    </div>
+                  </div>
+
+                  <div style={{
+                    color: '#fff',
+                    background: '#000',
+                    border: '.5rem solid #6a6a6a',
+                    padding: '.5rem',
+                    marginBottom: '1rem',
+                  }}>
                     <Video
                       style={styles.video}
                       source={GenericSizzle}
@@ -238,7 +170,8 @@ const GenericScreen = () => {
                       resizeMode={ResizeMode.CONTAIN}
                       onPlaybackStatusUpdate={status => setStatus(() => status)}
                     />
-                  <br />
+                  </div>
+
 
                   {/* <List.Accordion
                     title='Contract'
@@ -257,23 +190,21 @@ const GenericScreen = () => {
                         </marquee>
                       </a>
                       <br />
-                      <a
-                        href='https://arbiscan.io/address/0x98a61ca1504b92ae768ef20b85aa97030b7a1edf'
-                        target='_blank'
-                        rel='noreferrer'
-                        style={{ textDecoration: 'none' }}
-                      >
-                        <Button
-                          primary
-                          style={{
-                            width: '100%',
-                            maxWidth: '50vw',
-                            minWidth: '16rem',
-                          }}
+                      <div style={{  display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: '100%', justifyContent: 'center' }}>
+                        <a
+`                          href='https://arbiscan.io/address/0x884e1dB2Bde9023203Aa900A5f35B87BbAb001B9'
+                          target='_blank'
+                          rel='noreferrer'
+                          style={{ textDecoration: 'none' }}`
                         >
-                          View on ArbiScan
-                        </Button>
-                      </a>
+                          <Button
+                            primary
+                          >
+                            View on ArbiScan
+                          </Button>
+                        </a>
+                      </div>
+
                       <br />
                       <br />
                     </Text>
@@ -288,18 +219,20 @@ const GenericScreen = () => {
                       <p>View Whitepaper</p>
                     </a><br/>
                   </Button> */}
-                  <div style={{maxWidth:'13rem', margin:'0 0 1rem'}}>
-                  <Button onPress={() => openLink(GenericWhitepaper)}>
-                    <div style={{float: 'left', fontFamily: 'MS Sans Serif', margin: '0.25rem 0 0 0.4rem'}}>
-                       View Whitepaper
-                    </div>
-                  </Button>
-                  </div>
                   
-                  <div style={{padding:'1rem', margin:'auto 0', width:'94.3%', background:'#008080'}}>
-                    <img style={{width:'100%'}} src={Roadmap} />
+                  <div style={{
+                    color: '#fff',
+                    background: '#000',
+                    border: '.5rem solid #6a6a6a',
+                    padding: '.5rem',
+                    marginBottom: '2rem',
+                    textAlign: 'center',
+                  }}>
+                    <Text><h3 style={{color:'white'}}>ROADMAP</h3></Text>
+                    <div style={{padding:'0 1rem', margin:'auto 0', width:'auto', background:'#008080'}}>
+                      <img style={{width:'100%'}} src={Roadmap} />
+                    </div>
                   </div>
-                  <br/><br/>
                   
                   {/* <List.Accordion title='Tokenomics' style={styles.section}>
                     <table border='2'>
@@ -488,18 +421,6 @@ const GenericScreen = () => {
                       </View>
                       <View style={styles.associatedItem}>
                         <a
-                          href='https://discord.gg/ptPzYSXSaM'
-                          target='_blank'
-                          rel='noreferrer'
-                        >
-                          <Image
-                            style={styles.associatedImage}
-                            source={DiscordIcon}
-                          />
-                        </a>
-                      </View>
-                      <View style={styles.associatedItem}>
-                        <a
                           href='https://twitter.com/thegenericcoin'
                           target='_blank'
                           rel='noreferrer'
@@ -656,7 +577,6 @@ const GenericScreen = () => {
               </View>
             </Panel>
           </>
-        )}
       </View>
       <View style={styles.startMenu}>
         <AppBar style={styles.startHeader}>
@@ -693,18 +613,6 @@ const GenericScreen = () => {
               />
               <Menu.Item
                 size='lg'
-                disabled
-                onPress={() => openLink('/socials')}
-                title='Socials'
-              />
-              <Menu.Item
-                size='lg'
-                disabled
-                onPress={() => openLink('/info')}
-                title='Info'
-              />
-              <Menu.Item
-                size='lg'
                 // disabled
                 onPress={() => openLink('/slots')}
                 title='Slots'
@@ -717,7 +625,7 @@ const GenericScreen = () => {
               />
               <Menu.Item
                 size='lg'
-                // disabled
+                disabled
                 onPress={() => openLink('/staking')}
                 title='Staking'
               />
@@ -764,31 +672,31 @@ const styles = StyleSheet.create({
     width: '2rem',
     height: '2rem',
   },
-  price: {
-    position: 'absolute',
-    top: '1rem',
-    left: '1rem',
-  },
-  priceText: {
-    fontSize: '.75rem',
-  },
-  tokenomicText: {
-    margin: 12,
-  },
-  centered: {
-    textAlign: 'center',
-  },
-  infoView: {
-    maxWidth: '40rem',
-    width: '100%',
-    margin: 'auto',
-  },
-  videoPresentation: {
-    position: 'relative',
-    width: '100%',
-    height: 'auto',
-    margin: '2rem auto',
-  },
+  // price: {
+  //   position: 'absolute',
+  //   top: '1rem',
+  //   left: '1rem',
+  // },
+  // priceText: {
+  //   fontSize: '.75rem',
+  // },
+  // tokenomicText: {
+  //   margin: 12,
+  // },
+  // centered: {
+  //   textAlign: 'center',
+  // },
+  // infoView: {
+  //   maxWidth: '40rem',
+  //   width: '100%',
+  //   margin: 'auto',
+  // },
+  // videoPresentation: {
+  //   position: 'relative',
+  //   width: '100%',
+  //   height: 'auto',
+  //   margin: '2rem auto',
+  // },
   background: {
     flex: 1,
     backgroundColor: '#008080',
@@ -804,10 +712,10 @@ const styles = StyleSheet.create({
     marginBottom: -4,
     zIndex: 10,
   },
-  startText: {
-    fontFamily: 'MS Sans Serif',
-    float: 'left',
-  },
+  // startText: {
+  //   fontFamily: 'MS Sans Serif',
+  //   float: 'left',
+  // },
   startLogoImage: {
     float: 'left',
     position: 'relative',
@@ -836,19 +744,19 @@ const styles = StyleSheet.create({
     marginTop: -4,
     paddingTop: 12,
   },
-  zpanel: {
-    flex: 1,
-    padding: 8,
-    paddingTop: 32,
-    paddingBottom: 128,
-    margin: 18,
-    position: 'relative',
-    zIndex: -1,
-  },
-  zlink: {
-    position: 'relative',
-    zIndex: 9001,
-  },
+  // zpanel: {
+  //   flex: 1,
+  //   padding: 8,
+  //   paddingTop: 32,
+  //   paddingBottom: 128,
+  //   margin: 18,
+  //   position: 'relative',
+  //   zIndex: -1,
+  // },
+  // zlink: {
+  //   position: 'relative',
+  //   zIndex: 9001,
+  // },
   cutout: {
     flexGrow: 1,
     marginTop: 8,
@@ -866,7 +774,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     width: '100%',
-
     marginTop: 4,
   },
   statusBarItem: {
@@ -897,22 +804,22 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontStyle: 'italic',
   },
-  aboutButton: {
-    position: 'absolute',
-    right: 8,
-    height: 40,
-    width: 40,
-  },
-  questionMark: {
-    width: 26,
-    height: 26,
-  },
-  scrollPanel: {
-    zIndex: -1,
-  },
-  video: {
-    margin: '2rem 0',
-  },
+  // aboutButton: {
+  //   position: 'absolute',
+  //   right: 8,
+  //   height: 40,
+  //   width: 40,
+  // },
+  // questionMark: {
+  //   width: 26,
+  //   height: 26,
+  // },
+  // scrollPanel: {
+  //   zIndex: -1,
+  // },
+  // video: {
+  //   margin: '2rem 0',
+  // },
 });
 
 export default GenericScreen;

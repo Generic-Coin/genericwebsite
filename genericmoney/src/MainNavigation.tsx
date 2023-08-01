@@ -8,6 +8,7 @@ import AppScreen from './AppScreen';
 import StakingScreen from './StakingScreen';
 import NFTScreen from './NFTScreen';
 import AdminScreen from './AdminScreen';
+import ExchangeScreen from './ExchangeScreen';
 
 const Stack = createStackNavigator();
 
@@ -50,6 +51,9 @@ const MainNavigation = (props: Props) => {
         </Stack.Screen>
         <Stack.Screen name='admin' options={{ title: 'Generic Admin' }}>
           {() => <AdminScreen {...props} />}
+        </Stack.Screen>
+        <Stack.Screen name='exchange' options={{ title: 'Generic Exchange' }}>
+          {() => <ExchangeScreen {...props} />}
         </Stack.Screen>
       </Stack.Navigator>
     </>

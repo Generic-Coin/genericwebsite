@@ -173,7 +173,6 @@ const TeamScreen = () => {
               scrollViewProps={{
                 contentContainerStyle: styles.content,
               }}
-              alwaysShowScrollbars
             >
 
             <Panel variant='raised' style={[styles.zpanel]}>
@@ -264,18 +263,6 @@ const TeamScreen = () => {
               <Menu.Item
                 size='lg'
                 // disabled
-                onPress={() => openLink('/socials')}
-                title='Socials'
-              />
-              <Menu.Item
-                size='lg'
-                // disabled
-                onPress={() => openLink('/info')}
-                title='Info'
-              />
-              <Menu.Item
-                size='lg'
-                // disabled
                 onPress={() => openLink('/slots')}
                 title='Slots'
               />
@@ -287,7 +274,7 @@ const TeamScreen = () => {
               />
               <Menu.Item
                 size='lg'
-                // disabled
+                disabled
                 onPress={() => openLink('/staking')}
                 title='Staking'
               />

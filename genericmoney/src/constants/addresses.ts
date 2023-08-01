@@ -15,6 +15,13 @@ const ADDRESSES = {
         'stakingToken': '0xe98F65b1C5430B8b6f2F9d6F4E9872CB9734b625',
         'freeSpinNft': '0x049ecCd0bfb21D3e028fdaA43C7bab6CdC696d89',
     },
+    [SupportedChainId.ARBITRUM_ONE]: {
+        'genericToken': '0x884e1dB2Bde9023203Aa900A5f35B87BbAb001B9',
+        'slots': '0x967B35Fcb8DcFa0A463dE1DcDdbB745a777900dd',
+        'staking': '',
+        'stakingToken': '',
+        'freeSpinNft': '',
+    },
 };
 
 export default ADDRESSES;

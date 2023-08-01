@@ -19,18 +19,23 @@ import {
   ScrollView,
   Menu,
   Window,
+  Slider, 
+  Fieldset,
+  Card,
+  Container,
   // Anchor,
   // Select,
   // Fieldset,
 } from 'react95-native';
 // import { AntDesign } from '@expo/vector-icons';
+import * as Haptics from 'expo-haptics';
 import 'react-native-get-random-values';
 import '@ethersproject/shims';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {
-  useWalletConnect,
-  withWalletConnect,
-} from '@walletconnect/react-native-dapp';
+// import {
+//   useWalletConnect,
+//   withWalletConnect,
+// } from '@walletconnect/react-native-dapp';
 import { notificationService } from './util/notifications';
 
 import { useMatchMedia } from "./useMatchMedia";
@@ -100,8 +105,12 @@ const AppScreen = () => {
 
   // React states for the dApp
   const [vrfFee, setVrfFee] = useState('');
-  const [priceETH, setPriceETH] = useState('Loading...');
-  const [priceGEN, setPriceGEN] = useState('Loading...');
+  const [priceEthMin, setPriceEthMin] = useState('Loading...');
+  const [priceEth, setPriceEth] = useState('Loading...');
+  const [priceEthMax, setPriceEthMax] = useState('Loading...');
+  const [priceGenMin, setPriceGenMin] = useState('Loading...');
+  const [priceGen, setPriceGen] = useState('Loading...');
+  const [priceGenMax, setPriceGenMax] = useState('Loading...');
   const [pendingPrize, setPendingPrize] = useState('Loading...');
   const [prizePool, setPrizePool] = useState('Loading...');
   const [BNBBalance, setBNBBalance] = useState('Loading...');
@@ -113,8 +122,9 @@ const AppScreen = () => {
   const [isSlotRolling, setIsSlotRolling] = useState(false);
   const [isFreeSpin, setIsFreeSpin] = useState(false);
   const [spinHistory, setSpinHistory] = useState([]);
-  const [verticalMenuOpen, setVerticalMenuOpen] = React.useState(false);
+  const [verticalMenuOpen, setVerticalMenuOpen] = useState(false);
   const isDesktopResolution = useMatchMedia("(min-width:600px)", true);
+  const [payoutType, setPayoutType] = useState('');
   
   let currentBlockNumber: number;
 
@@ -150,8 +160,12 @@ const AppScreen = () => {
         //console.warn('spinHistory', historyArray);
 
         const vrfFee = await slotContract.methods.vrfFee().call();  
-        const priceEth = await slotContract.methods.minEthSpinPrice().call();
-        const priceGEN = await slotContract.methods.minTokenSpinPrice().call();
+        const priceEthMin = await slotContract.methods.minEthSpinPrice().call();
+        const priceEth = priceEthMin;
+        const priceEthMax = await slotContract.methods.maxEthSpinPrice().call();
+        const priceGenMin = await slotContract.methods.minTokenSpinPrice().call();
+        const priceGen = priceGenMin;
+        const priceGenMax = await slotContract.methods.maxTokenSpinPrice().call();
         const allowance = await tokenContract.methods
           .allowance(account, slotContractAddy)
           .call();
@@ -166,13 +180,17 @@ const AppScreen = () => {
           .balanceOf(account)
           .call();
 
-        const hasAllowance = web3.utils.toBN(allowance).gte(web3.utils.toBN(priceGEN));
+        const hasAllowance = web3.utils.toBN(allowance).gte(web3.utils.toBN(priceGen));
         setHasAllowance(hasAllowance);
 
-        // setPriceETH(web3.utils.fromWei(priceEth) + ' BNB');
-        setPriceETH(web3.utils.fromWei(priceEth));
-        // setPriceGEN(web3.utils.fromWei(priceGEN) + ' GENv3');
-        setPriceGEN(web3.utils.fromWei(priceGEN));
+        // setPriceEth(web3.utils.fromWei(priceEth) + ' BNB');
+        setPriceEthMin(web3.utils.fromWei(priceEthMin));
+        setPriceEth(web3.utils.fromWei(priceEth));
+        setPriceEthMax(web3.utils.fromWei(priceEthMax));
+        // setPriceGen(web3.utils.fromWei(priceGen) + ' GENv3');
+        setPriceGenMin(web3.utils.fromWei(priceGenMin));
+        setPriceGen(web3.utils.fromWei(priceGen));
+        setPriceGenMax(web3.utils.fromWei(priceGenMax));
         // setPendingPrize(web3.utils.fromWei(pendingPrizes) + ' GENv3');
         // setPendingPrize(web3.utils.fromWei(pendingPrizes));
         setPrizePool( Math.round(web3.utils.fromWei(prizesPool)).toLocaleString() + ' GEN');
@@ -183,7 +201,37 @@ const AppScreen = () => {
       } catch (ex) { }
     // }
   };
+
+  const [sliderValue, setSliderValue] = React.useState(0);
+
+  const handleChange = (newValue: number) => {
+
+    // const ETHdiff = Number(priceEthMax) - Number(priceEthMin);
+    // const percentOfETHDiff = ETHdiff * (newValue / 100);
+    // setPriceEth(String(percentOfETHDiff + priceEthMin));
+    setSliderValue(newValue);
+  };
+
+  const sendNotification = (val: number) => {
+    notificationService.send({
+      message: `Value selected: ${val}`,
+      closeButtonLabel: 'OK!',
+    });
+  };
+
+  const selectedGenPrice = () => {
+    const GenDiff = Number(priceGenMax) - Number(priceGenMin);
+    const percentOfGenDiff = GenDiff * (sliderValue / 100);
+    return String(percentOfGenDiff + Number(priceGenMin));
+  }
+
+  const selectedEthPrice = () => {
+    const Ethdiff = Number(priceEthMax) - Number(priceEthMin);
+    const percentOfEthDiff = Ethdiff * (sliderValue / 100);
+    return String(percentOfEthDiff + Number(priceEthMin));
+  }
   
+
   const getRoundHistory = async (e) => {
     let response : Promise<Number> = await slotContract.methods.roundInfo(e).call(); // : Promise<Number>
     console.log(response);
@@ -191,14 +239,17 @@ const AppScreen = () => {
   }
 
   const rollEth = async () => {
+    setPayoutType('eth');
     setIsRoundFetch(false);
     if (!!slotContract) {
       try {
         // Obtain the roll price directly from the contract and update it in the case it gets modified at some point.
         const vrfFee = await slotContract.methods.vrfFee().call();
-        const price = await slotContract.methods.minEthSpinPrice().call();
+        let price = selectedEthPrice();
+        price = String(Number(price) * 1000000000000000000);
+        // const price = selectedEthPrice();
         const totalPrice = web3.utils.toBN(price).add(web3.utils.toBN(vrfFee));
-        setPriceETH(web3.utils.fromWei(price));
+        setPriceEth(web3.utils.fromWei(price));
         // Roll the slot machine
         await slotContract.methods
           .ethSpin()
@@ -280,14 +331,18 @@ const AppScreen = () => {
   //   }
   // };
 
-  const rollToken = async () => {
+  const rollGen = async () => {
+    setPayoutType('gen');
     setIsRoundFetch(false);
     if (!!slotContract) {
       try {
         // Obtain the roll price directly from the contract and update it in the case it gets modified at some point.
         const vrfFee = await slotContract.methods.vrfFee().call();
-        const price = await slotContract.methods.minTokenSpinPrice().call();
-        setPriceGEN(web3.utils.fromWei(price));
+        // const price = await slotContract.methods.minTokenSpinPrice().call();
+        let price = selectedGenPrice();
+        price = price + '000000000000000000';
+        // console.warn('price', price);
+        setPriceGen(web3.utils.fromWei(price));
         // Roll the slot machine
         await slotContract.methods.tokenSpin(price).send({ from: account, value: vrfFee });
 
@@ -387,7 +442,7 @@ const AppScreen = () => {
               <ConnectMetamask />
             </div>
             <View style={styles.windowContent}>
-              <Text style={{ fontSize: '2.5rem', margin: '.75rem' }}>
+              <Text style={{ fontSize: 'clamp(1.5rem, 5vw, 2.5rem)', margin: '.75rem' }}>
                   <div style={{textAlign: 'center'}}>
                     <b>CURRENT JACKPOT</b><br/>
                     <div style={{
@@ -405,7 +460,8 @@ const AppScreen = () => {
                   padding: '2rem 0',
                   margin: '1rem',
                   zIndex: -1,
-                  height: '7rem',
+                  height: '17vw',
+                  maxHeight: '7rem',
                   overflow: 'hidden',
                   border: '0.3rem black solid',
                   left: 0,
@@ -435,7 +491,7 @@ const AppScreen = () => {
                           <View
                             style={{
                               left: '1.3%',
-                              marginTop: '-21vw',
+                              marginTop: '-15vw',
                               paddingTop: '51.4%',
                               textAlign: 'center',
                               maxHeight: '40vw',
@@ -515,14 +571,38 @@ const AppScreen = () => {
                     )}
               </div>
 
-              <div style={{  display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: '100%' }}>
+              <div style={{  display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: '100%', marginBottom: '1rem' }}>
                 <div style={{width:'30%', flex: 1, padding: '0 1rem',}}>
+                  <Text>
+                      {isRoundFetch === true ? (
+                        <Text style={{
+                          fontSize: 'clamp(0.3rem, 1.23rem, 2.2rem)',
+                        }}>
+                          <div style={{textAlign: 'center'}}><b>
+                            Payout:  <span>{payoutType === 'eth' ? (
+                                Math.round(web3.utils.fromWei(roundInfo['payout'])).toLocaleString() + ' GEN'
+                              ) : (
+                                Math.round(web3.utils.fromWei(roundInfo['payout'])).toLocaleString() + ' GEN'
+                              )}</span>
+                          </b></div>
+                        </Text>
+                      ) : (
+                      <>
+
+                      </>
+                    )}
+                  </Text>
+                </div>
+              </div>
+
+              <div style={{  display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: '100%' }}>
+                <div style={{width:'30%', flex: 2, padding: '0 1rem',}}>
                   <Text>
                     {active ? (
                       <div style={{
                         textAlign: 'center', 
                         margin: '0 0.5rem',
-                        fontSize: '2rem',
+                        fontSize: 'clamp(1rem, 5vw, 2rem)',
                       }}>
                         {(active && tokenBalance) ? (<div>
                           <div>GEN BALANCE<br/></div>
@@ -544,13 +624,13 @@ const AppScreen = () => {
                         <Image style={{width: '5rem', height: '5rem'}} source={GenericLogo} />
                       </div>
                     ) : (<></>)}
-                <div style={{width:'30%', flex: 1, padding: '0 1rem',}}>
+                <div style={{width:'30%', flex: 2, padding: '0 1rem',}}>
                   <Text>
                     {active ? (
                       <div style={{
                         textAlign: 'center', 
                         margin: '0 0.5rem',
-                        fontSize: '2rem',
+                        fontSize: 'clamp(1rem, 5vw, 2rem)',
                       }}>
                         {(active && BNBBalance) ? (<div>
                           <div>ETH BALANCE<br/></div>
@@ -570,12 +650,23 @@ const AppScreen = () => {
               </div>
 
               <div style={{  display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: '100%' }}>
-                    <div style={{width:'30%', flex: 1, padding: '0 1rem',}}>
+                    <div style={{width:'30%', flex: 2, padding: '0 1rem',}}>
                       <div>
-                        <Button style={{ margin: '0 0.25rem 1rem', height: '4rem'}} primary disabled={isSlotRolling || !active || !hasAllowance} onPress={() => rollToken()}>
-                          <span style={{fontFamily: 'MS Sans Serif'}}>GEN SPIN{active ? (<span> {priceGEN}</span>) : (<span></span>)}</span>
+                        <Button style={{ margin: '0 0.25rem 1rem', height: '6rem'}} primary disabled={isSlotRolling || !active || !hasAllowance} onPress={() => rollGen()}>
+                          <span style={{fontFamily: 'MS Sans Serif', 
+                                        textAlign: 'center', 
+                                        fontSize: 'clamp(.75rem, 5vw, 1.5rem)'
+                                      }}>GEN SPIN<br/>{active ? (<span> {selectedGenPrice()}</span>) : (<span></span>)}</span>
                         </Button> 
-                        <Button style={{ margin: '0 0.25rem 1rem'}} primary disabled={hasAllowance} onPress={() => handleApprove()}>Approve</Button>
+                        {active ? (
+                          <div>
+                            {(active && !hasAllowance) ? (<div>
+                              <Button style={{ margin: '0 0.25rem 1rem'}} primary disabled={hasAllowance} onPress={() => handleApprove()}>Approve</Button>
+                            </div>) : (<></>)}<br/>
+                          </div>
+                        ) : (
+                          <></>
+                        )}
                       </div>
                     </div>
                     {isDesktopResolution ? (
@@ -587,13 +678,28 @@ const AppScreen = () => {
                         <div><Text><h3>GENERIC COIN</h3></Text></div>
                       </div>
                     ) : (<></>)}
-                    <div style={{width:'30%', flex: 1, padding: '0 1rem',}}>
+                    <div style={{width:'30%', flex: 2, padding: '0 1rem',}}>
                       <div>
-                        <Button style={{ margin: '0 0.25rem 1rem', height: '4rem'}} primary disabled={isSlotRolling || !active} onPress={() => rollEth()}>
-                          <span style={{fontFamily: 'MS Sans Serif'}}>ETH SPIN {active ? (<span> {priceETH}</span>) : (<span></span>)}</span>
+                        <Button style={{ margin: '0 0.25rem 1rem', height: '6rem'}} primary disabled={isSlotRolling || !active} onPress={() => rollEth()}>
+                          <span style={{fontFamily: 'MS Sans Serif', 
+                                        textAlign: 'center',
+                                        fontSize: 'clamp(.75rem, 5vw, 1.5rem)'
+                                      }}>ETH SPIN<br/>{active ? (<span> {Number(selectedEthPrice()).toFixed(5).toLocaleString()}</span>) : (<span></span>)}</span>
                         </Button>
                       </div>
                     </div>
+                </div>
+
+                <div style={{  display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: '100%' }}>
+                  <div style={{width:'30%', flex: 1, padding: '0 1rem',}}>
+                    <Fieldset label='BET AMOUNT:' style={{ padding: 16 }}>
+                      <Slider
+                        onChange={handleChange}
+                        value={sliderValue}
+                        step={1}
+                      />
+                    </Fieldset>
+                  </div>
                 </div>
 
                 {isDesktopResolution ? (<></>) : (
@@ -613,23 +719,39 @@ const AppScreen = () => {
                 style={{margin: '1rem'}}
                 >
                 <div style={{
-                      margin: '1rem auto 0',
+                      margin: '.5rem auto 0',
                       display: 'flex',
-                      flexWrap: 'wrap'
+                      flexWrap: 'wrap',
+                      justifyContent: 'center',
                     }}>
                     {spinHistory.map(item => {
                       return <div 
                                 style={{
-                                  padding: '0.1rem 0.2rem 0',
-                                  margin: '0.4rem 0.3rem',
+                                  padding: '0',
+                                  margin: '0.4rem 0',
                                   textAlign: 'left',
                                   fontSize: '1rem',
                                   fontFamily: 'MS Sans Serif',
                                   whiteSpace: 'nowrap',
+                                  display: 'flex', 
+                                  flexDirection: 'row', 
+                                  flexWrap: 'wrap',
                                 }}
                                 key={item.round}>
-                                  <Button disabled>Spin ID {item.round}: &nbsp; 
-                                  {item.symbols[0]} | {item.symbols[1]} | {item.symbols[2]}</Button>
+                                  <div style={{ flex: 1, padding: '0 1rem',}}>
+                                      <Card>
+                                        <Card.Content>
+                                          <Text>
+                                            Spin ID <strong>{item.round}</strong>:&nbsp;&nbsp;{item.symbols[0]}&nbsp;{item.symbols[1]}&nbsp;{item.symbols[2]}
+                                            <div style={{display:'flex', justifyContent: 'center', marginTop:'.5rem'}}>
+                                              <div style={{flex: 1, textAlign: 'center'}}><img src={imageMap(item.symbols[0])} style={{width: '1.75rem', height: '1.75rem'}} /></div>
+                                              <div style={{flex: 1, textAlign: 'center'}}><img src={imageMap(item.symbols[1])} style={{width: '1.75rem', height: '1.75rem'}} /></div>
+                                              <div style={{flex: 1, textAlign: 'center'}}><img src={imageMap(item.symbols[2])} style={{width: '1.75rem', height: '1.75rem'}} /></div>
+                                            </div>
+                                          </Text>
+                                        </Card.Content>
+                                      </Card>
+                                  </div>
                              </div>;
                     })}
                 </div>
@@ -637,12 +759,20 @@ const AppScreen = () => {
               ) : (
                 <></>
               )}
+
+              <div style={{  display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: '100%', marginBottom: '1rem' }}>
+                <div style={{width:'30%', flex: 1, padding: '0 1rem',}}>
+                  <Text><a href='https://vrf.chain.link/' target='_blank'>Powered by Chainlink VRF</a></Text>
+                </div>
+              </div>
+
               
             </View>
           </Window>
         </View>
 
       </View>
+
       <View style={styles.startMenu}>
         <AppBar style={styles.startHeader}>
           <View>
@@ -678,18 +808,6 @@ const AppScreen = () => {
               />
               <Menu.Item
                 size='lg'
-                disabled
-                onPress={() => openLink('/socials')}
-                title='Socials'
-              />
-              <Menu.Item
-                size='lg'
-                disabled
-                onPress={() => openLink('/info')}
-                title='Info'
-              />
-              <Menu.Item
-                size='lg'
                 // disabled
                 onPress={() => openLink('/slots')}
                 title='Slots'
@@ -702,7 +820,7 @@ const AppScreen = () => {
               />
               <Menu.Item
                 size='lg'
-                // disabled
+                disabled
                 onPress={() => openLink('/staking')}
                 title='Staking'
               />
@@ -912,10 +1030,11 @@ const styles = StyleSheet.create({
   },
 });
 
-export default withWalletConnect(AppScreen, {
-  redirectUrl:
-    Platform.OS === 'web' ? window.location.origin : 'yourappscheme://',
-  storageOptions: {
-    asyncStorage: AsyncStorage,
-  },
-});
+// export default withWalletConnect(AppScreen, {
+//   redirectUrl:
+//     Platform.OS === 'web' ? window.location.origin : 'yourappscheme://',
+//   storageOptions: {
+//     asyncStorage: AsyncStorage,
+//   },
+// });
+export default AppScreen;
