@@ -23,6 +23,7 @@ module.exports = async function webpackConfig(env, argv) {
   Object.assign(config.resolve.alias, {
     ...resolver.extraNodeModules,
     'react-native-web': path.join(node_modules, 'react-native-web'),
+    'react-native-sound': path.join(node_modules, 'react-native-web-sound'),
   });
 
   return config;

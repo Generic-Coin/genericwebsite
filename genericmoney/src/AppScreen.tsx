@@ -246,9 +246,12 @@ const AppScreen = () => {
         // Obtain the roll price directly from the contract and update it in the case it gets modified at some point.
         const vrfFee = await slotContract.methods.vrfFee().call();
         let price = selectedEthPrice();
-        price = String(Number(price) * 1000000000000000000);
+        // console.warn('price start', price);
+        price = String(Math.round(Number(price) * 1000000000000000000));
+        // console.warn('price calculated', price);
         // const price = selectedEthPrice();
         const totalPrice = web3.utils.toBN(price).add(web3.utils.toBN(vrfFee));
+        // console.warn('price total', totalPrice);
         setPriceEth(web3.utils.fromWei(price));
         // Roll the slot machine
         await slotContract.methods
@@ -340,7 +343,7 @@ const AppScreen = () => {
         const vrfFee = await slotContract.methods.vrfFee().call();
         // const price = await slotContract.methods.minTokenSpinPrice().call();
         let price = selectedGenPrice();
-        price = price + '000000000000000000';
+        price = String(Math.round(Number(price))) + '000000000000000000';
         // console.warn('price', price);
         setPriceGen(web3.utils.fromWei(price));
         // Roll the slot machine
@@ -656,7 +659,7 @@ const AppScreen = () => {
                           <span style={{fontFamily: 'MS Sans Serif', 
                                         textAlign: 'center', 
                                         fontSize: 'clamp(.75rem, 5vw, 1.5rem)'
-                                      }}>GEN SPIN<br/>{active ? (<span> {selectedGenPrice()}</span>) : (<span></span>)}</span>
+                                      }}>GEN SPIN<br/>{active ? (<span> { Math.round(Number(selectedGenPrice())).toLocaleString()}</span>) : (<span></span>)}</span>
                         </Button> 
                         {active ? (
                           <div>
@@ -715,8 +718,8 @@ const AppScreen = () => {
               
                 {active && spinHistory ? (
                 <List.Accordion
-                title='Recent Spins'
-                style={{margin: '1rem'}}
+                  title='Recent Spins'
+                  style={{margin: '1rem 1rem 0'}}
                 >
                 <div style={{
                       margin: '.5rem auto 0',
@@ -760,7 +763,25 @@ const AppScreen = () => {
                 <></>
               )}
 
-              <div style={{  display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: '100%', marginBottom: '1rem' }}>
+              <List.Accordion
+                title='Tips & Troubleshooting'
+                style={{margin: '1rem 1rem 0'}}
+                >
+                <div style={{
+                      margin: '.5rem auto 0',
+                      display: 'flex',
+                      flexWrap: 'wrap',
+                      justifyContent: 'left',
+                    }}>
+                      <Text>
+                        <ul>
+                          <li>Try setting the gas fee to 'low' when confirming a spin.</li>
+                        </ul>
+                      </Text>
+                </div>
+                </List.Accordion>
+
+              <div style={{  display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: '100%', margin: '1rem 0' }}>
                 <div style={{width:'30%', flex: 1, padding: '0 1rem',}}>
                   <Text><a href='https://vrf.chain.link/' target='_blank'>Powered by Chainlink VRF</a></Text>
                 </div>
