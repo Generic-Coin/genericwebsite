@@ -119,7 +119,7 @@ const GenericScreen = () => {
                   }}
                 >
                   <div style={{  display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
-                    <div style={{flex: 1, margin:'0 .5rem 1rem 0'}}>
+                    <div style={{flex: 1, margin:'.5rem', minWidth:'10rem'}}>
                       <a href='https://app.uniswap.org/#/swap?outputCurrency=0x884e1db2bde9023203aa900a5f35b87bbab001b9&chain=arbitrum'
                           target='_blank'
                           rel='noreferrer'
@@ -132,7 +132,7 @@ const GenericScreen = () => {
                           </Button>
                         </a>
                     </div>
-                    <div style={{flex: 1, margin:'0 .5rem 1rem'}}>
+                    <div style={{flex: 1, margin:'.5rem', minWidth:'10rem'}}>
                         <Button
                             onPress={() => openLink(GenericWhitepaper)}
                             primary
@@ -140,7 +140,7 @@ const GenericScreen = () => {
                             View Whitepaper
                         </Button>
                     </div>
-                    <div style={{flex: 1, margin:'0 0 1rem .5rem'}}>
+                    <div style={{flex: 1, margin:'.5rem', minWidth:'10rem'}}>
                       <a href='https://arbiscan.io/address/0x884e1dB2Bde9023203Aa900A5f35B87BbAb001B9'
                           target='_blank'
                           rel='noreferrer'

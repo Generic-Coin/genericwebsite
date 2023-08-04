@@ -27,6 +27,9 @@ import ADDRESSES from './constants/addresses';
 import ConnectMetamask from './components/ConnectMetamask';
 import { DEFAULT_CHAIN_ID } from './constants/chains';
 
+import GenericLogo from './assets/images/gcp.png';
+
+
 const NFTScreen = () => {
 
     useEffect(() => {
@@ -54,7 +57,6 @@ const NFTScreen = () => {
     const tokenContractAddress = ADDRESSES[DEFAULT_CHAIN_ID].genericToken;
     const tokenContract = new web3.eth.Contract(tokenABI, tokenContractAddress);
 
-    // LP Staking contract
     const nftContractAddress = ADDRESSES[DEFAULT_CHAIN_ID].freeSpinNft;
     const nftContract = new web3.eth.Contract(freeSpinNFTABI, nftContractAddress);
 
@@ -66,14 +68,10 @@ const NFTScreen = () => {
     const [nftMetadata, setNftMetadata] = useState([]);
     const [mintingNFT, setMintingNFT] = useState(false);
     const [isInitialized, setIsInitialized] = useState(false);
-    const [mintAmount, setMintAmount] = useState(1);
     const [maxSupply, setMaxSupply] = useState('Loading...');
-    const [displayCostTier1, setDisplayCostTier1] = useState('Loading...');
-    const [displayCostTier2, setDisplayCostTier2] = useState('Loading...');
-    const [displayCostTier3, setDisplayCostTier3] = useState('Loading...');
-    const [weiCostTier1, setWeiCostTier1] = useState('Loading...');
-    const [weiCostTier2, setWeiCostTier2] = useState('Loading...');
-    const [weiCostTier3, setWeiCostTier3] = useState('Loading...');
+    const [costBronze, setCostBronze] = useState('Loading...');
+    const [costSilver, setCostSilver] = useState('Loading...');
+    const [costGold, setCostGold] = useState('Loading...');
     const [totalSupply, setTotalSupply] = useState('Loading...');
     const [statusMessage, setStatusMessage] = useState('Buy your Generic Spin NFT');
     const [currentTimestamp, setCurrentTimestamp] = useState('Loading...');
@@ -98,9 +96,27 @@ const NFTScreen = () => {
                 .maxSupply()
                 .call();
             setMaxSupply(maxSupply);
-            const costTier1 = await nftContract.methods.costTier1().call();
-            const costTier2 = await nftContract.methods.costTier2().call();
-            const costTier3 = await nftContract.methods.costTier3().call();
+
+            // Price to mint 1 NFT, in ETH
+            const costBronze = await nftContract.methods.costTier1().call();
+            const costSilver = await nftContract.methods.costTier2().call();
+            const costGold = await nftContract.methods.costTier3().call();
+
+            // TODO: display max supplies on page maybe?
+            const maxSupplyBronze = await nftContract.methods.maxSupplyTier1().call();
+            const maxSupplySilver = await nftContract.methods.maxSupplyTier2().call();
+            const maxSupplyGold = await nftContract.methods.maxSupplyTier3().call();
+
+            // TODO: when user presses mint button, check if circulating supply < maxSupply and display error if that's not the case or disable mint button, whatever works for you
+            const circulatingSupplyBronze = await nftContract.methods.circulatingSupplyTier1().call();
+            const circulatingSupplySilver = await nftContract.methods.circulatingSupplyTier2().call();
+            const circulatingSupplyGold = await nftContract.methods.circulatingSupplyTier3().call();
+
+            // The minimum GEN balance that a user needs to have to be able to mint a specific tier.
+            // TODO: when user presses mint button, check if tokenBalance >= minTokenBalance and display error if that's not the case
+            const minTokenBalanceBronze = await nftContract.methods.minTokenBalanceTier1().call();
+            const minTokenBalanceSilver = await nftContract.methods.minTokenBalanceTier2().call();
+            const minTokenBalanceGold = await nftContract.methods.minTokenBalanceTier3().call();
 
             const totalSupply = await nftContract.methods.totalSupply().call();
 
@@ -155,12 +171,9 @@ const NFTScreen = () => {
 
             setNftMetadata(metaObj);
             setTokenBalance(tokenBalance);
-            setDisplayCostTier1(web3.utils.fromWei(costTier1).toLocaleString());
-            setDisplayCostTier2(web3.utils.fromWei(costTier2).toLocaleString());
-            setDisplayCostTier3(web3.utils.fromWei(costTier3).toLocaleString());
-            setWeiCostTier1(costTier1);
-            setWeiCostTier2(costTier2);
-            setWeiCostTier3(costTier3);
+            setCostBronze(costBronze);
+            setCostSilver(costSilver);
+            setCostGold(costGold);
             setTotalSupply(totalSupply);
             setCurrentTimestamp(String(currentTimestamp));
             setFreeSpinTimeout(freeSpinTimeout);
@@ -193,60 +206,59 @@ const NFTScreen = () => {
         return str;
     });
 
-    const getTotalCost = (currentSupply) => {
-        const nextSupply = currentSupply + mintAmount;
-        var cost;
-        var totalCostWei = web3.utils.toBN(0);
 
-        if (nextSupply <= 200) {
-            // User needs to hold 1b GEN
-            cost = web3.utils.toBN(weiCostTier1)
-            totalCostWei = cost.mul(web3.utils.toBN(mintAmount));
-        } else if (
-            nextSupply > 200 &&
-            nextSupply <= 250
-        ) {
-            // User needs to hold 1b GEN
-            var tier1Mint = 0;
-            if (currentSupply < 200) {
-                tier1Mint = 200 - currentSupply;
-                cost = web3.utils.toBN(weiCostTier1);
-                totalCostWei = cost.mul(web3.utils.toBN(tier1Mint));
-            }
-
-            var tier2Mint = mintAmount - tier1Mint;
-            cost = web3.utils.toBN(weiCostTier2)
-            totalCostWei.add(cost.mul(web3.utils.toBN(tier2Mint)));
-        } else {
-            // User needs to hold 1b gen
-            var tier2Mint = 0;
-            if (currentSupply < 250) {
-                tier2Mint = 250 - currentSupply;
-                cost = web3.utils.toBN(weiCostTier2);
-                totalCostWei = cost.mul(web3.utils.toBN(tier2Mint));
-            }
-
-            var tier3Mint = mintAmount - tier2Mint;
-            cost = web3.utils.toBN(weiCostTier3)
-            totalCostWei.add(cost.mul(web3.utils.toBN(tier3Mint)));
-        }
-
-        return totalCostWei;
-    }
-
-    const mintNFTs = async () => {
-        const currentSupply = await nftContract.methods.totalSupply().call();
-        var totalCostWei = getTotalCost(currentSupply);
-        console.log(web3.utils.fromWei(totalCostWei));
-
-        console.log("Cost: ", totalCostWei);
+    const mintBronze = async () => {
         setStatusMessage(`Minting your NFT...`);
         setMintingNFT(true);
         await nftContract.methods
-            .mint(account, mintAmount)
+            .mintTier1()
             .send({
                 from: account,
-                value: totalCostWei,
+                value: costBronze,
+            })
+            .once("error", (err) => {
+                console.log(err);
+                setStatusMessage("Sorry, something went wrong please try again later.");
+                setMintingNFT(false);
+            })
+            .then((receipt) => {
+                console.log(receipt);
+                setStatusMessage(`Mint success! View your NFT's here.`);
+                setMintingNFT(false);
+                fetchContractData();
+            });
+    };
+
+    const mintSilver = async () => {
+        setStatusMessage(`Minting your NFT...`);
+        setMintingNFT(true);
+        await nftContract.methods
+            .mintTier2()
+            .send({
+                from: account,
+                value: costSilver,
+            })
+            .once("error", (err) => {
+                console.log(err);
+                setStatusMessage("Sorry, something went wrong please try again later.");
+                setMintingNFT(false);
+            })
+            .then((receipt) => {
+                console.log(receipt);
+                setStatusMessage(`Mint success! View your NFT's here.`);
+                setMintingNFT(false);
+                fetchContractData();
+            });
+    };
+
+    const mintGold = async () => {
+        setStatusMessage(`Minting your NFT...`);
+        setMintingNFT(true);
+        await nftContract.methods
+            .mintTier3()
+            .send({
+                from: account,
+                value: costGold,
             })
             .once("error", (err) => {
                 console.log(err);
@@ -269,57 +281,141 @@ const NFTScreen = () => {
             })
     }
 
-    const handleMintAmountChange = (newValue: number) => {
-        setMintAmount(newValue);
-    }
-
 
     return (
-        <div>
-            <div style={{ width: '100%', display: 'flex' }}>
-                <div style={{ float: 'left', margin: '.75rem 0' }}>
-                    <Text
-                        bold
-                        style={{
-                            fontSize: 22,
-                            margin: 12,
-                            marginBottom: 24,
+        <View style={styles.background}>
+            <View style={styles.container}>
+            <>
+                <AppBar style={styles.header}>
+                    <View style={styles.logo}>
+                    <Image style={styles.logoImage} source={GenericLogo} />
+                    <Text style={styles.heading} bold disabled>
+                        Generic NFTs
+                    </Text>
+                    </View>
+                </AppBar>
+                <Panel variant='raised' style={styles.panel}>
+                    <Panel variant='cutout' background='canvas' style={styles.cutout}>
+                    <ScrollView
+                        style={styles.scrollView}
+                        scrollViewProps={{
+                        contentContainerStyle: styles.content,
                         }}
                     >
-                        Generic Text
-                    </Text>
-                </div>
-            </div>
-            <ConnectMetamask />
-            {active ? (
-                <div>
-                    {tokenBalance ? (<p>Your GEN Balance: {tokenBalance} GEN</p>) : (<p></p>)}
-                    <p>Current supply: {totalSupply}</p>
-                    <p>Max supply: {maxSupply}</p>
-                    <p>Mint price tier 1 (0-200): {displayCostTier1} ETH</p>
-                    <p>Mint price tier 2 (201-250): {displayCostTier2} ETH</p>
-                    <p>Mint price tier 3 (251-275): {displayCostTier3} ETH</p>
-                    {statusMessage ? (<p>{statusMessage}</p>) : (<p></p>)}
-                    <NumberInput value={mintAmount} onChange={handleMintAmountChange} width={130} min={1} max={25} />
-                    <Button primary disabled={mintingNFT || !isInitialized} onPress={() => mintNFTs()}>Mint</Button>
-                    {nftMetadata.map((element, index) => {
-                        return (<div style={{ border: "1px solid black", display: "flex", flexDirection: "column", width: "14rem", color: "black" }} key={element.attributes[0].value}>
-                            <div>{element.name}</div>
-                            <div style={{ display: "flex", justifyContent: "center" }} >
-                                <img src={element.image} style={{ height: "8rem", width: "8rem", }}></img>
-                            </div>
-                            <div style={{ color: "black" }}>{element.description}</div>
-                            {Number(element.lastFreeSpinTime) > 0 ? (
-                                <div>Last free spin claim: {new Date(element.lastFreeSpinTime * 1000).toLocaleDateString()} {new Date(element.lastFreeSpinTime * 1000).toLocaleTimeString()}</div>
+
+                        <div>
+                            <ConnectMetamask />
+                            {active ? (
+                                <Text>
+                                    <div>
+                                        {tokenBalance ? (<p>Your GEN Balance: {tokenBalance} GEN</p>) : (<p></p>)}
+                                        <p>Current supply: {totalSupply}</p>
+                                        <p>Max supply: {maxSupply}</p>
+                                        {/* <p>Mint price bronze tier (0-200): {web3.utils.fromWei(costBronze).toLocaleString()} ETH</p>
+                                        <p>Mint price silver tier (201-250): {web3.utils.fromWei(costSilver).toLocaleString()} ETH</p>
+                                        <p>Mint price gold tier (251-275): {web3.utils.fromWei(costGold).toLocaleString()} ETH</p> */}
+                                        <p>Mint price bronze tier (0-200): {costBronze} ETH</p>
+                                        <p>Mint price silver tier (201-250): {costSilver} ETH</p>
+                                        <p>Mint price gold tier (251-275): {costGold} ETH</p>
+                                        {statusMessage ? (<p>{statusMessage}</p>) : (<p></p>)}
+                                        <Button primary disabled={mintingNFT || !isInitialized} onPress={() => mintBronze()}>Mint Bronze</Button>
+                                        <Button primary disabled={mintingNFT || !isInitialized} onPress={() => mintSilver()}>Mint Silver</Button>
+                                        <Button primary disabled={mintingNFT || !isInitialized} onPress={() => mintGold()}>Mint Gold</Button>
+                                        {nftMetadata.map((element, index) => {
+                                            return (<div style={{ border: "1px solid black", display: "flex", flexDirection: "column", width: "14rem", color: "black" }} key={element.attributes[0].value}>
+                                                <div>{element.name}</div>
+                                                <div style={{ display: "flex", justifyContent: "center" }} >
+                                                    <img src={element.image} style={{ height: "8rem", width: "8rem", }}></img>
+                                                </div>
+                                                <div style={{ color: "black" }}>{element.description}</div>
+                                                {Number(element.lastFreeSpinTime) > 0 ? (
+                                                    <div>Last free spin claim: {new Date(element.lastFreeSpinTime * 1000).toLocaleDateString()} {new Date(element.lastFreeSpinTime * 1000).toLocaleTimeString()}</div>
+                                                ) : (<></>)}
+                                                <Button primary disabled={Number(element.lastFreeSpinTime) + Number(freeSpinTimeout) >= Number(currentTimestamp)} onPress={() => claimFreeSpin(element.attributes[0].value)}>Claim free spin</Button>
+                                            </div>)
+                                        })}
+                                    </div>
+                                </Text>
                             ) : (<></>)}
-                            <Button primary disabled={Number(element.lastFreeSpinTime) + Number(freeSpinTimeout) >= Number(currentTimestamp)} onPress={() => claimFreeSpin(element.attributes[0].value)}>Claim free spin</Button>
-                        </div>)
-                    })}
-                </div>
-            ) : (<></>)}
-        </div>
+                        </div>
+                    
+                    </ScrollView>
+                    </Panel>
+                </Panel>
+            </>
+            </View>
+            <View style={styles.startMenu}>
+        <AppBar style={styles.startHeader}>
+          <View>
+            <Menu
+              style={{bottom: '2.9rem', left: '-0.45rem', minWidth: '10rem'}}
+              open={verticalMenuOpen}
+              anchor={
+                <Button
+                  active={verticalMenuOpen}
+                  onPress={() => setVerticalMenuOpen(state => !state)}
+                >
+                  <div style={{flexDirection: 'row'}}>
+                    <div style={{float: 'left', fontFamily: 'MS Sans Serif'}}>
+                      <Image style={styles.startLogoImage} source={GenericLogo} />
+                    </div> 
+                    <div style={{float: 'left', fontFamily: 'MS Sans Serif', margin: '0.25rem 0 0 0.4rem'}}>
+                       Navigate
+                    </div>
+                  </div>
+                </Button>
+              }
+            >
+              <Menu.Item
+                size='lg'
+                onPress={() => openLink('/')}
+                title='Home'
+              />
+              <Menu.Item
+                size='lg'
+                // disabled
+                onPress={() => openLink('/team')}
+                title='Team'
+              />
+              <Menu.Item
+                size='lg'
+                // disabled
+                onPress={() => openLink('/slots')}
+                title='Slots'
+              />
+              <Menu.Item
+                size='lg'
+                disabled
+                onPress={() => openLink('/exchange')}
+                title='Exchange'
+              />
+              <Menu.Item
+                size='lg'
+                disabled
+                onPress={() => openLink('/staking')}
+                title='Staking'
+              />
+              <Menu.Item
+                size='lg'
+                disabled
+                onPress={() => openLink('/nft')}
+                title='NFTs'
+              />
+              {/* <Title>Letters</Title> */}
+              {/* <Menu.Item size='lg' onPress={() => notify('A')} title='A' /> */}
+              {/* <Divider size='auto' /> */}
+              {/* <Menu.Item
+                size='lg'
+                disabled
+                onPress={() => notify('Disabled Item')}
+                title='Disabled Item'
+              /> */}
+            </Menu>
+          </View>
 
-
+        </AppBar>
+      </View>
+        </View>
     );
 };
 

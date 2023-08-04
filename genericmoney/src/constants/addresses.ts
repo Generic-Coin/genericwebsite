@@ -20,7 +20,7 @@ const ADDRESSES = {
         'slots': '0x967B35Fcb8DcFa0A463dE1DcDdbB745a777900dd',
         'staking': '',
         'stakingToken': '',
-        'freeSpinNft': '',
+        'freeSpinNft': '0x50115e0FB88E982c79FdF6d2755678C271f15CA9',
     },
 };
 
