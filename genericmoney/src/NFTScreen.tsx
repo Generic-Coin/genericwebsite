@@ -27,9 +27,6 @@ import ADDRESSES from './constants/addresses';
 import ConnectMetamask from './components/ConnectMetamask';
 import { DEFAULT_CHAIN_ID } from './constants/chains';
 
-import GenericLogo from './assets/images/gcp.png';
-
-
 const NFTScreen = () => {
 
     useEffect(() => {
@@ -283,139 +280,52 @@ const NFTScreen = () => {
 
 
     return (
-        <View style={styles.background}>
-            <View style={styles.container}>
-            <>
-                <AppBar style={styles.header}>
-                    <View style={styles.logo}>
-                    <Image style={styles.logoImage} source={GenericLogo} />
-                    <Text style={styles.heading} bold disabled>
-                        Generic NFTs
-                    </Text>
-                    </View>
-                </AppBar>
-                <Panel variant='raised' style={styles.panel}>
-                    <Panel variant='cutout' background='canvas' style={styles.cutout}>
-                    <ScrollView
-                        style={styles.scrollView}
-                        scrollViewProps={{
-                        contentContainerStyle: styles.content,
+        <div>
+            <div style={{ width: '100%', display: 'flex' }}>
+                <div style={{ float: 'left', margin: '.75rem 0' }}>
+                    <Text
+                        bold
+                        style={{
+                            fontSize: 22,
+                            margin: 12,
+                            marginBottom: 24,
                         }}
                     >
-
-                        <div>
-                            <ConnectMetamask />
-                            {active ? (
-                                <Text>
-                                    <div>
-                                        {tokenBalance ? (<p>Your GEN Balance: {tokenBalance} GEN</p>) : (<p></p>)}
-                                        <p>Current supply: {totalSupply}</p>
-                                        <p>Max supply: {maxSupply}</p>
-                                        {/* <p>Mint price bronze tier (0-200): {web3.utils.fromWei(costBronze).toLocaleString()} ETH</p>
-                                        <p>Mint price silver tier (201-250): {web3.utils.fromWei(costSilver).toLocaleString()} ETH</p>
-                                        <p>Mint price gold tier (251-275): {web3.utils.fromWei(costGold).toLocaleString()} ETH</p> */}
-                                        <p>Mint price bronze tier (0-200): {costBronze} ETH</p>
-                                        <p>Mint price silver tier (201-250): {costSilver} ETH</p>
-                                        <p>Mint price gold tier (251-275): {costGold} ETH</p>
-                                        {statusMessage ? (<p>{statusMessage}</p>) : (<p></p>)}
-                                        <Button primary disabled={mintingNFT || !isInitialized} onPress={() => mintBronze()}>Mint Bronze</Button>
-                                        <Button primary disabled={mintingNFT || !isInitialized} onPress={() => mintSilver()}>Mint Silver</Button>
-                                        <Button primary disabled={mintingNFT || !isInitialized} onPress={() => mintGold()}>Mint Gold</Button>
-                                        {nftMetadata.map((element, index) => {
-                                            return (<div style={{ border: "1px solid black", display: "flex", flexDirection: "column", width: "14rem", color: "black" }} key={element.attributes[0].value}>
-                                                <div>{element.name}</div>
-                                                <div style={{ display: "flex", justifyContent: "center" }} >
-                                                    <img src={element.image} style={{ height: "8rem", width: "8rem", }}></img>
-                                                </div>
-                                                <div style={{ color: "black" }}>{element.description}</div>
-                                                {Number(element.lastFreeSpinTime) > 0 ? (
-                                                    <div>Last free spin claim: {new Date(element.lastFreeSpinTime * 1000).toLocaleDateString()} {new Date(element.lastFreeSpinTime * 1000).toLocaleTimeString()}</div>
-                                                ) : (<></>)}
-                                                <Button primary disabled={Number(element.lastFreeSpinTime) + Number(freeSpinTimeout) >= Number(currentTimestamp)} onPress={() => claimFreeSpin(element.attributes[0].value)}>Claim free spin</Button>
-                                            </div>)
-                                        })}
-                                    </div>
-                                </Text>
+                        Generic Text
+                    </Text>
+                </div>
+            </div>
+            <ConnectMetamask />
+            {active ? (
+                <div>
+                    {tokenBalance ? (<p>Your GEN Balance: {tokenBalance} GEN</p>) : (<p></p>)}
+                    <p>Current supply: {totalSupply}</p>
+                    <p>Max supply: {maxSupply}</p>
+                    <p>Mint price bronze tier (0-200): {web3.utils.fromWei(costBronze).toLocaleString()} ETH</p>
+                    <p>Mint price silver tier (201-250): {web3.utils.fromWei(costSilver).toLocaleString()} ETH</p>
+                    <p>Mint price gold tier (251-275): {web3.utils.fromWei(costGold).toLocaleString()} ETH</p>
+                    {statusMessage ? (<p>{statusMessage}</p>) : (<p></p>)}
+                    <Button primary disabled={mintingNFT || !isInitialized} onPress={() => mintBronze()}>Mint Bronze</Button>
+                    <Button primary disabled={mintingNFT || !isInitialized} onPress={() => mintSilver()}>Mint Silver</Button>
+                    <Button primary disabled={mintingNFT || !isInitialized} onPress={() => mintGold()}>Mint Gold</Button>
+                    {nftMetadata.map((element, index) => {
+                        return (<div style={{ border: "1px solid black", display: "flex", flexDirection: "column", width: "14rem", color: "black" }} key={element.attributes[0].value}>
+                            <div>{element.name}</div>
+                            <div style={{ display: "flex", justifyContent: "center" }} >
+                                <img src={element.image} style={{ height: "8rem", width: "8rem", }}></img>
+                            </div>
+                            <div style={{ color: "black" }}>{element.description}</div>
+                            {Number(element.lastFreeSpinTime) > 0 ? (
+                                <div>Last free spin claim: {new Date(element.lastFreeSpinTime * 1000).toLocaleDateString()} {new Date(element.lastFreeSpinTime * 1000).toLocaleTimeString()}</div>
                             ) : (<></>)}
-                        </div>
-                    
-                    </ScrollView>
-                    </Panel>
-                </Panel>
-            </>
-            </View>
-            <View style={styles.startMenu}>
-        <AppBar style={styles.startHeader}>
-          <View>
-            <Menu
-              style={{bottom: '2.9rem', left: '-0.45rem', minWidth: '10rem'}}
-              open={verticalMenuOpen}
-              anchor={
-                <Button
-                  active={verticalMenuOpen}
-                  onPress={() => setVerticalMenuOpen(state => !state)}
-                >
-                  <div style={{flexDirection: 'row'}}>
-                    <div style={{float: 'left', fontFamily: 'MS Sans Serif'}}>
-                      <Image style={styles.startLogoImage} source={GenericLogo} />
-                    </div> 
-                    <div style={{float: 'left', fontFamily: 'MS Sans Serif', margin: '0.25rem 0 0 0.4rem'}}>
-                       Navigate
-                    </div>
-                  </div>
-                </Button>
-              }
-            >
-              <Menu.Item
-                size='lg'
-                onPress={() => openLink('/')}
-                title='Home'
-              />
-              <Menu.Item
-                size='lg'
-                // disabled
-                onPress={() => openLink('/team')}
-                title='Team'
-              />
-              <Menu.Item
-                size='lg'
-                // disabled
-                onPress={() => openLink('/slots')}
-                title='Slots'
-              />
-              <Menu.Item
-                size='lg'
-                disabled
-                onPress={() => openLink('/exchange')}
-                title='Exchange'
-              />
-              <Menu.Item
-                size='lg'
-                disabled
-                onPress={() => openLink('/staking')}
-                title='Staking'
-              />
-              <Menu.Item
-                size='lg'
-                disabled
-                onPress={() => openLink('/nft')}
-                title='NFTs'
-              />
-              {/* <Title>Letters</Title> */}
-              {/* <Menu.Item size='lg' onPress={() => notify('A')} title='A' /> */}
-              {/* <Divider size='auto' /> */}
-              {/* <Menu.Item
-                size='lg'
-                disabled
-                onPress={() => notify('Disabled Item')}
-                title='Disabled Item'
-              /> */}
-            </Menu>
-          </View>
+                            <Button primary disabled={Number(element.lastFreeSpinTime) + Number(freeSpinTimeout) >= Number(currentTimestamp)} onPress={() => claimFreeSpin(element.attributes[0].value)}>Claim free spin</Button>
+                        </div>)
+                    })}
+                </div>
+            ) : (<></>)}
+        </div>
 
-        </AppBar>
-      </View>
-        </View>
+
     );
 };
 

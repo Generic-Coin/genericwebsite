@@ -9,4 +9,4 @@ export const SUPPORTED_CHAIN_IDS = [
   SupportedChainId.ARBITRUM_ONE,
 ] as const
 
-export const DEFAULT_CHAIN_ID = SupportedChainId.ARBITRUM_ONE;
+export const DEFAULT_CHAIN_ID = SupportedChainId.ARBITRUM_GOERLI;

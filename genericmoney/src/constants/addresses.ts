@@ -13,7 +13,7 @@ const ADDRESSES = {
         'slots': '0x0356196bE06a804E4A3A9292bbFf7f8F3427CB6c',
         'staking': '0x0057FB37d9e49DA014C6191C00F9B05F510e6480',
         'stakingToken': '0xe98F65b1C5430B8b6f2F9d6F4E9872CB9734b625',
-        'freeSpinNft': '0x049ecCd0bfb21D3e028fdaA43C7bab6CdC696d89',
+        'freeSpinNft': '0x0F2639f5b7aC3eC8e22013333ac337068EaF3095',
     },
     [SupportedChainId.ARBITRUM_ONE]: {
         'genericToken': '0x884e1dB2Bde9023203Aa900A5f35B87BbAb001B9',
