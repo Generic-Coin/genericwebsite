@@ -365,6 +365,61 @@ const GenericScreen = () => {
                     </Text>
                   </List.Accordion> */}
 
+                  <div style={{  display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', margin:'.5rem .5rem 1rem' }}>
+                    <div style={{flex: 1, margin:'.5rem', minWidth:'10rem'}}>
+                      <a href='http://dextools.io/app/arbitrum/pair-explorer/0x0095D76b6fAE5A178f3F26aE42ffe82234d131D6'
+                          target='_blank'
+                          rel='noreferrer'
+                          style={{ textDecoration: 'none' }}
+                        >
+                          <Button
+                            primary
+                          >
+                            DEXTools
+                          </Button>
+                        </a>
+                    </div>
+                    <div style={{flex: 1, margin:'.5rem', minWidth:'10rem'}}>
+                      <a href='https://www.geckoterminal.com/arbitrum/pools/0x0095d76b6fae5a178f3f26ae42ffe82234d131d6'
+                          target='_blank'
+                          rel='noreferrer'
+                          style={{ textDecoration: 'none' }}
+                        >
+                          <Button
+                            primary
+                          >
+                            GeckoTerminal
+                          </Button>
+                        </a>
+                    </div>
+                    <div style={{flex: 1, margin:'.5rem', minWidth:'10rem'}}>
+                      <a href='https://www.dexview.com/arbitrum/0x884e1dB2Bde9023203Aa900A5f35B87BbAb001B9'
+                          target='_blank'
+                          rel='noreferrer'
+                          style={{ textDecoration: 'none' }}
+                        >
+                          <Button
+                            primary
+                          >
+                            DEXView
+                          </Button>
+                        </a>
+                    </div>
+                    <div style={{flex: 1, margin:'.5rem', minWidth:'10rem'}}>
+                      <a href='https://dexscreener.com/arbitrum/0x0095d76b6fae5a178f3f26ae42ffe82234d131d6'
+                          target='_blank'
+                          rel='noreferrer'
+                          style={{ textDecoration: 'none' }}
+                        >
+                          <Button
+                            primary
+                          >
+                            DEXSCREENER
+                          </Button>
+                        </a>
+                    </div>
+
+                  </div>
 
                   <List.Accordion title='Partnerships' style={styles.section}>
                     <Text style={styles.textIndent}>

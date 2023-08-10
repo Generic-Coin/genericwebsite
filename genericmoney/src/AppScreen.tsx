@@ -48,6 +48,7 @@ import slotContractABI from './assets/contracts/slotsABI.json';
 import tokenABI from './assets/contracts/tokenABI.json';
 
 import GenericLogo from './assets/images/gcp.png';
+import ChainlinkVRFLogo from './assets/images/clvrf.svg';
 import SlotMachine from './assets/images/slots.png';
 import Reel1 from './assets/images/reel/1.png';
 import Reel2 from './assets/images/reel/2.png';
@@ -407,7 +408,7 @@ const AppScreen = () => {
   useEffect(() => {
     const animation = Animated.loop(
       Animated.timing(translateY, {
-        toValue: -500,
+        toValue: -3000,
         duration: 150,
         useNativeDriver: false,
       })
@@ -491,17 +492,6 @@ const AppScreen = () => {
                   ) : (
                       <>
                         {isSlotRolling ? (
-                          <View
-                            style={{
-                              left: '1.3%',
-                              marginTop: '-15vw',
-                              paddingTop: '51.4%',
-                              textAlign: 'center',
-                              maxHeight: '40vw',
-                              overflow: 'hidden',
-                              display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'
-                            }}
-                          >
                             <Animated.Text
                               style={{
                                 fontWeight: 'bold',
@@ -512,48 +502,47 @@ const AppScreen = () => {
                                 transform: [{ translateY }],
                               }}
                             >
-                            <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>
+                            <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: '100%'}}>
 
-                            <div style={{width:'7.5rem', height:'7.5rem', margin:'0 1rem', flex:1}}>
-                              <img src={imageMap('1')} style={{width: '100%', height: '100%'}} /><br/>
-                              <img src={imageMap('2')} style={{width: '100%', height: '100%'}} /><br/>
-                              <img src={imageMap('3')} style={{width: '100%', height: '100%'}} /><br/>
-                              <img src={imageMap('4')} style={{width: '100%', height: '100%'}} /><br/>
-                              <img src={imageMap('5')} style={{width: '100%', height: '100%'}} /><br/>
-                              <img src={imageMap('6')} style={{width: '100%', height: '100%'}} /><br/>
-                              <img src={imageMap('7')} style={{width: '100%', height: '100%'}} /><br/>
-                              <img src={imageMap('8')} style={{width: '100%', height: '100%'}} /><br/>
-                              <img src={imageMap('9')} style={{width: '100%', height: '100%'}} /><br/>
-                              <img src={imageMap('0')} style={{width: '100%', height: '100%'}} />
-                            </div>
-                            <div style={{width:'7.5rem', height:'7.5rem', margin:'0 1rem', flex:1}}>
-                              <img src={imageMap('2')} style={{width: '100%', height: '100%'}} /><br/>
-                              <img src={imageMap('3')} style={{width: '100%', height: '100%'}} /><br/>
-                              <img src={imageMap('4')} style={{width: '100%', height: '100%'}} /><br/>
-                              <img src={imageMap('5')} style={{width: '100%', height: '100%'}} /><br/>
-                              <img src={imageMap('6')} style={{width: '100%', height: '100%'}} /><br/>
-                              <img src={imageMap('7')} style={{width: '100%', height: '100%'}} /><br/>
-                              <img src={imageMap('8')} style={{width: '100%', height: '100%'}} /><br/>
-                              <img src={imageMap('9')} style={{width: '100%', height: '100%'}} /><br/>
-                              <img src={imageMap('0')} style={{width: '100%', height: '100%'}} /><br/>
-                              <img src={imageMap('1')} style={{width: '100%', height: '100%'}} />
-                            </div>
-                            <div style={{width:'7.5rem', height:'7.5rem', margin:'0 1rem', flex:1}}>
-                              <img src={imageMap('3')} style={{width: '100%', height: '100%'}} /><br/>
-                              <img src={imageMap('4')} style={{width: '100%', height: '100%'}} /><br/>
-                              <img src={imageMap('5')} style={{width: '100%', height: '100%'}} /><br/>
-                              <img src={imageMap('6')} style={{width: '100%', height: '100%'}} /><br/>
-                              <img src={imageMap('7')} style={{width: '100%', height: '100%'}} /><br/>
-                              <img src={imageMap('8')} style={{width: '100%', height: '100%'}} /><br/>
-                              <img src={imageMap('9')} style={{width: '100%', height: '100%'}} /><br/>
-                              <img src={imageMap('0')} style={{width: '100%', height: '100%'}} /><br/>
-                              <img src={imageMap('1')} style={{width: '100%', height: '100%'}} /><br/>
-                              <img src={imageMap('2')} style={{width: '100%', height: '100%'}} />
-                            </div>
+                              <div style={{width:'30%', maxWidth:'7.5rem', margin:'0 1rem', flex:1}}>
+                                <img src={imageMap('1')} style={{width: '100%', height: '100%'}} /><br/>
+                                <img src={imageMap('2')} style={{width: '100%', height: '100%'}} /><br/>
+                                <img src={imageMap('3')} style={{width: '100%', height: '100%'}} /><br/>
+                                <img src={imageMap('4')} style={{width: '100%', height: '100%'}} /><br/>
+                                <img src={imageMap('5')} style={{width: '100%', height: '100%'}} /><br/>
+                                <img src={imageMap('6')} style={{width: '100%', height: '100%'}} /><br/>
+                                <img src={imageMap('7')} style={{width: '100%', height: '100%'}} /><br/>
+                                <img src={imageMap('8')} style={{width: '100%', height: '100%'}} /><br/>
+                                <img src={imageMap('9')} style={{width: '100%', height: '100%'}} /><br/>
+                                <img src={imageMap('0')} style={{width: '100%', height: '100%'}} />
+                              </div>
+                              <div style={{width:'30%', maxWidth:'7.5rem', margin:'0 1rem', flex:1}}>
+                                <img src={imageMap('2')} style={{width: '100%', height: '100%'}} /><br/>
+                                <img src={imageMap('3')} style={{width: '100%', height: '100%'}} /><br/>
+                                <img src={imageMap('4')} style={{width: '100%', height: '100%'}} /><br/>
+                                <img src={imageMap('5')} style={{width: '100%', height: '100%'}} /><br/>
+                                <img src={imageMap('6')} style={{width: '100%', height: '100%'}} /><br/>
+                                <img src={imageMap('7')} style={{width: '100%', height: '100%'}} /><br/>
+                                <img src={imageMap('8')} style={{width: '100%', height: '100%'}} /><br/>
+                                <img src={imageMap('9')} style={{width: '100%', height: '100%'}} /><br/>
+                                <img src={imageMap('0')} style={{width: '100%', height: '100%'}} /><br/>
+                                <img src={imageMap('1')} style={{width: '100%', height: '100%'}} />
+                              </div>
+                              <div style={{width:'30%', maxWidth:'7.5rem', margin:'0 1rem', flex:1}}>
+                                <img src={imageMap('3')} style={{width: '100%', height: '100%'}} /><br/>
+                                <img src={imageMap('4')} style={{width: '100%', height: '100%'}} /><br/>
+                                <img src={imageMap('5')} style={{width: '100%', height: '100%'}} /><br/>
+                                <img src={imageMap('6')} style={{width: '100%', height: '100%'}} /><br/>
+                                <img src={imageMap('7')} style={{width: '100%', height: '100%'}} /><br/>
+                                <img src={imageMap('8')} style={{width: '100%', height: '100%'}} /><br/>
+                                <img src={imageMap('9')} style={{width: '100%', height: '100%'}} /><br/>
+                                <img src={imageMap('0')} style={{width: '100%', height: '100%'}} /><br/>
+                                <img src={imageMap('1')} style={{width: '100%', height: '100%'}} /><br/>
+                                <img src={imageMap('2')} style={{width: '100%', height: '100%'}} />
+                              </div>
 
                             </div>
                             </Animated.Text>
-                          </View>
                         ) : (
                           <Text>
                             <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: '100%'}}>
@@ -783,7 +772,7 @@ const AppScreen = () => {
 
               <div style={{  display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: '100%', margin: '1rem 0' }}>
                 <div style={{width:'30%', flex: 1, padding: '0 1rem',}}>
-                  <Text><a href='https://vrf.chain.link/' target='_blank'>Powered by Chainlink VRF</a></Text>
+                  <a href='https://vrf.chain.link/' target='_blank'><Image style={{height:'2.5rem', width: '10rem',}} source={ChainlinkVRFLogo} /></a>
                 </div>
               </div>
 
@@ -874,6 +863,9 @@ const styles = StyleSheet.create({
   '@keyframes scroll': {
     '0%': { transform: [{ translateY: 0 }] },
     '100%': { transform: [{ translateY: '-100%' }] },
+  },
+  chainlinkVRFLogo: {
+    width:'5rem',
   },
   responsiveLogo: {
     width:'30%',
