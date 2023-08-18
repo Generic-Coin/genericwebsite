@@ -44,11 +44,21 @@ import { useMatchMedia } from "./useMatchMedia";
 import { useWeb3React } from '@web3-react/core';
 import Web3 from 'web3';
 import { injected } from './supportedNetworks';
+
+
+// **********************
+// ----------------------
+// smart contract imports
+// ---------------------
+// **********************
 import slotContractABI from './assets/contracts/slotsABI.json';
 import tokenABI from './assets/contracts/tokenABI.json';
+import freeSpinNFTABI from './assets/contracts/freeSpinNFTABI.json';
+
+
+
 
 import GenericLogo from './assets/images/gcp.png';
-import ChainlinkVRFLogo from './assets/images/clvrf.svg';
 import SlotMachine from './assets/images/slots.png';
 import Reel1 from './assets/images/reel/1.png';
 import Reel2 from './assets/images/reel/2.png';
@@ -126,6 +136,11 @@ const AppScreen = () => {
   const [verticalMenuOpen, setVerticalMenuOpen] = useState(false);
   const isDesktopResolution = useMatchMedia("(min-width:600px)", true);
   const [payoutType, setPayoutType] = useState('');
+
+  const [nftNumber, setNftNumber]= useState(); // nft id number
+
+  // // users nft id number
+  // const [userNFTNumber, setUserNFTNumber] = useState();
   
   let currentBlockNumber: number;
 
@@ -322,6 +337,70 @@ const AppScreen = () => {
     }
   };
 
+
+  // approval for free spin
+  // get the correct token id or from array
+  const tokenId = 203;
+
+  // useffect hook to grab to token id of most recent in array nft if free spins avail > 0
+
+  // claim free spins from the NFT https://testnet.arbiscan.io/address/0x0f2639f5b7ac3ec8e22013333ac337068eaf3095#code
+  // slots contract testnet https://testnet.arbiscan.io/address/0x0356196be06a804e4a3a9292bbff7f8f3427cb6c
+  const handleApproveFreeSpins = async () => {
+
+
+      try {
+
+
+        await slotContract.methods.claimFreeSpinFromNFT(tokenId).send({ from: account });
+      } catch (ex) {
+        return;
+      }
+  };
+
+  const rollFree = async () => {
+    setPayoutType('gen');
+    setIsRoundFetch(false);
+    if (!!slotContract) {
+      try {
+        // Obtain the roll price directly from the contract and update it in the case it gets modified at some point.
+        const vrfFee = await slotContract.methods.vrfFee().call();
+        const weiToEth = Web3.utils.fromWei(vrfFee, 'ether');
+        // Roll the slot machine
+        const etherValue = web3.utils.toWei(weiToEth, "ether"); // Convert 0.001 Ether to Wei
+
+        try {
+            const txReceipt = await slotContract.methods.freeSpin().send({ from: account, value: etherValue });
+            console.log("Transaction Receipt:", txReceipt);
+        } catch (error) {
+            console.error("Transaction Error:", error);
+        }
+
+        console.log("free spin");
+
+        const roundIndex = (await slotContract.methods.getLastRoundsPlayed(account, 1).call())[0];
+        // Rolling state for the UI
+        setIsSlotRolling(true);
+        let resp = await slotContract.methods
+          .roundInfo(roundIndex)
+          .call();
+        // While Chainlink is processing the VRF, send a request every three seconds until it's fulfilled.
+        while (resp['finished'] === false) {
+          await timer(3000);
+          resp = await slotContract.methods
+            .roundInfo(roundIndex)
+            .call();
+        }
+
+        // Finish the rolling state and display the results
+        setRoundInfo(resp);
+        setIsRoundFetch(true);
+        setIsSlotRolling(false);
+      } catch (ex) { }
+    }
+
+  }
+
   // const handleClaim = async () => {
   //   if (!!slotContract) {
   //     try {
@@ -408,7 +487,7 @@ const AppScreen = () => {
   useEffect(() => {
     const animation = Animated.loop(
       Animated.timing(translateY, {
-        toValue: -3000,
+        toValue: -500,
         duration: 150,
         useNativeDriver: false,
       })
@@ -492,6 +571,17 @@ const AppScreen = () => {
                   ) : (
                       <>
                         {isSlotRolling ? (
+                          <View
+                            style={{
+                              left: '1.3%',
+                              marginTop: '-15vw',
+                              paddingTop: '51.4%',
+                              textAlign: 'center',
+                              maxHeight: '40vw',
+                              overflow: 'hidden',
+                              display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center'
+                            }}
+                          >
                             <Animated.Text
                               style={{
                                 fontWeight: 'bold',
@@ -502,47 +592,48 @@ const AppScreen = () => {
                                 transform: [{ translateY }],
                               }}
                             >
-                            <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: '100%'}}>
+                            <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>
 
-                              <div style={{width:'30%', maxWidth:'7.5rem', margin:'0 1rem', flex:1}}>
-                                <img src={imageMap('1')} style={{width: '100%', height: '100%'}} /><br/>
-                                <img src={imageMap('2')} style={{width: '100%', height: '100%'}} /><br/>
-                                <img src={imageMap('3')} style={{width: '100%', height: '100%'}} /><br/>
-                                <img src={imageMap('4')} style={{width: '100%', height: '100%'}} /><br/>
-                                <img src={imageMap('5')} style={{width: '100%', height: '100%'}} /><br/>
-                                <img src={imageMap('6')} style={{width: '100%', height: '100%'}} /><br/>
-                                <img src={imageMap('7')} style={{width: '100%', height: '100%'}} /><br/>
-                                <img src={imageMap('8')} style={{width: '100%', height: '100%'}} /><br/>
-                                <img src={imageMap('9')} style={{width: '100%', height: '100%'}} /><br/>
-                                <img src={imageMap('0')} style={{width: '100%', height: '100%'}} />
-                              </div>
-                              <div style={{width:'30%', maxWidth:'7.5rem', margin:'0 1rem', flex:1}}>
-                                <img src={imageMap('2')} style={{width: '100%', height: '100%'}} /><br/>
-                                <img src={imageMap('3')} style={{width: '100%', height: '100%'}} /><br/>
-                                <img src={imageMap('4')} style={{width: '100%', height: '100%'}} /><br/>
-                                <img src={imageMap('5')} style={{width: '100%', height: '100%'}} /><br/>
-                                <img src={imageMap('6')} style={{width: '100%', height: '100%'}} /><br/>
-                                <img src={imageMap('7')} style={{width: '100%', height: '100%'}} /><br/>
-                                <img src={imageMap('8')} style={{width: '100%', height: '100%'}} /><br/>
-                                <img src={imageMap('9')} style={{width: '100%', height: '100%'}} /><br/>
-                                <img src={imageMap('0')} style={{width: '100%', height: '100%'}} /><br/>
-                                <img src={imageMap('1')} style={{width: '100%', height: '100%'}} />
-                              </div>
-                              <div style={{width:'30%', maxWidth:'7.5rem', margin:'0 1rem', flex:1}}>
-                                <img src={imageMap('3')} style={{width: '100%', height: '100%'}} /><br/>
-                                <img src={imageMap('4')} style={{width: '100%', height: '100%'}} /><br/>
-                                <img src={imageMap('5')} style={{width: '100%', height: '100%'}} /><br/>
-                                <img src={imageMap('6')} style={{width: '100%', height: '100%'}} /><br/>
-                                <img src={imageMap('7')} style={{width: '100%', height: '100%'}} /><br/>
-                                <img src={imageMap('8')} style={{width: '100%', height: '100%'}} /><br/>
-                                <img src={imageMap('9')} style={{width: '100%', height: '100%'}} /><br/>
-                                <img src={imageMap('0')} style={{width: '100%', height: '100%'}} /><br/>
-                                <img src={imageMap('1')} style={{width: '100%', height: '100%'}} /><br/>
-                                <img src={imageMap('2')} style={{width: '100%', height: '100%'}} />
-                              </div>
+                            <div style={{width:'7.5rem', height:'7.5rem', margin:'0 1rem', flex:1}}>
+                              <img src={imageMap('1')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('2')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('3')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('4')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('5')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('6')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('7')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('8')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('9')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('0')} style={{width: '100%', height: '100%'}} />
+                            </div>
+                            <div style={{width:'7.5rem', height:'7.5rem', margin:'0 1rem', flex:1}}>
+                              <img src={imageMap('2')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('3')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('4')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('5')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('6')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('7')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('8')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('9')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('0')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('1')} style={{width: '100%', height: '100%'}} />
+                            </div>
+                            <div style={{width:'7.5rem', height:'7.5rem', margin:'0 1rem', flex:1}}>
+                              <img src={imageMap('3')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('4')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('5')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('6')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('7')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('8')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('9')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('0')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('1')} style={{width: '100%', height: '100%'}} /><br/>
+                              <img src={imageMap('2')} style={{width: '100%', height: '100%'}} />
+                            </div>
 
                             </div>
                             </Animated.Text>
+                          </View>
                         ) : (
                           <Text>
                             <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: '100%'}}>
@@ -587,6 +678,8 @@ const AppScreen = () => {
                 </div>
               </div>
 
+              
+
               <div style={{  display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: '100%' }}>
                 <div style={{width:'30%', flex: 2, padding: '0 1rem',}}>
                   <Text>
@@ -612,9 +705,14 @@ const AppScreen = () => {
                     </Text>
                 </div>
                 {isDesktopResolution ? (
+          
+
                       <div style={{width:'30%', flex: 1, justifyContent: 'center', display: 'flex', alignItems: 'end'}}>
                         <Image style={{width: '5rem', height: '5rem'}} source={GenericLogo} />
+                  
                       </div>
+
+
                     ) : (<></>)}
                 <div style={{width:'30%', flex: 2, padding: '0 1rem',}}>
                   <Text>
@@ -666,10 +764,24 @@ const AppScreen = () => {
                         width:'30%',
                         flex: 1, 
                         justifyContent: 'center', 
-                        display: 'flex'}}>
+                        display: 'flex',
+                        // flexDirection: 'column',
+                      }}>
+
+
                         <div><Text><h3>GENERIC COIN</h3></Text></div>
+                        
+
+                        {/* <div>
+                        <Text>
+                          <p>BUTTON HIT FREE SPIN</p>
+                        </Text>
+                      </div> */}
+
+
                       </div>
                     ) : (<></>)}
+                    
                     <div style={{width:'30%', flex: 2, padding: '0 1rem',}}>
                       <div>
                         <Button style={{ margin: '0 0.25rem 1rem', height: '6rem'}} primary disabled={isSlotRolling || !active} onPress={() => rollEth()}>
@@ -678,8 +790,10 @@ const AppScreen = () => {
                                         fontSize: 'clamp(.75rem, 5vw, 1.5rem)'
                                       }}>ETH SPIN<br/>{active ? (<span> {Number(selectedEthPrice()).toFixed(5).toLocaleString()}</span>) : (<span></span>)}</span>
                         </Button>
+                      
                       </div>
                     </div>
+                    
                 </div>
 
                 <div style={{  display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: '100%' }}>
@@ -706,6 +820,56 @@ const AppScreen = () => {
                     )}
               
                 {active && spinHistory ? (
+
+                  <>
+
+                  
+
+                  {/* FREE SPIN ZONE */}
+                  <List.Accordion
+                  title='NFT Free Spin'
+                  style={{margin: '1rem 1rem 0'}}
+                  >
+                      
+                      <div>
+
+                        {/* handleApproveFreeSpins */}
+                        <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: '100%', paddingBottom: '30px' }}>
+                        <div style={{ width: '30%', flex: 1, padding: '0 1rem', paddingBottom: '5px', paddingTop: '5px' }}>
+                          <label htmlFor='nftNumber' style={{ display: 'block', marginBottom: '8px', paddingBottom: '5px', paddingTop: '5px' }}>
+                          <Text>
+                        <ul>
+                          <li>Enter your NFT ID + click claim free spin!</li>
+                        </ul>
+                      </Text>
+                          </label>
+                          <input
+                            id='nftNumber'
+                            type='text'
+                            value={nftNumber}
+                            onChange={(e) => setNftNumber(e.target.value)}
+                            style={{ width: '98%', padding: '4px', fontSize: '16px' }}
+                          />
+                        </div>
+                      </div>
+
+
+                      <Button onPress={() => handleApproveFreeSpins()}>Claim Free Spin</Button>
+
+                      </div>
+
+                      <div>
+                      <Button onPress={() => rollFree()}>Free Spin</Button>
+                      </div>
+                        
+                  </List.Accordion>
+
+
+
+
+
+
+
                 <List.Accordion
                   title='Recent Spins'
                   style={{margin: '1rem 1rem 0'}}
@@ -748,9 +912,11 @@ const AppScreen = () => {
                     })}
                 </div>
                 </List.Accordion>
-              ) : (
+                </>) : (
                 <></>
               )}
+
+
 
               <List.Accordion
                 title='Tips & Troubleshooting'
@@ -772,7 +938,7 @@ const AppScreen = () => {
 
               <div style={{  display: 'flex', flexDirection: 'row', flexWrap: 'wrap', width: '100%', margin: '1rem 0' }}>
                 <div style={{width:'30%', flex: 1, padding: '0 1rem',}}>
-                  <a href='https://vrf.chain.link/' target='_blank'><Image style={{height:'2.5rem', width: '10rem',}} source={ChainlinkVRFLogo} /></a>
+                  <Text><a href='https://vrf.chain.link/' target='_blank'>Powered by Chainlink VRF</a></Text>
                 </div>
               </div>
 
@@ -863,9 +1029,6 @@ const styles = StyleSheet.create({
   '@keyframes scroll': {
     '0%': { transform: [{ translateY: 0 }] },
     '100%': { transform: [{ translateY: '-100%' }] },
-  },
-  chainlinkVRFLogo: {
-    width:'5rem',
   },
   responsiveLogo: {
     width:'30%',
