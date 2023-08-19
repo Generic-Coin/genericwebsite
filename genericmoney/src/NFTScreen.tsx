@@ -32,11 +32,18 @@ import slotContractABI from './assets/contracts/slotsABI.json';
 import ADDRESSES from './constants/addresses';
 import ConnectMetamask from './components/ConnectMetamask';
 import { DEFAULT_CHAIN_ID } from './constants/chains';
+import bronzeSpinNft from './assets/images/b.png';
+import silverSpinNft from './assets/images/s.png';
+import goldSpinNft from './assets/images/g.png';
  
 import GenericLogo from './assets/images/gcp.png';
  
  
 const NFTScreen = () => {
+
+    const openLink = (url: string) => {
+        Linking.openURL(url).catch(err => console.warn("Couldn't load page", err));
+      };
  
     const [isMobile, setIsMobile] = useState(false);
  
@@ -198,7 +205,7 @@ const NFTScreen = () => {
             metaObj.push({
                 'name': 'Generic Spin NFT - Bronze',
                 'description': 'This NFT will give the user benefits in the Generic Slots app.',
-                'image': <img src="https://generic.money/assets/b.png" />,
+                'image': <img src={bronzeSpinNft} />,
                 'attributes': [
                     {
                         'display_type': 'number',
@@ -428,7 +435,7 @@ const NFTScreen = () => {
                                         <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
                                             <div style={{ width: "100%", maxWidth: "300px", color: "black", marginBottom: '20px' }}>
                                                 <div style={{ display: "flex", justifyContent: "center" }}>
-                                                    <img style={{ width: "100%", height: "auto" }} src="https://generic.money/assets/b.png" alt="nft1" />
+                                                    <img style={{ width: "100%", height: "auto", margin:'1rem auto 1rem' }} src={bronzeSpinNft} alt="nft1" />
                                                 </div>
                                                 <div style={{ color: "black", textAlign: 'center' }}>Generic Spin NFT - Bronze</div>
                                                 <div style={{ color: "black", textAlign: 'center', paddingTop: '15px' }}>Hold 500M $GEN to mint bronze</div>
@@ -438,7 +445,7 @@ const NFTScreen = () => {
                                             </div>
                                             <div style={{ width: "100%", maxWidth: "300px", color: "black", marginBottom: '20px' }}>
                                                 <div style={{ display: "flex", justifyContent: "center" }}>
-                                                    <img style={{ width: "100%", height: "auto" }} src="https://generic.money/assets/s.png" alt="nft2" />
+                                                    <img style={{ width: "100%", height: "auto", margin:'1rem auto 1rem' }} src={silverSpinNft} alt="nft2" />
                                                 </div>
                                                 <div style={{ color: "black", textAlign: 'center' }}>Generic Spin NFT - Silver</div>
                                                 <div style={{ color: "black", textAlign: 'center', paddingTop: '15px' }}>Hold 500M $GEN to mint silver</div>
@@ -448,7 +455,7 @@ const NFTScreen = () => {
                                             </div>
                                             <div style={{ width: "100%", maxWidth: "300px", color: "black" }}>
                                                 <div style={{ display: "flex", justifyContent: "center" }}>
-                                                    <img style={{ width: "100%", height: "auto" }} src="https://generic.money/assets/g.png" alt="nft3" />
+                                                    <img style={{ width: "100%", height: "auto", margin:'1rem auto 1rem' }} src={goldSpinNft} alt="nft3" />
                                                 </div>
                                                 <div style={{ color: "black", textAlign: 'center' }}>Generic Spin NFT - Gold</div>
                                                 <div style={{ color: "black", textAlign: 'center', paddingTop: '15px' }}>Hold 1B $GEN to mint gold</div>
@@ -525,7 +532,7 @@ const NFTScreen = () => {
                                         <div style={{ display: "flex", justifyContent: "center" }}>
  
  
-                                        <img style={{minWidth: '100%', maxWidth: '100%', minHeight: '275px', maxHeight: '275px'}} src="https://generic.money/assets/b.png" alt="nft1" />
+                                        <img style={{minWidth: '100%', maxWidth: '100%', minHeight: '275px', maxHeight: '275px', margin:'1rem auto 1rem'}} src={bronzeSpinNft} />
                                         </div>
                                         <div style={{ color: "black", textAlign: 'center'}}>Generic Spin NFT - Bronze</div>
                                         <div style={{ color: "black", textAlign: 'center', paddingTop: '15px'}}>Hold 500M $GEN to mint bronze</div>
@@ -537,7 +544,7 @@ const NFTScreen = () => {
                                     <div style={{ width: "14rem", color: "black" }}>
                                         
                                         <div style={{ display: "flex", justifyContent: "center" }}>
-                                        <img style={{minWidth: '100%', maxWidth: '100%', minHeight: '275px', maxHeight: '275px'}} src="https://generic.money/assets/s.png" alt="nft2" />
+                                        <img style={{minWidth: '100%', maxWidth: '100%', minHeight: '275px', maxHeight: '275px', margin:'1rem auto 1rem'}} src={silverSpinNft} />
                                         </div>
                                         <div style={{ color: "black", textAlign: 'center'}}>Generic Spin NFT - Silver</div>
                                         <div style={{ color: "black", textAlign: 'center', paddingTop: '15px'}}>Hold 500M $GEN to mint silver</div>
@@ -548,7 +555,7 @@ const NFTScreen = () => {
                                     </div>
                                     <div style={{  width: "14rem", color: "black" }}>
                                         <div style={{ display: "flex", justifyContent: "center" }}>
-                                        <img style={{minWidth: '100%', maxWidth: '100%', minHeight: '275px', maxHeight: '275px'}} src="https://generic.money/assets/g.png" alt="nft3" />
+                                        <img style={{minWidth: '100%', maxWidth: '100%', minHeight: '275px', maxHeight: '275px', margin:'1rem auto 1rem'}} src={goldSpinNft} />
                                         </div>
                                         <div style={{ color: "black", textAlign: 'center'}}>Generic Spin NFT - Gold</div>
                                         <div style={{ color: "black", textAlign: 'center', paddingTop: '15px'}}>Hold 1B $GEN to mint gold</div>
@@ -665,7 +672,6 @@ const NFTScreen = () => {
               />
               <Menu.Item
                 size='lg'
-                disabled
                 onPress={() => openLink('/nft')}
                 title='NFTs'
               />

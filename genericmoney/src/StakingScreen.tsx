@@ -324,7 +324,6 @@ const StakingScreen = () => {
                       />
                       <Menu.Item
                         size='lg'
-                        disabled
                         onPress={() => openLink('/nft')}
                         title='NFTs'
                       />

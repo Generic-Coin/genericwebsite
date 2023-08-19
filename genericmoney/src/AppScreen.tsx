@@ -1002,7 +1002,6 @@ const AppScreen = () => {
               />
               <Menu.Item
                 size='lg'
-                disabled
                 onPress={() => openLink('/nft')}
                 title='NFTs'
               />
