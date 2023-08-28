@@ -40,7 +40,7 @@ import GenericLogo from './assets/images/gcp.png';
  
  
 const NFTScreen = () => {
-
+ 
     const openLink = (url: string) => {
         Linking.openURL(url).catch(err => console.warn("Couldn't load page", err));
       };
@@ -94,12 +94,12 @@ const NFTScreen = () => {
  
     // React states for the dApp
     const [tokenBalance, setTokenBalance] = useState('Loading...');
-    const [formattedBalance, setFormatedBalance] = useState('Loading...');
+    const [formattedBalance, setFormattedBalance] = useState('Loading...');
  
  
     const [nftMetadata, setNftMetadata] = useState([]);
     const [mintingNFT, setMintingNFT] = useState(false);
-    const [isInitialized, setIsInitialized] = useState(false);
+    const [isInitialized, setIsInitialized] = useState(true);
     const [maxSupply, setMaxSupply] = useState('Loading...');
     const [costBronze, setCostBronze] = useState('Loading...');
  
@@ -125,29 +125,105 @@ const NFTScreen = () => {
  
     useEffect(() => {
         if (web3.givenProvider !== null) {
+            mintPrices();
             fetchContractData();
         }
     }, [active]);
  
+    // Load all of the stats data seperately, update on change
+    useEffect(() => {
+        if (web3.givenProvider !== null) {
+            loadStatsData();
+        }
+    }, [active, totalSupply, formattedBalance]);
+ 
+    // load tiers minted
+    // useEffect(() => {
+    //     if (web3.givenProvider !== null) {
+    //         tierQuanitityMinted();
+    //     }
+    // }, [active, supplyBronzeNFT]);
+ 
+    const loadStatsData = async () => {
+        try {
+ 
+            // total supply of nfts minted
+            const totalSupply = await nftContract.methods.totalSupply().call();
+            // console.log("the total supply", totalSupply)
+            setTotalSupply(totalSupply)
+ 
+            // users token balance
+            const tokenBalanceWei = await tokenContract.methods.balanceOf(account).call();
+            const decimals = await tokenContract.methods.decimals().call();
+            const tokenBalanceEther = tokenBalanceWei / 10 ** decimals;
+            const tokenBalanceInWholeEther = Math.floor(tokenBalanceEther);
+            // console.log("token balance in whole ether", tokenBalanceInWholeEther);
+            setFormattedBalance(tokenBalanceInWholeEther.toString());
+ 
+        } catch(error) {
+            console.log("ERROR WITH THE stats" , error)
+        }
+    }
+ 
+    const mintPrices = async () => {
+        try{
+            // bronze
+            const costBronze = await nftContract.methods.costTier1().call();
+            // console.log("cost of bronze", costBronze)
+            const costBronzeInEther = await web3.utils.fromWei(costBronze, 'ether');
+            // console.log("cost b in ether", costBronzeInEther)
+            setCostBEther(costBronzeInEther);
+ 
+            // silver
+            const costSilver = await nftContract.methods.costTier2().call();
+            // console.log("cost of silver", costSilver)
+            const costSilverInEther = await web3.utils.fromWei(costSilver, 'ether');
+            // console.log("cost s in ether", costSilverInEther)
+            setCostSEther(costSilverInEther);
+ 
+            // gold
+            const costGold = await nftContract.methods.costTier3().call();
+            // console.log("cost of gold", costGold)
+            const costGoldInEther = await web3.utils.fromWei(costGold, 'ether');
+            // console.log("cost G in ether", costGoldInEther)
+            setCostGEther(costGoldInEther);
+        } catch(error) {
+            console.log("MINT PRICES ERROR", error)
+        }
+    }
+ 
+    const tierQuanitityMinted = async () => {
+        try {                       
+            // const circulatingSupplyBronze = await nftContract.methods.circulatingSupplyTier1()
+            // console.log("circ ccccc          supply bronze", circulatingSupplyBronze)
+            // setSupplyBronzeNFT(circulatingSupplyBronze);
+ 
+        } catch(error) {
+ 
+        }
+    }
+ 
+ 
     const fetchContractData = async () => {
         try {
-            const tokenBalance = await tokenContract.methods
-                .balanceOf(account)
-                .call();
+            // const tokenBalance = await tokenContract.methods
+            //     .balanceOf(account)
+            //     .call();
+ 
             const maxSupply = await nftContract.methods
                 .maxSupply()
                 .call();
             setMaxSupply(maxSupply);
  
             // Price to mint 1 NFT, in ETH
-            const costBronze = await nftContract.methods.costTier1().call();
-            const costBronzeInEther = await web3.utils.fromWei(costBronze, 'ether');
+            // const costBronze = await nftContract.methods.costTier1().call();
+            // const costBronzeInEther = await web3.utils.fromWei(costBronze, 'ether');
  
-            const costSilver = await nftContract.methods.costTier2().call();
-            const costSilverInEther = await web3.utils.fromWei(costSilver, 'ether');
+            // const costSilver = await nftContract.methods.costTier2().call();
+            // const costSilverInEther = await web3.utils.fromWei(costSilver, 'ether');
  
-            const costGold = await nftContract.methods.costTier3().call();
-            const costGoldInEther = await web3.utils.fromWei(costGold, 'ether');
+            // const costGold = await nftContract.methods.costTier3().call();
+            // const costGoldInEther = await web3.utils.fromWei(costGold, 'ether');
  
   
             // TODO: display max supplies on page maybe? | // static value not needed, also slows down dapp :^)
@@ -165,19 +241,6 @@ const NFTScreen = () => {
             const circulatingSupplyGold = await nftContract.methods.circulatingSupplyTier3().call();
             setSupplyGoldNFT(circulatingSupplyGold);
  
-            // The minimum GEN balance that a user needs to have to be able to mint a specific tier.
-            // TODO: when user presses mint button, check if tokenBalance >= minTokenBalance and display error if that's not the case
- 
-            // will do
-            // const minTokenBalanceBronze = await nftContract.methods.minTokenBalanceTier1().call();
-            // const minTokenBalanceSilver = await nftContract.methods.minTokenBalanceTier2().call();
-            // const minTokenBalanceGold = await nftContract.methods.minTokenBalanceTier3().call();
- 
-            const totalSupply = await nftContract.methods.totalSupply().call();
-            const formatTokenBalance = await web3.utils.fromWei(tokenBalance,'ether')
-            const formattedBalance = parseInt(formatTokenBalance);
-    
- 
  
             // Array of NFT id's
             const walletOfOwner = await nftContract.methods
@@ -191,7 +254,7 @@ const NFTScreen = () => {
                 .freeSpinTimeout()
                 .call();
  
-            nftUrlArray = await getNftUrlArray(walletOfOwner);
+            // nftUrlArray = await getNftUrlArray(walletOfOwner);
  
  
  
@@ -199,54 +262,54 @@ const NFTScreen = () => {
             //let metaObj = await getMetadata(nftUrlArray);
  
             /*************** FOR LOCAL TESTING ***********/
-            let metaObj = [];
+            // let metaObj = [];
  
             // Add the fetched data to the metaObj array
-            metaObj.push({
-                'name': 'Generic Spin NFT - Bronze',
-                'description': 'This NFT will give the user benefits in the Generic Slots app.',
-                'image': <img src={bronzeSpinNft} />,
-                'attributes': [
-                    {
-                        'display_type': 'number',
-                        'trait_type': 'Token ID',
-                        'value': 1
-                    }
-                ]
-            });
-            metaObj.push({
-                'name': 'Generic Spin NFT #2',
-                'description': 'This NFT will give the user benefits in the Generic Slots app.',
-                'image': 'https://generic.money/favicon-16.png',
-                'attributes': [
-                    {
-                        'display_type': 'number',
-                        'trait_type': 'Token ID',
-                        'value': 2
-                    }
-                ]
-            });
+            // metaObj.push({
+            //     'name': 'Generic Spin NFT - Bronze',
+            //     'description': 'This NFT will give the user benefits in the Generic Slots app.',
+            //     'image': <img src={bronzeSpinNft} />,
+            //     'attributes': [
+            //         {
+            //             'display_type': 'number',
+            //             'trait_type': 'Token ID',
+            //             'value': 1
+            //         }
+            //     ]
+            // });
+            // metaObj.push({
+            //     'name': 'Generic Spin NFT #2',
+            //     'description': 'This NFT will give the user benefits in the Generic Slots app.',
+            //     'image': 'https://generic.money/favicon-16.png',
+            //     'attributes': [
+            //         {
+            //             'display_type': 'number',
+            //             'trait_type': 'Token ID',
+            //             'value': 2
+            //         }
+            //     ]
+            // });
  
             // metaObj[0]['lastFreeSpinTime'] = '0';
             // metaObj[1]['lastFreeSpinTime'] = '1680723533';
             // console.log("metaobject??????????????", metaObj);
             /****************************** */
  
-            setNftMetadata(metaObj);
+            // setNftMetadata(metaObj);
  
-            setTokenBalance(tokenBalance);
-            setFormatedBalance(formattedBalance);
+            // setTokenBalance(tokenBalance);
+            // setFormatedBalance(formattedBalance);
  
  
  
-            setCostBronze(costBronze);
-            setCostBEther(costBronzeInEther);
+            // setCostBronze(costBronze);
+            // setCostBEther(costBronzeInEther);
  
-            setCostSilver(costSilver);
-            setCostSEther(costSilverInEther);
+            // setCostSilver(costSilver);
+            // setCostSEther(costSilverInEther);
  
-            setCostGold(costGold);
-            setCostGEther(costGoldInEther);
+            // setCostGold(costGold);
+            // setCostGEther(costGoldInEther);
  
             setTotalSupply(totalSupply);
             setCurrentTimestamp(String(currentTimestamp));
@@ -255,96 +318,72 @@ const NFTScreen = () => {
         } catch (ex) { }
     };
  
-    const getNftUrlArray = (async (nftIdArray) => {
-        let nftArr = [];
+    // const getNftUrlArray = (async (nftIdArray) => {
+    //     let nftArr = [];
  
-        for (let i = 0; i < nftIdArray.length; i++) {
-            // Fetch json and add it to return array
-            let tokenURI = await nftContract.methods.tokenURI(nftIdArray[i]).call();
-            nftArr.push(tokenURI);
-        }
-        return nftArr;
+    //     for (let i = 0; i < nftIdArray.length; i++) {
+    //         // Fetch json and add it to return array
+    //         let tokenURI = await nftContract.methods.tokenURI(nftIdArray[i]).call();
+    //         nftArr.push(tokenURI);
+    //     }
+    //     return nftArr;
  
-    });
+    // });
  
-    const getMetadata = (async (nftUrlArray) => {
-        let str = [];
-        for (let link_ of nftUrlArray) {
-            let jsn_ = await fetch(link_.toString());
-            jsn_ = await jsn_.json();
-            // Manually fetching the last free spin time for each NFT and adding it to the json.
-            jsn_['lastFreeSpinTime'] = await slotContract.methods.lastFreeSpinTimeNFT(jsn_.attributes[0].value).call();
-            str.push(jsn_);
-        }
+    // const getMetadata = (async (nftUrlArray) => {
+    //     let str = [];
+    //     for (let link_ of nftUrlArray) {
+    //         let jsn_ = await fetch(link_.toString());
+    //         jsn_ = await jsn_.json();
+    //         // Manually fetching the last free spin time for each NFT and adding it to the json.
+    //         jsn_['lastFreeSpinTime'] = await slotContract.methods.lastFreeSpinTimeNFT(jsn_.attributes[0].value).call();
+    //         str.push(jsn_);
+    //     }
  
-        return str;
-    });
+    //     return str;
+    // });
  
  
     const mintBronze = async () => {
-        setStatusMessage(`Minting your NFT...`);
-        setMintingNFT(true);
-        await nftContract.methods
-            .mintTier1()
-            .send({
-                from: account,
-                value: costBronze,
-            })
-            .once("error", (err) => {
-                console.log(err);
-                setStatusMessage("Sorry, something went wrong please try again later.");
-                setMintingNFT(false);
-            })
-            .then((receipt) => {
-                console.log(receipt);
-                setStatusMessage(`Mint success! View your NFT's here.`);
-                setMintingNFT(false);
-                fetchContractData();
-            });
+        try {
+            // Convert Ether to Wei
+            const etherValue = web3.utils.toWei(costBEther, 'ether');
+            
+            const mintBronzeNow = await nftContract.methods.mintTier1().send({ from: account, value: etherValue });
+            console.log("minting bronze...", mintBronzeNow);
+        } catch (error) {
+            console.error("Error minting bronze:", error);
+        }
     };
  
     const mintSilver = async () => {
-        setStatusMessage(`Minting your NFT...`);
-        setMintingNFT(true);
-        await nftContract.methods
-            .mintTier2()
-            .send({
-                from: account,
-                value: costSilver,
-            })
-            .once("error", (err) => {
-                console.log(err);
-                setStatusMessage("Sorry, something went wrong please try again later.");
-                setMintingNFT(false);
-            })
-            .then((receipt) => {
-                console.log(receipt);
-                setStatusMessage(`Mint success! View your NFT's here.`);
-                setMintingNFT(false);
-                fetchContractData();
-            });
+ 
+        try {
+            // Convert Ether to Wei
+            const etherValue = web3.utils.toWei(costSEther, 'ether');
+            
+            const mintBronzeNow = await nftContract.methods.mintTier2().send({ from: account, value: etherValue });
+            console.log("minting silver...", mintBronzeNow);
+        } catch (error) {
+            console.error("Error minting silver:", error);
+        }
+ 
     };
  
     const mintGold = async () => {
-        setStatusMessage(`Minting your NFT...`);
-        setMintingNFT(true);
-        await nftContract.methods
-            .mintTier3()
-            .send({
-                from: account,
-                value: costGold,
-            })
-            .once("error", (err) => {
-                console.log(err);
-                setStatusMessage("Sorry, something went wrong please try again later.");
-                setMintingNFT(false);
-            })
-            .then((receipt) => {
-                console.log(receipt);
-                setStatusMessage(`Mint success! View your NFT's here.`);
-                setMintingNFT(false);
-                fetchContractData();
-            });
+ 
+        try {
+            // Convert Ether to Wei
+            const etherValue = web3.utils.toWei(costGEther, 'ether');
+            
+            const mintBronzeNow = await nftContract.methods.mintTier3().send({ from: account, value: etherValue });
+            console.log("minting gold...", mintBronzeNow);
+        } catch (error) {
+            console.error("Error minting gold:", error);
+        }
+ 
+ 
+ 
     };
  
     const claimFreeSpin = async (nftId) => {
@@ -385,6 +424,9 @@ const NFTScreen = () => {
                         <ConnectMetamask />
                         </div>
  
+                        {console.log("This is the acc right here:", account)}
+                        {console.log("this is minted", supplyBronzeNFT)}
+ 
  
  
                             {isMobile 
@@ -405,7 +447,7 @@ const NFTScreen = () => {
                                         <p>Mint price gold tier (251-275): {web3.utils.fromWei(costGold).toLocaleString()} ETH</p> */}
                                         <List.Accordion title='Statistics' style={styles.section} defaultExpanded >
                                             <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', border: '1px solid #D8D8D8', backgroundColor: '#C6C6C6' }}>
- 
+                                                
                                                 <span style={{ marginBottom: '20px', marginTop: '10px' }}>
                                                     <b style={{ fontSize: '18px', backgroundColor: '' }}>Current Supply Minted</b>
                                                     <fieldset style={{ fontSize: '24px', minWidth: '150px', maxWidth: '150px', marginTop: '10px', marginBottom: '10px', border: '7px solid #6A6A6A', backgroundColor: 'black', color: 'white', paddingTop: '10px', paddingBottom: '10px' }}>
@@ -441,7 +483,7 @@ const NFTScreen = () => {
                                                 <div style={{ color: "black", textAlign: 'center', paddingTop: '15px' }}>Hold 500M $GEN to mint bronze</div>
                                                 <p style={{ color: "black", textAlign: 'center' }}>{supplyBronzeNFT}/200 minted</p>
                                                 <p style={{ color: "black", textAlign: 'center' }}>Mint price: {(costBEther + " ETH")}</p>
-                                                <Button style={{ width: '100%' }} primary disabled={mintingNFT || !isInitialized} onPress={() => mintBronze()}>Mint Bronze</Button>
+                                                <Button style={{ width: '100%' }} primary onPress={() => mintBronze()}>Mint Bronze</Button>
                                             </div>
                                             <div style={{ width: "100%", maxWidth: "300px", color: "black", marginBottom: '20px' }}>
                                                 <div style={{ display: "flex", justifyContent: "center" }}>
