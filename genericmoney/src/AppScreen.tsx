@@ -272,7 +272,7 @@ const AppScreen = () => {
         // Roll the slot machine
         await slotContract.methods
           .ethSpin()
-          .send({ from: account, value: totalPrice });
+          .send({ from: account, value: totalPrice, maxPriorityFeePerGas: null, maxFeePerGas: null, gas: 480000, gasPrice: null  });
         const roundIndex = (await slotContract.methods.getLastRoundsPlayed(account, 1).call())[0];
         // Rolling state for the UI
         setIsSlotRolling(true);
@@ -329,7 +329,7 @@ const AppScreen = () => {
             slotContractAddy,
             '115792089237316195423570985008687907853269984665640564039457584007913129639935',
           )
-          .send({ from: account });
+          .send({ from: account, maxPriorityFeePerGas: null, maxFeePerGas: null, gas: 300000, gasPrice: null  });
         setHasAllowance(true);
       } catch (ex) {
         return;
@@ -427,7 +427,7 @@ const AppScreen = () => {
         // console.warn('price', price);
         setPriceGen(web3.utils.fromWei(price));
         // Roll the slot machine
-        await slotContract.methods.tokenSpin(price).send({ from: account, value: vrfFee });
+        await slotContract.methods.tokenSpin(price).send({ from: account, value: vrfFee, maxPriorityFeePerGas: null, maxFeePerGas: null, gas: 300000, gasPrice: null  });
 
         const roundIndex = (await slotContract.methods.getLastRoundsPlayed(account, 1).call())[0];
         // Rolling state for the UI
