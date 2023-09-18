@@ -269,8 +269,8 @@ const TeamScreen = () => {
               <Menu.Item
                 size='lg'
                 // disabled
-                onPress={() => openLink('/exchange')}
-                title='Exchange'
+                onPress={() => openLink('http://bingo.generic.money')}
+                title='Bingo'
               />
               <Menu.Item
                 size='lg'

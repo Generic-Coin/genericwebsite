@@ -702,9 +702,9 @@ const NFTScreen = () => {
               />
               <Menu.Item
                 size='lg'
-                disabled
-                onPress={() => openLink('/exchange')}
-                title='Exchange'
+                // disabled
+                onPress={() => openLink('http://bingo.generic.money')}
+                title='Bingo'
               />
               <Menu.Item
                 size='lg'
