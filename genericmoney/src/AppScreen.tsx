@@ -143,8 +143,8 @@ const AppScreen = () => {
     gold: [],
   });
   const [userHasFreeSpin, setUserHasFreeSpin] = useState(false);
-  const [nextFreeSpin, setNextFreeSpin] = useState(0);
-  const [freeSpinTimeout, setFreeSpinTimeout] = useState(0);
+  const [nextFreeSpin, setNextFreeSpin] = useState('Loading...');
+  const [freeSpinTimer, setFreeSpinTimer] = useState(null);
 
   // Define timer for usage with Async requests
   const timer = ms => new Promise(res => setTimeout(res, ms));
@@ -157,7 +157,10 @@ const AppScreen = () => {
         fetchContractData();
       }, 15000);
       fetchContractData();
-      return () => clearInterval(id);
+      return () => {
+        clearInterval(id);
+        clearInterval(freeSpinTimer);
+      };
     } else {
       return null;
     }
@@ -201,9 +204,6 @@ const AppScreen = () => {
         .call();
 
       const userNFTs = await getUserNFTs();
-      const freeSpinTimeout = await slotContract.methods
-        .freeSpinTimeout()
-        .call();
       const hasFreeSpin = await slotContract.methods
         .hasFreeSpin(account)
         .call();
@@ -232,8 +232,9 @@ const AppScreen = () => {
       setTokenBalance(web3.utils.fromWei(balanceToken));
 
       setUserNFTs(userNFTs);
-      setFreeSpinTimeout(freeSpinTimeout);
       setUserHasFreeSpin(hasFreeSpin);
+
+      getNextFreeSpinTime();
     } catch (e) {
       console.error(e);
     }
@@ -387,31 +388,39 @@ const AppScreen = () => {
     }
   };
 
-  const formatCountdown = timestamp => {
-    const countdownDate = new Date(timestamp * 1000);
-    const now = new Date();
-
-    const diff = countdownDate - now;
-
-    const hours = Math.floor(diff / 1000 / 60 / 60);
-    const minutes = Math.floor(diff / 1000 / 60) % 60;
-    const seconds = Math.floor(diff / 1000) % 60;
-
-    return `${hours.toString().padStart(2, '0')}:${minutes
-      .toString()
-      .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-  };
-
   const getNextFreeSpinTime = async () => {
-    const currentTime = Math.floor(Date.now() / 1000); // unix timestamp
-    const lastAddressSpinTime = await freeSpinNFTContract.methods
-      .lastFreeSpinTimeAddress(account)
-      .call();
+    if (freeSpinTimer) {
+      clearInterval(freeSpinTimer);
+    }
 
-    const remainingTime = lastAddressSpinTime + freeSpinTimeout - currentTime;
-    const nextTime = formatCountdown(remainingTime);
+    const freeSpinTimeout = Number(
+      await slotContract.methods.freeSpinTimeout().call(),
+    );
+    const interval = setInterval(async () => {
+      const currentTime = Math.floor(Date.now() / 1000);
+      const lastAddressSpinTime = await slotContract.methods
+        .lastFreeSpinTimeAddress(account)
+        .call();
 
-    setNextFreeSpin(nextTime);
+      const remainingTime =
+        Number(lastAddressSpinTime) + freeSpinTimeout - currentTime;
+
+      if (remainingTime > 0) {
+        const hours = Math.floor(remainingTime / 3600)
+          .toString()
+          .padStart(2, '0');
+        const minutes = Math.floor(remainingTime / 60)
+          .toString()
+          .padStart(2, '0');
+        const seconds = (remainingTime % 60).toString().padStart(2, '0');
+
+        setNextFreeSpin(`${hours}:${minutes}:${seconds}`);
+      } else {
+        setNextFreeSpin('00:00:00');
+        clearInterval(interval);
+      }
+    }, 1000);
+    setFreeSpinTimer(interval);
   };
 
   // claim free spins from the NFT https://testnet.arbiscan.io/address/0x0f2639f5b7ac3ec8e22013333ac337068eaf3095#code
@@ -426,11 +435,13 @@ const AppScreen = () => {
       const lastFreeSpinTimeNFT = await slotContract.methods
         .lastFreeSpinTimeNFT(id)
         .call();
+      const freeSpinTimeout = Number(
+        await slotContract.methods.freeSpinTimeout().call(),
+      );
 
       if (
-        Number(lastFreeSpinTimeAddress) + Number(freeSpinTimeout) <
-          currentTime &&
-        Number(lastFreeSpinTimeNFT) + Number(freeSpinTimeout) < currentTime
+        Number(lastFreeSpinTimeAddress) + freeSpinTimeout < currentTime &&
+        Number(lastFreeSpinTimeNFT) + freeSpinTimeout < currentTime
       ) {
         // console.log('Claiming free spin from ' + tier + ' NFT ' + id);
         await slotContract.methods
@@ -1444,7 +1455,8 @@ const AppScreen = () => {
                                   Unused free spin. Play before claiming another
                                   one!
                                 </p>
-                              ) : nextFreeSpin > 0 ? (
+                              ) : nextFreeSpin !== 'Loading...' &&
+                                nextFreeSpin !== '00:00:00' ? (
                                 <p>
                                   Next free spin claimable in: {nextFreeSpin}
                                 </p>
