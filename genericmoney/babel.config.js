@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
-const pak = require('../package.json');
+const pak = require('../package-githubhatesmultiplepackagefiles.json');
 
 module.exports = function babelConfig(api) {
   api.cache(true);
